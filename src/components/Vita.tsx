@@ -59,18 +59,7 @@ export const Vita: React.FC = () => {
                         lens === 'brutalist' ? 'font-mono uppercase font-bold' :
                         'font-sans'
                       }`}>
-                        {entry.orgUrl ? (
-                          <a
-                            href={entry.orgUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-white/80 underline decoration-white/30 underline-offset-2 transition-colors"
-                          >
-                            {entry.organization}
-                          </a>
-                        ) : (
-                          entry.organization
-                        )}
+                        {entry.organization}
                       </h5>
 
                       <div className="space-y-1 pt-0.5">
