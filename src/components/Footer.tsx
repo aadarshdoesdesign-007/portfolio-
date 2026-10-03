@@ -17,7 +17,7 @@ export const Footer: React.FC<FooterProps> = ({
   const { lens } = useLens();
 
   return (
-    <footer className={`background--highlight py-16 sm:py-20 text-white transition-colors duration-400 ${
+    <footer className={`background--highlight py-12 sm:py-16 md:py-20 text-white transition-colors duration-400 ${
       lens === 'brutalist' ? 'border-t-2 border-white' :
       lens === 'experimental' ? 'border-t border-dashed border-white/40' :
       'border-t border-white/20'

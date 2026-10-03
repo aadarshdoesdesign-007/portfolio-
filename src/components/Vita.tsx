@@ -8,7 +8,7 @@ export const Vita: React.FC = () => {
   const { lens } = useLens();
 
   return (
-    <section id="vita" className="py-20 sm:py-28 transition-colors duration-400">
+    <section id="vita" className="py-14 sm:py-20 md:py-28 transition-colors duration-400">
       {/* Section Title */}
       <div className="gridRow">
         <div className="grid_full">

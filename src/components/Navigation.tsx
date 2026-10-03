@@ -41,10 +41,93 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <>
       <nav 
-        className="fixed top-0 left-0 right-0 z-30 pointer-events-none transition-colors duration-300"
-        style={{ height: '88px' }}
+        className="fixed top-0 left-0 right-0 z-30 pointer-events-none transition-colors duration-300 h-16 md:h-[88px]"
       >
-        <div className="gridRow h-full items-center">
+        {/* Mobile Header (320px - 767px): Art-directed 64px bar, 24px (px-6) side padding */}
+        <div className="flex md:hidden h-full px-6 items-center justify-between w-full">
+          {/* Brand Identity: Radial Mark + Handwritten Aadarsh Signature */}
+          <div className="flex items-center gap-3 pointer-events-auto">
+            {/* Radial Mark */}
+            <a 
+              href="#" 
+              aria-label="Scroll to top"
+              className="relative block w-6 h-6 cursor-pointer group flex-shrink-0"
+              title="Aadarsh R — Scroll to top"
+            >
+              <div 
+                className="w-full h-full relative"
+                style={{ transform: `rotate(${rotation}deg)` }}
+              >
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-colors duration-300"
+                    style={{
+                      width: '2px',
+                      height: '100%',
+                      backgroundColor: 'var(--accent)',
+                      transform: `translate(-50%, -50%) rotate(${(180 / 8) * i}deg)`
+                    }}
+                  />
+                ))}
+              </div>
+            </a>
+
+            {/* Handwritten Signature */}
+            <a
+              href="#"
+              aria-label="Aadarsh signature - Scroll to top"
+              className="inline-flex items-center cursor-pointer transition-opacity duration-200 hover:opacity-80"
+              title="Aadarsh — Scroll to top"
+            >
+              <span
+                className="inline-block transition-colors duration-300"
+                style={{
+                  width: '64px',
+                  height: '20px',
+                  backgroundColor: 'var(--accent)',
+                  WebkitMaskImage: `url('/images/aadarsh_signature.png')`,
+                  WebkitMaskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'left center',
+                  maskImage: `url('/images/aadarsh_signature.png')`,
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'left center',
+                }}
+              />
+            </a>
+          </div>
+
+          {/* Mobile Right: Colour Switcher + Hamburger Menu Button */}
+          <div className="flex items-center gap-2 pointer-events-auto">
+            <ColourSwitcher
+              currentColor={currentColor}
+              onColorChange={onColorChange}
+            />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded bg-white/10 hover:bg-white/20 transition-colors text-white"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            >
+              <div className="w-5 h-4 relative flex flex-col justify-between">
+                <span
+                  className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                    mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
+                  }`}
+                />
+                <span
+                  className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                    mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                  }`}
+                />
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop Header (>= 768px): Pristine 6-column gridRow */}
+        <div className="hidden md:grid gridRow h-full items-center">
           {/* Top-Left Brand Identity: Radial Mark + Handwritten Aadarsh Signature */}
           <div className="grid_1-2 flex items-center gap-3.5 pointer-events-auto">
             {/* 1. THE CIRCULAR / RADIAL MARK */}
@@ -230,32 +313,6 @@ export const Navigation: React.FC<NavigationProps> = ({
               currentLens={currentLens}
               onLensChange={onLensChange}
             />
-          </div>
-
-          {/* Mobile Actions: Color Switcher & Hamburger Toggle */}
-          <div className="md:hidden flex items-center justify-end gap-2 col-span-full pointer-events-auto pr-2">
-            <ColourSwitcher
-              currentColor={currentColor}
-              onColorChange={onColorChange}
-            />
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded bg-white/10 hover:bg-white/20 transition-colors text-white"
-              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            >
-              <div className="w-5 h-4 relative flex flex-col justify-between">
-                <span
-                  className={`w-full h-0.5 bg-white transition-all duration-300 ${
-                    mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
-                  }`}
-                />
-                <span
-                  className={`w-full h-0.5 bg-white transition-all duration-300 ${
-                    mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-                  }`}
-                />
-              </div>
-            </button>
           </div>
         </div>
       </nav>

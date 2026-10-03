@@ -27,7 +27,7 @@ export const ProjectGallery: React.FC<ProjectGalleryProps> = ({
   });
 
   return (
-    <section id="projects" className="py-20 sm:py-28 border-t border-b border-white/20 transition-colors duration-400">
+    <section id="projects" className="py-14 sm:py-20 md:py-28 border-t border-b border-white/20 transition-colors duration-400">
       {/* Section Header Row */}
       <div className="gridRow items-baseline">
         <div className="grid_1">

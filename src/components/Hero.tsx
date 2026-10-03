@@ -7,15 +7,12 @@ export const Hero: React.FC = () => {
   const { lens } = useLens();
 
   return (
-    <header className="min-h-screen flex flex-col justify-between pt-32 sm:pt-40 lg:pt-48 pb-12 sm:pb-16 text-white transition-colors duration-400">
+    <header className="pt-20 sm:pt-24 md:pt-40 lg:pt-48 pb-12 md:pb-16 md:min-h-screen md:flex md:flex-col md:justify-between text-white transition-colors duration-400">
       {/* Primary Dominant Editorial Statement */}
       <div className="gridRow">
         <div className="grid_2-6">
           <h1 
-            className="text-white font-sans font-light tracking-[-0.025em] max-w-[960px] leading-[1.14]"
-            style={{
-              fontSize: 'clamp(38px, 5.2vw, 80px)',
-            }}
+            className="text-white font-sans font-light tracking-[-0.025em] text-[29px] xs:text-[32px] sm:text-[38px] md:text-[clamp(38px,5.2vw,80px)] max-w-full sm:max-w-xl md:max-w-[960px] leading-[1.18] md:leading-[1.14]"
           >
             I design interfaces, visualise complexity, tell stories, and occasionally{' '}
             <span className="relative inline-block align-baseline">
@@ -70,7 +67,7 @@ export const Hero: React.FC = () => {
           </h1>
 
           {/* Secondary Understated Identity Metadata */}
-          <div className="mt-8 sm:mt-10 font-mono text-xs sm:text-sm tracking-wide space-y-1">
+          <div className="mt-6 sm:mt-8 md:mt-10 font-mono text-xs sm:text-sm tracking-wide space-y-1">
             <div className="text-white font-medium">
               {lens === 'experimental' ? 'NODE::AADARSH_R [STATUS: ONLINE]' :
                lens === 'brutalist' ? '== AADARSH R //' :
@@ -87,15 +84,15 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Hero Table of Contents Nav */}
-      <div className="gridRow mt-auto pt-20 sm:pt-28">
-        <div className="grid_2-6">
-          <ul className={`max-w-md ${
-            lens === 'editorial' ? 'font-serif text-2xl sm:text-3xl' : 'font-sans text-2xl sm:text-3xl lg:text-[34px]'
+      <div className="gridRow mt-8 sm:mt-10 md:mt-auto md:pt-28">
+        <div className="grid_2-6 w-full">
+          <ul className={`w-full max-w-full md:max-w-md ${
+            lens === 'editorial' ? 'font-serif text-xl sm:text-2xl md:text-3xl' : 'font-sans text-xl sm:text-2xl md:text-3xl lg:text-[34px]'
           } font-light leading-[1.2]`}>
             <li>
               <a 
                 href="#about" 
-                className={`group flex items-center py-3 border-t border-white/30 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center py-4 md:py-3 border-t border-white/25 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-white' : ''
                 }`}
               >
@@ -112,7 +109,7 @@ export const Hero: React.FC = () => {
             <li>
               <a 
                 href="#projects" 
-                className={`group flex items-center py-3 border-t border-white/30 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center py-4 md:py-3 border-t border-white/25 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-white' : ''
                 }`}
               >
@@ -129,7 +126,7 @@ export const Hero: React.FC = () => {
             <li>
               <a 
                 href="#vita" 
-                className={`group flex items-center py-3 border-t border-b border-white/30 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center py-4 md:py-3 border-t border-b border-white/25 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-b-2 border-white' : ''
                 }`}
               >

@@ -311,24 +311,45 @@ section {
   .grid_2-4 { grid-column: 2 / span 4; }
 }
 
-@media (max-width: 640px) {
-  .gridRow {
-    gap: var(--grid-gap);
-    grid-template-columns: repeat(1, 1fr);
-    max-width: var(--max-width);
-    margin: 0 auto;
+@media (max-width: 767px) {
+  :root {
+    --grid-gap: 24px;
+    --section-padding: 56px;
+    --font-size-reg: 16px;
   }
+
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    font-size: 16px;
+  }
+
+  .gridRow {
+    display: block;
+    gap: 0;
+    max-width: 100vw;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
   .grid_1, .grid_1-2, .grid_1-3, .grid_1-4, .grid_1-5, .grid_1-6,
   .grid_2, .grid_2-3, .grid_2-4, .grid_2-6,
   .grid_3, .grid_3-4, .grid_3-5, .grid_3-6,
   .grid_4, .grid_4-5, .grid_4-6,
   .grid_5, .grid_5-6,
   .grid_6, .grid_full {
-    grid-column: 1;
+    grid-column: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
+
   .m-hide {
     display: none !important;
   }
+
   .grid_reverse {
     display: flex;
     flex-direction: column-reverse;
