@@ -10,7 +10,7 @@ export const About: React.FC = () => {
   const { lens } = useLens();
 
   return (
-    <section id="about" className="py-14 sm:py-20 md:py-28 transition-colors duration-400">
+    <section id="about" className="pt-12 sm:pt-16 md:pt-28 pb-14 sm:pb-20 md:pb-28 transition-colors duration-400">
       {/* Section Title */}
       <div className="gridRow">
         <div className="grid_full">
@@ -21,23 +21,25 @@ export const About: React.FC = () => {
       {/* Main About Layout: Content Column (Cols 1-4) & Short Vita Column (Cols 5-6) */}
       <div className="gridRow">
         {/* Left: Editorial Narrative & Visuals */}
-        <div className="grid_1-4 space-y-8">
-          {/* Interactive Pixelated Portrait of Aadarsh */}
-          <PixelPortrait className="max-w-[280px] sm:max-w-[320px]" />
+        <div className="grid_1-4 space-y-6 sm:space-y-8">
+          {/* Interactive Pixelated Portrait of Aadarsh - Full width on mobile, 320px on desktop */}
+          <div className="w-full max-w-full md:max-w-[320px] mb-6 sm:mb-8">
+            <PixelPortrait className="w-full" />
+          </div>
 
           {/* Pullquote */}
           <blockquote className={`leading-[1.3] text-white py-1 ${
-            lens === 'editorial' ? 'font-serif text-2xl sm:text-3xl italic border-l border-white/60 pl-4' :
-            lens === 'brutalist' ? 'font-mono text-lg sm:text-xl font-bold border-l-4 border-white pl-4' :
-            lens === 'swiss' ? 'font-sans text-xl sm:text-2xl font-bold border-l-4 border-white pl-4' :
-            lens === 'experimental' ? 'font-mono text-base sm:text-lg border-l-2 border-dashed border-white/60 pl-4' :
-            'font-sans text-xl sm:text-2xl font-light border-l-2 border-white/60 pl-4'
+            lens === 'editorial' ? 'font-serif text-xl sm:text-2xl md:text-3xl italic border-l border-white/60 pl-4' :
+            lens === 'brutalist' ? 'font-mono text-base sm:text-lg md:text-xl font-bold border-l-4 border-white pl-4' :
+            lens === 'swiss' ? 'font-sans text-lg sm:text-xl md:text-2xl font-bold border-l-4 border-white pl-4' :
+            lens === 'experimental' ? 'font-mono text-sm sm:text-base md:text-lg border-l-2 border-dashed border-white/60 pl-4' :
+            'font-sans text-lg sm:text-xl md:text-2xl font-light border-l-2 border-white/60 pl-4'
           }`}>
             "{profile.quote}"
           </blockquote>
 
           {/* Body paragraphs */}
-          <div className={`space-y-5 text-[16px] sm:text-[17px] leading-[1.6] text-white/90 ${
+          <div className={`space-y-4 sm:space-y-5 text-[17px] sm:text-[18px] leading-[1.55] text-white/90 ${
             lens === 'editorial' ? 'font-serif text-[18px]' : 'font-normal'
           }`}>
             <p>
@@ -52,9 +54,9 @@ export const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Short Vita (Cols 5-6) */}
-        <div className="grid_5-6 pt-12 md:pt-0">
-          <div className={`p-6 space-y-6 text-white backdrop-blur-sm transition-all duration-300 ${
+        {/* Right: Short Vita (Cols 5-6) - Full-width stacked card on mobile */}
+        <div className="grid_5-6 mt-10 md:mt-0">
+          <div className={`w-full p-5 sm:p-6 space-y-6 text-white backdrop-blur-sm transition-all duration-300 ${
             lens === 'swiss' ? 'bg-white/10 rounded-none border border-white/40' :
             lens === 'brutalist' ? 'bg-black rounded-none border-2 border-white shadow-[4px_4px_0px_white]' :
             lens === 'editorial' ? 'bg-white/5 rounded border-l-2 border-white/40 border-t-0 border-r-0 border-b-0 pl-6' :

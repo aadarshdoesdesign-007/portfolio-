@@ -324,6 +324,10 @@ section {
     font-size: 16px;
   }
 
+  .hidden {
+    display: none !important;
+  }
+
   .gridRow {
     display: block;
     gap: 0;

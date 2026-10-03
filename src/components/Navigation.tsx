@@ -41,12 +41,12 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <>
       <nav 
-        className="fixed top-0 left-0 right-0 z-30 pointer-events-none transition-colors duration-300 h-16 md:h-[88px]"
+        className="sticky top-0 z-40 w-full bg-[var(--background)] h-14 sm:h-16 transition-colors duration-400 md:fixed md:top-0 md:left-0 md:right-0 md:h-[88px] md:bg-transparent md:pointer-events-none md:z-30"
       >
-        {/* Mobile Header (320px - 767px): Art-directed 64px bar, 24px (px-6) side padding */}
-        <div className="flex md:hidden h-full px-6 items-center justify-between w-full">
+        {/* Mobile Header (320px - 767px): Art-directed 56px-64px bar, 20-24px side padding */}
+        <div className="flex md:hidden h-full px-5 sm:px-6 items-center justify-between w-full pointer-events-auto">
           {/* Brand Identity: Radial Mark + Handwritten Aadarsh Signature */}
-          <div className="flex items-center gap-3 pointer-events-auto">
+          <div className="flex items-center gap-3">
             {/* Radial Mark */}
             <a 
               href="#" 
@@ -100,7 +100,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           </div>
 
           {/* Mobile Right: Colour Switcher + Hamburger Menu Button */}
-          <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="flex items-center gap-2">
             <ColourSwitcher
               currentColor={currentColor}
               onColorChange={onColorChange}
@@ -126,10 +126,11 @@ export const Navigation: React.FC<NavigationProps> = ({
           </div>
         </div>
 
-        {/* Desktop Header (>= 768px): Pristine 6-column gridRow */}
-        <div className="hidden md:grid gridRow h-full items-center">
-          {/* Top-Left Brand Identity: Radial Mark + Handwritten Aadarsh Signature */}
-          <div className="grid_1-2 flex items-center gap-3.5 pointer-events-auto">
+        {/* Desktop Header (>= 768px): Pristine 6-column gridRow wrapped in hidden md:block */}
+        <div className="hidden md:block h-full">
+          <div className="gridRow h-full items-center">
+            {/* Top-Left Brand Identity: Radial Mark + Handwritten Aadarsh Signature */}
+            <div className="grid_1-2 flex items-center gap-3.5 pointer-events-auto">
             {/* 1. THE CIRCULAR / RADIAL MARK */}
             <a 
               href="#" 
@@ -315,11 +316,12 @@ export const Navigation: React.FC<NavigationProps> = ({
             />
           </div>
         </div>
+      </div>
       </nav>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[var(--background)] text-white pt-24 px-6 pb-12 flex flex-col justify-between md:hidden animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 bg-[var(--background)] text-white pt-24 px-6 pb-12 flex flex-col justify-between md:hidden animate-in fade-in duration-200">
           <ul className="space-y-6 font-sans text-2xl font-light">
             {navLinks.map((link) => (
               <li key={link.num}>

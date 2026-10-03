@@ -203,7 +203,7 @@ export const PixelPortrait: React.FC<PixelPortraitProps> = ({ className = '' }) 
   }
 
   return (
-    <div className={`relative max-w-sm w-full ${className}`}>
+    <div className={`relative w-full ${className}`}>
       {/* Outer interactive portrait container */}
       <div
         ref={containerRef}

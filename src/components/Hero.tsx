@@ -7,12 +7,12 @@ export const Hero: React.FC = () => {
   const { lens } = useLens();
 
   return (
-    <header className="pt-20 sm:pt-24 md:pt-40 lg:pt-48 pb-12 md:pb-16 md:min-h-screen md:flex md:flex-col md:justify-between text-white transition-colors duration-400">
+    <header className="pt-6 sm:pt-8 md:pt-40 lg:pt-48 pb-8 sm:pb-10 md:pb-16 md:min-h-screen md:flex md:flex-col md:justify-between text-white transition-colors duration-400">
       {/* Primary Dominant Editorial Statement */}
       <div className="gridRow">
         <div className="grid_2-6">
           <h1 
-            className="text-white font-sans font-light tracking-[-0.025em] text-[29px] xs:text-[32px] sm:text-[38px] md:text-[clamp(38px,5.2vw,80px)] max-w-full sm:max-w-xl md:max-w-[960px] leading-[1.18] md:leading-[1.14]"
+            className="text-white font-sans font-light tracking-[-0.03em] md:tracking-[-0.025em] text-[clamp(42px,12.5vw,56px)] md:text-[clamp(38px,5.2vw,80px)] max-w-[340px] sm:max-w-xl md:max-w-[960px] leading-[0.98] md:leading-[1.14] text-left"
           >
             I design interfaces, visualise complexity, tell stories, and occasionally{' '}
             <span className="relative inline-block align-baseline">
@@ -62,8 +62,7 @@ export const Hero: React.FC = () => {
                   />
                 </div>
               </div>
-            </span>
-            .
+            </span>.
           </h1>
 
           {/* Secondary Understated Identity Metadata */}
@@ -87,21 +86,21 @@ export const Hero: React.FC = () => {
       <div className="gridRow mt-8 sm:mt-10 md:mt-auto md:pt-28">
         <div className="grid_2-6 w-full">
           <ul className={`w-full max-w-full md:max-w-md ${
-            lens === 'editorial' ? 'font-serif text-xl sm:text-2xl md:text-3xl' : 'font-sans text-xl sm:text-2xl md:text-3xl lg:text-[34px]'
+            lens === 'editorial' ? 'font-serif text-xl sm:text-2xl md:text-3xl' : 'font-sans'
           } font-light leading-[1.2]`}>
             <li>
               <a 
                 href="#about" 
-                className={`group flex items-center py-4 md:py-3 border-t border-white/25 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center h-16 sm:h-[72px] md:h-auto md:py-3 border-t border-white/20 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-white' : ''
                 }`}
               >
-                <span className={`inline-block w-12 font-mono text-sm sm:text-base ${
+                <span className={`inline-block w-12 font-mono text-xs sm:text-sm ${
                   lens === 'swiss' ? 'font-bold text-white' : 'text-white/50'
                 } group-hover:text-white/80 transition-colors`}>
                   {lens === 'editorial' ? 'I.' : lens === 'experimental' ? '01_' : '01'}
                 </span>
-                <span className="tracking-tight">
+                <span className="text-[22px] sm:text-2xl md:text-3xl tracking-tight text-white font-light">
                   {lens === 'brutalist' ? 'ABOUT' : 'About'}
                 </span>
               </a>
@@ -109,16 +108,16 @@ export const Hero: React.FC = () => {
             <li>
               <a 
                 href="#projects" 
-                className={`group flex items-center py-4 md:py-3 border-t border-white/25 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center h-16 sm:h-[72px] md:h-auto md:py-3 border-t border-white/20 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-white' : ''
                 }`}
               >
-                <span className={`inline-block w-12 font-mono text-sm sm:text-base ${
+                <span className={`inline-block w-12 font-mono text-xs sm:text-sm ${
                   lens === 'swiss' ? 'font-bold text-white' : 'text-white/50'
                 } group-hover:text-white/80 transition-colors`}>
                   {lens === 'editorial' ? 'II.' : lens === 'experimental' ? '02_' : '02'}
                 </span>
-                <span className="tracking-tight">
+                <span className="text-[22px] sm:text-2xl md:text-3xl tracking-tight text-white font-light">
                   {lens === 'brutalist' ? 'PROJECTS' : 'Projects'}
                 </span>
               </a>
@@ -126,16 +125,16 @@ export const Hero: React.FC = () => {
             <li>
               <a 
                 href="#vita" 
-                className={`group flex items-center py-4 md:py-3 border-t border-b border-white/25 text-white transition-all duration-300 hover:pl-3 ${
+                className={`group flex items-center h-16 sm:h-[72px] md:h-auto md:py-3 border-t border-b border-white/20 text-white transition-all duration-300 hover:pl-3 ${
                   lens === 'brutalist' ? 'border-t-2 border-b-2 border-white' : ''
                 }`}
               >
-                <span className={`inline-block w-12 font-mono text-sm sm:text-base ${
+                <span className={`inline-block w-12 font-mono text-xs sm:text-sm ${
                   lens === 'swiss' ? 'font-bold text-white' : 'text-white/50'
                 } group-hover:text-white/80 transition-colors`}>
                   {lens === 'editorial' ? 'III.' : lens === 'experimental' ? '03_' : '03'}
                 </span>
-                <span className="tracking-tight">
+                <span className="text-[22px] sm:text-2xl md:text-3xl tracking-tight text-white font-light">
                   {lens === 'brutalist' ? 'VITA' : 'Vita'}
                 </span>
               </a>
