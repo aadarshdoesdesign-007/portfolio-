@@ -166,29 +166,29 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onSele
 
       case 'wireframe': // NewSpace Drone Interface
         return (
-          <svg viewBox="0 0 600 380" className="w-full h-full bg-[#0f172a]" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="600" height="380" fill="#0f172a"/>
-            <circle cx="300" cy="190" r="120" stroke="#334155" strokeWidth="1" strokeDasharray="4 4"/>
-            <circle cx="300" cy="190" r="70" stroke="#334155" strokeWidth="1"/>
-            <line x1="300" y1="50" x2="300" y2="330" stroke="#1e293b" strokeWidth="1"/>
-            <line x1="160" y1="190" x2="440" y2="190" stroke="#1e293b" strokeWidth="1"/>
+          <svg viewBox="0 0 600 380" className="w-full h-full bg-[#f8fafc]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="380" fill="#f8fafc"/>
+            <circle cx="300" cy="190" r="120" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4"/>
+            <circle cx="300" cy="190" r="70" stroke="#94a3b8" strokeWidth="1"/>
+            <line x1="300" y1="50" x2="300" y2="330" stroke="#cbd5e1" strokeWidth="1"/>
+            <line x1="160" y1="190" x2="440" y2="190" stroke="#cbd5e1" strokeWidth="1"/>
 
             {/* Flight horizon line */}
-            <line x1="220" y1="180" x2="380" y2="180" stroke="#38bdf8" strokeWidth="2"/>
-            <circle cx="300" cy="180" r="4" fill="#38bdf8"/>
+            <line x1="220" y1="180" x2="380" y2="180" stroke="#0284c7" strokeWidth="2"/>
+            <circle cx="300" cy="180" r="4" fill="#0284c7"/>
 
             {/* Telemetry badges */}
-            <rect x="30" y="30" width="130" height="40" rx="2" fill="#1e293b"/>
-            <text x="40" y="46" fontFamily="monospace" fontSize="8" fill="#94a3b8">ALTITUDE MSL</text>
-            <text x="40" y="62" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#f8fafc">1,420 M</text>
+            <rect x="30" y="30" width="130" height="40" rx="3" fill="#ffffff" stroke="#e2e8f0"/>
+            <text x="40" y="46" fontFamily="monospace" fontSize="8" fill="#64748b">ALTITUDE MSL</text>
+            <text x="40" y="62" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#0f172a">1,420 M</text>
 
-            <rect x="440" y="30" width="130" height="40" rx="2" fill="#1e293b"/>
-            <text x="450" y="46" fontFamily="monospace" fontSize="8" fill="#94a3b8">AIRSPEED</text>
-            <text x="450" y="62" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#f8fafc">68 KTS</text>
+            <rect x="440" y="30" width="130" height="40" rx="3" fill="#ffffff" stroke="#e2e8f0"/>
+            <text x="450" y="46" fontFamily="monospace" fontSize="8" fill="#64748b">AIRSPEED</text>
+            <text x="450" y="62" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#0f172a">68 KTS</text>
 
-            <rect x="30" y="310" width="130" height="40" rx="2" fill="#1e293b"/>
-            <text x="40" y="326" fontFamily="monospace" fontSize="8" fill="#94a3b8">BATTERY LINK</text>
-            <text x="40" y="342" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#4ade80">94.2%</text>
+            <rect x="30" y="310" width="130" height="40" rx="3" fill="#ffffff" stroke="#e2e8f0"/>
+            <text x="40" y="326" fontFamily="monospace" fontSize="8" fill="#64748b">BATTERY LINK</text>
+            <text x="40" y="342" fontFamily="monospace" fontSize="13" fontWeight="bold" fill="#16a34a">94.2%</text>
           </svg>
         );
 
