@@ -89,18 +89,21 @@ export const About: React.FC = () => {
                   lens === 'experimental' ? 'border-l border-dashed border-white/40' :
                   'border-l border-white/30'
                 }`}>
-                  {/* Pulsing indicator for active positions */}
-                  {entry.isCurrent ? (
-                    <span className={`absolute -left-[5px] top-1.5 w-2 h-2 ${
-                      lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded-full'
-                    } bg-white ring-4 ring-white/20`} />
-                  ) : (
-                    <span className={`absolute -left-[4px] top-2 w-1.5 h-1.5 ${
-                      lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded-full'
-                    } bg-white/40`} />
-                  )}
-                  <div className="font-mono text-xs text-white/60">
-                    {entry.date}
+                  {/* Timeline indicator node optically centered with the first line date */}
+                  <div className="relative flex items-center h-[1.45em]">
+                    <span
+                      className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(1rem+50%)] ${
+                        entry.isCurrent
+                          ? 'w-2 h-2 bg-white ring-2 ring-white/25'
+                          : 'w-1.5 h-1.5 bg-white/40'
+                      } ${
+                        lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded-full'
+                      } transition-all duration-200`}
+                      aria-hidden="true"
+                    />
+                    <div className="font-mono text-xs text-white/60">
+                      {entry.date}
+                    </div>
                   </div>
                   <div className={`font-medium text-[15px] text-white mt-0.5 ${
                     lens === 'editorial' ? 'font-serif' : 'font-sans'

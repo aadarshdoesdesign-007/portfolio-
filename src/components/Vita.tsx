@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { SectionHeader } from './SectionHeader';
+import { BulletItem } from './BulletItem';
 import { vitaSections } from '@/content/vita';
 import { useLens } from '@/context/LensContext';
 
@@ -66,21 +67,18 @@ export const Vita: React.FC = () => {
                         {entry.positions.map((pos, pIdx) => (
                           <div
                             key={pIdx}
-                            className={`relative text-xs text-white/90 ${
-                              pos.isCurrent ? 'pl-3.5 font-medium' : ''
+                            className={`text-xs text-white/90 ${
+                              pos.isCurrent ? 'font-medium' : ''
                             } ${lens === 'editorial' ? 'font-serif italic' : ''}`}
                           >
-                            {pos.isCurrent && (
-                              <span className={`absolute left-0 top-1.5 w-2 h-2 ${
-                                lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded-full'
-                              } bg-white ring-4 ring-white/20`} />
-                            )}
-                            <div>{pos.title}</div>
-                            {pos.date && (
-                              <div className="text-[11px] font-mono text-white/50">
-                                {pos.date}
-                              </div>
-                            )}
+                            <BulletItem active={true} showDot={!!pos.isCurrent}>
+                              <div>{pos.title}</div>
+                              {pos.date && (
+                                <div className="text-[11px] font-mono text-white/50 not-italic">
+                                  {pos.date}
+                                </div>
+                              )}
+                            </BulletItem>
                           </div>
                         ))}
                       </div>

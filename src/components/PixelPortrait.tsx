@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import { useLens } from '@/context/LensContext';
+import { StatusDot } from './BulletItem';
 
 interface PixelPortraitProps {
   className?: string;
@@ -261,7 +262,7 @@ export const PixelPortrait: React.FC<PixelPortraitProps> = ({ className = '' }) 
       {/* Subtle Editorial Caption matching Olivier's Reference */}
       <div className="mt-2.5 flex items-center justify-between text-xs font-mono text-white/70">
         <span className="flex items-center gap-1.5">
-          <span className={`w-1.5 h-1.5 bg-white ${lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded-full'}`} />
+          <StatusDot size="sm" active={true} />
           <span>
             {lens === 'experimental' ? 'NODE::PORTRAIT_PIXELS [FEED: ACTIVE]' :
              lens === 'editorial' ? 'Portrait — subtle resolution' :
