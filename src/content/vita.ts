@@ -6,7 +6,7 @@ export const vitaSections: VitaSection[] = [
     entries: [
       {
         id: 'newspace',
-        date: '2025/10 → 2026/04',
+        date: '10/25 → 04/26',
         organization: 'NewSpace Research and Technologies',
         orgUrl: 'https://www.newspaceresearch.com/',
         location: 'Bengaluru, IN',
@@ -20,7 +20,7 @@ export const vitaSections: VitaSection[] = [
       },
       {
         id: 'iit-indore',
-        date: '2026/04 → 2026/07',
+        date: '04/26 → 07/26',
         organization: 'IIT Indore',
         orgUrl: 'https://www.iiti.ac.in/',
         location: 'Indore / Remote, IN',
@@ -34,7 +34,7 @@ export const vitaSections: VitaSection[] = [
       },
       {
         id: 'zoo-authority',
-        date: '2025/10 → 2026/03',
+        date: '10/25 → 03/26',
         organization: 'Zoo Authority of Karnataka',
         location: 'Shivamogga, IN',
         positions: [
@@ -214,7 +214,7 @@ export const shortVitaEntries = [
     isCurrent: false
   },
   {
-    date: '2026/04 → 2026/07',
+    date: '04/26 → 07/26',
     organization: 'IIT Indore',
     url: 'https://www.iiti.ac.in/',
     role: 'Data Visualization & UX Collaborator',
@@ -222,7 +222,7 @@ export const shortVitaEntries = [
     isCurrent: false
   },
   {
-    date: '2025/10 → 2026/04',
+    date: '10/25 → 04/26',
     organization: 'NewSpace Research & Tech',
     url: 'https://www.newspaceresearch.com/',
     role: 'UI/UX Design Intern',
@@ -230,7 +230,7 @@ export const shortVitaEntries = [
     isCurrent: false
   },
   {
-    date: '2025/08 → ongoing',
+    date: '08/25 → ongoing',
     organization: 'Academic Research (IIT Delhi Aarohan)',
     role: 'Co-Author & Research Lead (GenAI & FinTech UX)',
     location: 'Bengaluru, IN',

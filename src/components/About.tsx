@@ -44,23 +44,11 @@ export const About: React.FC = () => {
               I work at the convergence of digital product design, information visualization, and design research. Rather than treating design as decorative styling, I approach interface design as an information architecture challenge—translating ambiguous user needs, technical telemetry, and cultural data into coherent, legible systems.
             </p>
             <p>
-              My recent work spans mission-critical telemetry interfaces for autonomous systems at <span className="font-medium text-white">NewSpace Research & Technologies</span>, large-scale multi-variable data visualizations for 28 ethnography methodologies at <span className="font-medium text-white">IIT Indore</span>,<sup className="text-[11px] text-white font-mono ml-0.5 font-bold">[1]</sup> and accessible public wayfinding for the <span className="font-medium text-white">Zoo Authority of Karnataka</span>.
+              My recent work spans mission-critical telemetry interfaces for autonomous systems at <span className="font-medium text-white">NewSpace Research & Technologies</span>, large-scale multi-variable data visualizations for 28 ethnography methodologies at <span className="font-medium text-white">IIT Indore</span>, and accessible public wayfinding for the <span className="font-medium text-white">Zoo Authority of Karnataka</span>.
             </p>
             <p>
-              I am pursuing a Bachelor of Design at <span className="font-medium text-white">Jain University</span>, School of Design, Media and Creative Arts. Concurrently, I am co-authoring three faculty-mentored research papers—including studies on AI-assisted architectural heritage reconstruction selected for presentation at <span className="font-medium text-white">Aarohan, IIT Delhi's National Research Paper Showcase</span>.<sup className="text-[11px] text-white font-mono ml-0.5 font-bold">[2]</sup>
+              I am pursuing a Bachelor of Design at <span className="font-medium text-white">Jain University</span>, School of Design, Media and Creative Arts. Concurrently, I am co-authoring three faculty-mentored research papers—including studies on AI-assisted architectural heritage reconstruction selected for presentation at <span className="font-medium text-white">Aarohan, IIT Delhi's National Research Paper Showcase</span>.
             </p>
-          </div>
-
-          {/* Footnotes */}
-          <div className="pt-6 border-t border-white/20 text-xs font-mono text-white/70 space-y-2">
-            <div>
-              <span className="text-white font-bold mr-1">[1]</span>
-              Structured a multidimensional research classification database spanning 28 ethnography types across 73 disciplines with an interactive 6-chart dashboard prototype.
-            </div>
-            <div>
-              <span className="text-white font-bold mr-1">[2]</span>
-              Aarohan is IIT Delhi's annual flagship National Research Paper Showcase; paper authored under faculty mentorship.
-            </div>
           </div>
         </div>
 
