@@ -119,8 +119,11 @@ function HomeContent() {
         onLensChange={setLens}
       />
 
-      {/* 00 Hero Header with bold statement and Table of Contents */}
-      <Hero />
+      {/* 00 Hero Header with bold statement, Table of Contents, and mobile controls */}
+      <Hero 
+        currentColor={currentColor}
+        onColorChange={applyThemeColor}
+      />
 
       <main className="main">
         {/* 01 About Section */}

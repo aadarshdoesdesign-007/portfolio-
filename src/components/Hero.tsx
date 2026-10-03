@@ -1,10 +1,17 @@
 'use client';
 import React, { useState } from 'react';
 import { useLens } from '@/context/LensContext';
+import { ThemeColor } from './ColourSwitcher';
+import { MobileControlArea } from './MobileControlArea';
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  currentColor?: ThemeColor;
+  onColorChange?: (color: ThemeColor) => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ currentColor, onColorChange }) => {
   const [isMountainHovered, setIsMountainHovered] = useState(false);
-  const { lens } = useLens();
+  const { lens, setLens } = useLens();
 
   return (
     <header className="pt-6 sm:pt-8 md:pt-40 lg:pt-48 pb-8 sm:pb-10 md:pb-16 md:min-h-screen md:flex md:flex-col md:justify-between text-white transition-colors duration-400">
@@ -140,6 +147,16 @@ export const Hero: React.FC = () => {
               </a>
             </li>
           </ul>
+
+          {/* Dedicated Responsive Mobile Control Area */}
+          {currentColor && onColorChange && (
+            <MobileControlArea
+              currentColor={currentColor}
+              onColorChange={onColorChange}
+              currentLens={lens}
+              onLensChange={setLens}
+            />
+          )}
         </div>
       </div>
     </header>

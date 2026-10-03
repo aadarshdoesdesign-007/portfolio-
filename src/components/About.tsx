@@ -10,7 +10,7 @@ export const About: React.FC = () => {
   const { lens } = useLens();
 
   return (
-    <section id="about" className="pt-12 sm:pt-16 md:pt-28 pb-14 sm:pb-20 md:pb-28 transition-colors duration-400">
+    <section id="about" className="pt-10 sm:pt-14 md:pt-28 pb-14 sm:pb-20 md:pb-28 transition-colors duration-400">
       {/* Section Title */}
       <div className="gridRow">
         <div className="grid_full">

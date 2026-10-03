@@ -339,26 +339,9 @@ export const Navigation: React.FC<NavigationProps> = ({
             ))}
           </ul>
 
-          <div className="pt-6 border-t border-white/20 flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-white/70 font-mono">Accent Theme</span>
-              <ColourSwitcher
-                currentColor={currentColor}
-                onColorChange={(color) => {
-                  onColorChange(color);
-                }}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-white/70 font-mono">Visual Lens</span>
-              <LensSelector
-                currentLens={currentLens}
-                onLensChange={(lens) => {
-                  onLensChange(lens);
-                  setMobileMenuOpen(false);
-                }}
-              />
-            </div>
+          <div className="pt-6 border-t border-white/20 text-xs font-mono text-white/50 flex items-center justify-between">
+            <span>Aadarsh R — Portfolio</span>
+            <span>2026</span>
           </div>
         </div>
       )}
