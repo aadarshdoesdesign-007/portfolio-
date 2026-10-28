@@ -6,11 +6,14 @@ import { Footer } from '@/components/Footer';
 import { NotebookBackground } from '@/components/NotebookBackground';
 import { MorphingArrowBadge } from '@/components/MorphingArrowBadge';
 import { SpiderAntHero } from '@/components/SpiderAntHero';
+import { CompanionSelector } from '@/components/CompanionSelector';
+import { useCompanion } from '@/context/CompanionContext';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects } from '@/content/projects';
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
+  const { mode } = useCompanion();
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 6);
 
   return (
@@ -24,21 +27,26 @@ export default function HomePage() {
       <main className="relative z-10 flex-1 max-w-7xl mx-auto px-5 sm:px-10 py-8 sm:py-16 w-full pointer-events-auto">
         {/* Hero Section */}
         <section className="relative min-h-[75vh] sm:min-h-[85vh] flex flex-col justify-center mb-16 sm:mb-24">
-          {/* Decorative Web Background Graphic */}
-          <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <img
-              src="/spiderweb.svg"
-              alt="Geometric spiderweb background"
-              className="absolute inset-0 w-full h-full object-contain opacity-35 md:opacity-45 pointer-events-none"
-            />
-          </div>
+          {/* Decorative Web Background Graphic (in Spider Mode) */}
+          {mode === 'spider' && (
+            <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0 transition-opacity duration-500">
+              <img
+                src="/spiderweb.svg"
+                alt="Geometric spiderweb background"
+                className="absolute inset-0 w-full h-full object-contain opacity-35 md:opacity-45 pointer-events-none"
+              />
+            </div>
+          )}
 
           {/* Foreground Hero Content */}
           <div className="relative z-10 max-w-3xl space-y-6 pointer-events-auto">
-            {/* Badge sticker */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black bg-white shadow-[2px_2px_0px_#000000] text-xs font-mono font-bold">
-              <span className="w-2 h-2 rounded-full bg-[#90CD26] animate-pulse" />
-              <span>OPEN FOR SELECT PRODUCT &amp; RESEARCH COLLABORATIONS</span>
+            {/* Badges & Companion Preference Selector */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black bg-white shadow-[2px_2px_0px_#000000] text-xs font-mono font-bold">
+                <span className="w-2 h-2 rounded-full bg-[#90CD26] animate-pulse" />
+                <span>OPEN FOR SELECT PRODUCT &amp; RESEARCH COLLABORATIONS</span>
+              </div>
+              <CompanionSelector />
             </div>
 
             <h1 className="font-pacaembu text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-black leading-[1.08]">

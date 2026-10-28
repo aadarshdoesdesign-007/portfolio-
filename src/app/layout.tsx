@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { CompanionProvider } from '@/context/CompanionContext';
 
 export const viewport: Viewport = {
   themeColor: '#E4E2D8',
@@ -32,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="bg-[#E4E2D8] text-black antialiased font-pacaembu">
-        {children}
+        <CompanionProvider>
+          {children}
+        </CompanionProvider>
       </body>
     </html>
   );
