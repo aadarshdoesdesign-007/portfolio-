@@ -1,35 +1,70 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useCompanion, CompanionMode } from '@/context/CompanionContext';
 
 export const CompanionSelector: React.FC = () => {
   const { mode, setMode } = useCompanion();
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const options: { mode: CompanionMode; icon: string; label: string }[] = [
+    { mode: 'spider', icon: '🕷️', label: 'Spider & Ant' },
+    { mode: 'dog', icon: '🐕', label: 'Dog & Ball' },
+    { mode: 'ant-only', icon: '🐜', label: 'Ant Only' },
+  ];
+
+  const currentOption = options.find((o) => o.mode === mode) || options[0];
 
   return (
-    <div className="inline-flex flex-wrap items-center gap-2 p-1.5 sm:p-2 rounded-2xl bg-[#F9F3EB] border-2 border-black shadow-[3px_3px_0px_#000000] text-xs font-mono font-bold select-none transition-all">
-      <span className="flex items-center gap-1.5 pl-1.5 text-black/80 font-pacaembu font-bold text-xs sm:text-sm">
-        <span className="text-sm">💬</span>
-        <span>Scared of spiders?</span>
-      </span>
+    <div ref={containerRef} className="relative inline-block text-left select-none">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-black/30 bg-white/90 hover:bg-white text-black font-mono text-xs font-semibold shadow-[1px_1px_0px_#000000] hover:shadow-[2px_2px_0px_#000000] transition-all cursor-pointer"
+        aria-label="Change cursor companion"
+        title="Change cursor companion"
+      >
+        <span>{currentOption.icon}</span>
+        <span className="hidden sm:inline text-[11px] font-pacaembu font-bold text-black/80">companion</span>
+        <span className="text-[9px] text-black/50">▾</span>
+      </button>
 
-      <div className="relative">
-        <select
-          value={mode}
-          onChange={(e) => setMode(e.target.value as CompanionMode)}
-          aria-label="Choose your cursor companion mode"
-          className="appearance-none bg-white hover:bg-[#FFFF5F] text-black font-pacaembu font-bold text-xs sm:text-sm px-3 py-1.5 pr-8 rounded-xl border border-black shadow-[1px_1px_0px_#000000] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#FF4BB9] transition-all"
-        >
-          <option value="spider">🕷️ No, let the spider chase me!</option>
-          <option value="dog">🐕 Yes, give me a dog chasing a ball!</option>
-          <option value="ant-only">🐜 Just the ant, please. No chaser.</option>
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-black font-bold">
-          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-          </svg>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-44 rounded-2xl bg-[#F9F3EB] border-2 border-black shadow-[4px_4px_0px_#000000] p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-2 py-1 text-[10px] font-mono font-bold text-black/50 uppercase tracking-wider border-b border-black/10 mb-1">
+            Cursor Companion
+          </div>
+          {options.map((opt) => (
+            <button
+              key={opt.mode}
+              type="button"
+              onClick={() => {
+                setMode(opt.mode);
+                setIsOpen(false);
+              }}
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left text-xs font-pacaembu font-bold transition-all cursor-pointer ${
+                mode === opt.mode
+                  ? 'bg-[#FFFF5F] text-black border border-black shadow-[1px_1px_0px_#000000]'
+                  : 'hover:bg-white text-black/80 hover:text-black'
+              }`}
+            >
+              <span className="text-sm">{opt.icon}</span>
+              <span>{opt.label}</span>
+            </button>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   );
 };

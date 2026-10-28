@@ -21,63 +21,49 @@ export default function HomePage() {
       <NotebookBackground />
 
       {/* Dedicated Viewport-level Interaction Layer (pointer-events: none, non-blocking) */}
-      <SpiderAntHero spiderSize={230} antSize={32} speed={1.35} />
+      <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
 
       <Navbar />
 
-      {/* Hero Section — Minimal Editorial Layout with Generous Negative Space */}
-      <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-end px-5 sm:px-12 py-8 sm:py-12 w-full overflow-visible">
+      {/* Hero Section — Minimal Editorial Layout Matching eranamjoshi.com */}
+      <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-end px-6 sm:px-14 py-12 sm:py-16 w-full overflow-visible">
         {/* Subtle Centered Geometric Spiderweb Background Motif */}
         {mode === 'spider' && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div className="relative w-[85vw] max-w-3xl h-[65vh] flex items-center justify-center">
+            <div className="relative w-[80vw] max-w-2xl h-[55vh] flex items-center justify-center">
               <img
                 src="/spiderweb.svg"
                 alt=""
                 aria-hidden="true"
-                className="w-full h-full object-contain opacity-35 select-none pointer-events-none transition-opacity duration-700"
+                className="w-full h-full object-contain opacity-30 select-none pointer-events-none transition-opacity duration-700"
               />
             </div>
           </div>
         )}
 
-        {/* Lower-Left Restrained Introductory Statement */}
-        <div className="relative z-10 max-w-lg space-y-3 pointer-events-auto pb-2 sm:pb-4">
+        {/* Lower-Left Minimal Introductory Statement */}
+        <div className="relative z-10 max-w-lg space-y-4 pointer-events-auto pb-4 sm:pb-8">
           <div className="space-y-1.5">
             <h1 className="font-pacaembu text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-black leading-tight">
               Aadarsh Ramakrishnan
             </h1>
 
-            <p className="font-mooli text-base sm:text-lg text-black/85 leading-relaxed">
-              Product designer exploring complex systems through interfaces, data visualisation, and design research.
-            </p>
-
-            <p className="font-mono text-xs sm:text-sm text-black/60 pt-0.5">
-              Based in Bengaluru, India.
+            <p className="font-mooli text-base sm:text-lg text-black/80 leading-relaxed">
+              Product designer exploring interfaces, data, and ideas.
             </p>
           </div>
 
-          {/* Understated Supporting Links */}
-          <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono font-bold">
+          {/* Understated One-CTA + Small Unobtrusive Availability Indicator */}
+          <div className="pt-1 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
             <a
               href="#work"
-              className="inline-flex items-center gap-1.5 text-black hover:text-[#FF4BB9] underline decoration-black/40 hover:decoration-[#FF4BB9] underline-offset-4 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-black bg-[#FFFF5F] text-black font-pacaembu font-bold text-xs shadow-[2px_2px_0px_#000000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_#000000] transition-all"
             >
-              <span>selected work</span>
-              <span>↓</span>
+              <span>Explore work</span>
+              <span className="font-bold">→</span>
             </a>
 
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-1 text-black/70 hover:text-black hover:underline underline-offset-4 transition-colors"
-            >
-              <span>about me</span>
-              <span>→</span>
-            </Link>
-
-            <span className="text-black/30 hidden sm:inline">·</span>
-
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 border border-black/30 text-black text-[11px]">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 border border-black/25 text-black/75 text-[11px] font-mono shadow-[1px_1px_0px_#000000]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#90CD26] animate-pulse" />
               <span>{profile.availability}</span>
             </span>
