@@ -1,9 +1,19 @@
 export const profile = {
-  name: 'Aadarsh R',
+  name: 'Aadarsh Ramakrishnan',
+  preferredName: 'Aadarsh R',
   pronouns: 'he/him',
-  role: 'UI/UX Designer · Product Designer · Communication Designer',
-  headline: 'Aadarsh R is a UI/UX, product and communication designer based in Bengaluru.',
-  shortBio: 'Communication Design student at Jain University specializing in UX design, information visualization, and design research. I explore how design can make complex systems, data, and human experiences easier to understand.',
+  primaryRole: 'Product Designer',
+  supportingRoles: [
+    'UI/UX and interaction design',
+    'Data visualisation',
+    'Design research',
+    'Creative technology'
+  ],
+  role: 'Product Designer · UI/UX & Interaction · Data Visualisation',
+  availability: 'Open to UI/UX internships · 2026',
+  headline: 'I design interfaces for complex systems.',
+  supportingCopy: 'I work across product design, data visualisation, and design research to turn complex information into clear, useful experiences.',
+  shortBio: 'Communication Design student at Jain University specializing in product design, UI/UX, information visualization, and design research. I explore how design can make complex systems, data, and human experiences clear and useful.',
   location: 'Bengaluru, Karnataka, India',
   phone: '+91 94877 83279',
   email: 'aadarshdoesdesign@gmail.com',

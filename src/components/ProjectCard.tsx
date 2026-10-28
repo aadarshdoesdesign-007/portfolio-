@@ -166,7 +166,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, priority = fa
           </svg>
         );
 
-      case 'brand': // Nudge / Katha
+      case 'nudge-llm': // Nudge - Prompt Intent & ACM SIGCHI Hackathon
         return (
           <svg viewBox="0 0 600 380" className="w-full h-full bg-[#FFF7EE]" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="600" height="380" fill="#FFF7EE"/>
@@ -196,98 +196,254 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, priority = fa
           </svg>
         );
 
-      default: // Wayfinding / Slanted
+      case 'katha-brand': // KATHA Creative Studio - Branding, Typography & Editorial
+        return (
+          <svg viewBox="0 0 600 380" className="w-full h-full bg-[#FFF5EE]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="380" fill="#FFF5EE"/>
+            <rect x="24" y="24" width="552" height="332" rx="16" fill="#FDFBF7" stroke="#000000" strokeWidth="2"/>
+
+            {/* Tactile poster header grid */}
+            <rect x="48" y="48" width="504" height="68" rx="10" fill="#FF7043" stroke="#000000" strokeWidth="1.5"/>
+            <text x="68" y="92" fontFamily="serif" fontSize="32" fontWeight="900" letterSpacing="4" fill="#FFFFFF">K A T H A</text>
+            <text x="240" y="88" fontFamily="JetBrains Mono" fontSize="11" fontWeight="700" fill="#000000">CREATIVE STUDIO // BRAND &amp; EDITORIAL</text>
+
+            {/* Studio layout specimen cards */}
+            <g transform="translate(48, 136)">
+              {/* Card 1: Editorial Print Specimen */}
+              <rect width="156" height="180" rx="8" fill="#FFFFFF" stroke="#000000" strokeWidth="1.5"/>
+              <rect x="14" y="14" width="128" height="24" rx="4" fill="#000000"/>
+              <text x="24" y="30" fontFamily="serif" fontSize="10" fontWeight="700" fill="#FFFFFF">VERNACULAR TYPE</text>
+              <line x1="14" y1="52" x2="142" y2="52" stroke="#000000" strokeWidth="2"/>
+              <line x1="14" y1="62" x2="120" y2="62" stroke="#000000" strokeWidth="1"/>
+              <line x1="14" y1="72" x2="135" y2="72" stroke="#000000" strokeWidth="1"/>
+              <line x1="14" y1="82" x2="110" y2="82" stroke="#000000" strokeWidth="1"/>
+              
+              <rect x="14" y="100" width="128" height="64" rx="4" fill="#FFFF5F" stroke="#000000" strokeWidth="1"/>
+              <text x="24" y="126" fontFamily="sans-serif" fontSize="18" fontWeight="900" fill="#000000">अ · Aa</text>
+              <text x="24" y="146" fontFamily="JetBrains Mono" fontSize="9" fill="#000000">MODULAR GLYPHS</text>
+            </g>
+
+            {/* Card 2: Visual System Identity Lockup */}
+            <g transform="translate(222, 136)">
+              <rect width="156" height="180" rx="8" fill="#FFFFFF" stroke="#000000" strokeWidth="1.5"/>
+              <circle cx="78" cy="65" r="42" fill="#FF7043" stroke="#000000" strokeWidth="1.5"/>
+              <text x="78" y="72" textAnchor="middle" fontFamily="serif" fontSize="24" fontWeight="800" fill="#FFFFFF">क</text>
+              <rect x="16" y="124" width="124" height="24" rx="12" fill="#000000"/>
+              <text x="78" y="140" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="9" fontWeight="700" fill="#FFFFFF">SWISS GRID × FOLK</text>
+              <text x="78" y="166" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="8" fill="#666666">TACTILE PACKAGING</text>
+            </g>
+
+            {/* Card 3: Color Palette & Swatches */}
+            <g transform="translate(396, 136)">
+              <rect width="156" height="180" rx="8" fill="#FFFFFF" stroke="#000000" strokeWidth="1.5"/>
+              <text x="16" y="28" fontFamily="JetBrains Mono" fontSize="10" fontWeight="700" fill="#000000">SPOT INK TOKENS</text>
+              <rect x="16" y="40" width="36" height="36" rx="6" fill="#FF7043" stroke="#000000" strokeWidth="1"/>
+              <text x="60" y="62" fontFamily="JetBrains Mono" fontSize="10" fill="#000000">Vermilion</text>
+              <rect x="16" y="84" width="36" height="36" rx="6" fill="#FFFF5F" stroke="#000000" strokeWidth="1"/>
+              <text x="60" y="106" fontFamily="JetBrains Mono" fontSize="10" fill="#000000">Fluo Ochre</text>
+              <rect x="16" y="128" width="36" height="36" rx="6" fill="#000000" stroke="#000000" strokeWidth="1"/>
+              <text x="60" y="150" fontFamily="JetBrains Mono" fontSize="10" fill="#000000">India Ink</text>
+            </g>
+          </svg>
+        );
+
+      case 'wayfinding': // Zoo Authority of Karnataka - Mysore Zoo Wayfinding
+        return (
+          <svg viewBox="0 0 600 380" className="w-full h-full bg-[#F4F9F0]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="380" fill="#F4F9F0"/>
+            <rect x="24" y="24" width="552" height="332" rx="16" fill="#FFFFFF" stroke="#000000" strokeWidth="2"/>
+
+            {/* Header bar */}
+            <rect x="24" y="24" width="552" height="44" rx="16" fill="#90CD26"/>
+            <rect x="24" y="52" width="552" height="16" fill="#90CD26"/>
+            <line x1="24" y1="68" x2="576" y2="68" stroke="#000000" strokeWidth="2"/>
+            <text x="44" y="50" fontFamily="JetBrains Mono" fontSize="11" fontWeight="800" fill="#000000">MYSORE ZOO // PEDESTRIAN ORIENTATION &amp; WAYFINDING</text>
+
+            {/* Cartographic trails */}
+            <path d="M 60 300 C 140 260, 220 290, 300 220 C 380 150, 420 170, 520 110" stroke="#000000" strokeWidth="3.5" fill="none"/>
+            <path d="M 120 320 C 200 240, 240 160, 360 130 C 440 100, 480 80, 540 70" stroke="#90CD26" strokeWidth="2.5" strokeDasharray="6 4" fill="none"/>
+
+            {/* Wayfinding nodes */}
+            <g transform="translate(140, 260)">
+              <circle cx="0" cy="0" r="16" fill="#FFFF5F" stroke="#000000" strokeWidth="2"/>
+              <text x="0" y="5" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#000000">01</text>
+              <rect x="24" y="-12" width="90" height="24" rx="6" fill="#FFFFFF" stroke="#000000" strokeWidth="1"/>
+              <text x="32" y="4" fontFamily="sans-serif" fontSize="9" fontWeight="700" fill="#000000">Main Plaza</text>
+            </g>
+
+            <g transform="translate(300, 220)">
+              <circle cx="0" cy="0" r="16" fill="#FF4BB9" stroke="#000000" strokeWidth="2"/>
+              <text x="0" y="5" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#FFFFFF">02</text>
+              <rect x="24" y="-12" width="105" height="24" rx="6" fill="#FFFFFF" stroke="#000000" strokeWidth="1"/>
+              <text x="32" y="4" fontFamily="sans-serif" fontSize="9" fontWeight="700" fill="#000000">Aviary Canopy</text>
+            </g>
+
+            <g transform="translate(440, 140)">
+              <circle cx="0" cy="0" r="16" fill="#00ADE6" stroke="#000000" strokeWidth="2"/>
+              <text x="0" y="5" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#FFFFFF">03</text>
+              <rect x="24" y="-12" width="96" height="24" rx="6" fill="#FFFFFF" stroke="#000000" strokeWidth="1"/>
+              <text x="32" y="4" fontFamily="sans-serif" fontSize="9" fontWeight="700" fill="#000000">Safari Station</text>
+            </g>
+
+            {/* Compass badge */}
+            <g transform="translate(480, 260)">
+              <circle cx="36" cy="36" r="32" fill="#FFFFFF" stroke="#000000" strokeWidth="1.5"/>
+              <line x1="36" y1="12" x2="36" y2="60" stroke="#000000" strokeWidth="1.5"/>
+              <line x1="12" y1="36" x2="60" y2="36" stroke="#000000" strokeWidth="1.5"/>
+              <polygon points="36,10 40,24 32,24" fill="#FF4BB9"/>
+              <text x="36" y="8" fontFamily="JetBrains Mono" fontSize="8" fontWeight="800" textAnchor="middle" fill="#000000">N</text>
+            </g>
+          </svg>
+        );
+
+      case 'speculative': // Slanted Publishers - Future Speculative Systems
+        return (
+          <svg viewBox="0 0 600 380" className="w-full h-full bg-[#FFF0F8]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="600" height="380" fill="#FFF0F8"/>
+            <rect x="24" y="24" width="552" height="332" rx="16" fill="#FFFFFF" stroke="#000000" strokeWidth="2"/>
+
+            {/* Slanted poster lockup */}
+            <rect x="48" y="48" width="504" height="40" rx="8" fill="#000000"/>
+            <text x="64" y="73" fontFamily="sans-serif" fontSize="12" fontWeight="800" fill="#FFFFFF">SLANTED PUBLISHERS // VISIONS OF THE FUTURE</text>
+            <text x="440" y="73" fontFamily="JetBrains Mono" fontSize="10" fill="#FFFF5F">ANTHOLOGY '25</text>
+
+            {/* Speculative graphic grid / bingo card */}
+            <g transform="translate(48, 108)">
+              {/* Halftone patterned poster box */}
+              <rect width="230" height="210" rx="10" fill="#FDFBF7" stroke="#000000" strokeWidth="1.5"/>
+              <rect x="16" y="16" width="198" height="30" rx="4" fill="#FF4BB9" stroke="#000000" strokeWidth="1"/>
+              <text x="28" y="36" fontFamily="sans-serif" fontSize="11" fontWeight="900" fill="#FFFFFF">SPECULATIVE BINGO</text>
+              
+              <g transform="translate(16, 56)">
+                {Array.from({ length: 4 }).map((_, r) =>
+                  Array.from({ length: 4 }).map((_, c) => (
+                    <rect
+                      key={`${r}-${c}`}
+                      x={c * 50}
+                      y={r * 34}
+                      width={44}
+                      height={28}
+                      rx={3}
+                      fill={(r + c) % 3 === 0 ? '#FFFF5F' : (r + c) % 3 === 1 ? '#00ADE6' : '#FFFFFF'}
+                      stroke="#000000"
+                      strokeWidth="1"
+                    />
+                  ))
+                )}
+              </g>
+            </g>
+
+            {/* Typography specimen & quote */}
+            <g transform="translate(300, 108)">
+              <rect width="252" height="210" rx="10" fill="#FFFFFF" stroke="#000000" strokeWidth="1.5"/>
+              <text x="20" y="36" fontFamily="serif" fontSize="20" fontWeight="900" fill="#000000">"Automated Rituals"</text>
+              <text x="20" y="60" fontFamily="sans-serif" fontSize="10" fill="#666666">Interrogating algorithmic futures with visual irony.</text>
+              <line x1="20" y1="76" x2="232" y2="76" stroke="#000000" strokeWidth="1"/>
+
+              <rect x="20" y="92" width="212" height="40" rx="6" fill="#F8FAFC" stroke="#000000" strokeWidth="1"/>
+              <text x="32" y="116" fontFamily="JetBrains Mono" fontSize="10" fontWeight="700" fill="#000000">SPOT RISO &amp; INDIA INK</text>
+
+              <rect x="20" y="144" width="212" height="46" rx="8" fill="#FFFF5F" stroke="#000000" strokeWidth="1.5"/>
+              <text x="32" y="172" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" fill="#000000">INTERNATIONAL FEATURE</text>
+            </g>
+          </svg>
+        );
+
+      default:
         return (
           <svg viewBox="0 0 600 380" className="w-full h-full bg-[#F4F9F8]" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="600" height="380" fill="#F4F9F8"/>
             <rect x="24" y="24" width="552" height="332" rx="16" fill="#FFFFFF" stroke="#000000" strokeWidth="2"/>
-
-            {/* Topographical trail */}
-            <path d="M 60 300 C 140 260, 220 290, 300 220 C 380 150, 420 170, 520 90" stroke="#000000" strokeWidth="3" fill="none"/>
-            <path d="M 120 320 C 200 240, 240 160, 360 120 C 440 90, 480 60, 540 50" stroke="#90CD26" strokeWidth="2.5" strokeDasharray="6 4" fill="none"/>
-
-            <circle cx="140" cy="260" r="16" fill="#FFFF5F" stroke="#000000" strokeWidth="2"/>
-            <text x="140" y="265" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#000000">01</text>
-
-            <circle cx="300" cy="220" r="16" fill="#FF4BB9" stroke="#000000" strokeWidth="2"/>
-            <text x="300" y="225" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#FFFFFF">02</text>
-
-            <circle cx="440" cy="140" r="16" fill="#00ADE6" stroke="#000000" strokeWidth="2"/>
-            <text x="440" y="145" fontFamily="JetBrains Mono" fontSize="10" fontWeight="800" textAnchor="middle" fill="#FFFFFF">03</text>
+            <circle cx="300" cy="190" r="60" fill="#FFFF5F" stroke="#000000" strokeWidth="2"/>
+            <text x="300" y="196" fontFamily="JetBrains Mono" fontSize="14" fontWeight="800" textAnchor="middle" fill="#000000">PROJECT</text>
           </svg>
         );
     }
   };
 
   return (
-    <article className="group relative block w-full">
-      <Link href={`/work/${project.slug}`} className="block focus:outline-none">
+    <article className="group relative block w-full h-full">
+      <Link href={`/work/${project.slug}`} className="block h-full focus:outline-none">
         <motion.div
           whileHover={{ y: -6 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative rounded-3xl bg-[#F9F3EB] border-2 border-black p-4 sm:p-5 shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] transition-shadow duration-200 overflow-hidden flex flex-col justify-between"
+          className="relative h-full rounded-3xl bg-[#F9F3EB] border-2 border-black p-4 sm:p-5 shadow-[4px_4px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] transition-shadow duration-200 overflow-hidden flex flex-col justify-between"
         >
-          {/* Card Visual Header / Media */}
-          <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-black/30 bg-white">
-            <div className="w-full h-full transform transition-transform duration-500 group-hover:scale-[1.03]">
-              {renderThumbnail()}
+          <div>
+            {/* Card Visual Header / Media */}
+            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-black/30 bg-white">
+              <div className="w-full h-full transform transition-transform duration-500 group-hover:scale-[1.03]">
+                {renderThumbnail()}
+              </div>
+
+              {/* Corner Badge */}
+              {project.coverBadge && (
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 border border-black text-[10px] font-mono font-bold tracking-wider text-black shadow-[1px_1px_0px_#000000]">
+                  {project.coverBadge}
+                </div>
+              )}
+
+              {/* Year Tag */}
+              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black text-white text-[10px] font-mono font-semibold">
+                {project.year}
+              </div>
             </div>
 
-            {/* Corner Badge */}
-            {project.coverBadge && (
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 border border-black text-[10px] font-mono font-bold tracking-wider text-black shadow-[1px_1px_0px_#000000]">
-                {project.coverBadge}
+            {/* Card Metadata & Content */}
+            <div className="mt-4 space-y-2.5">
+              {/* Category / Discipline Pill */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  className="px-3 py-0.5 rounded-full text-xs font-pacaembu font-bold tracking-wide border border-black"
+                  style={{ backgroundColor: project.accentColor, color: project.accentColor === '#000000' ? '#ffffff' : '#000000' }}
+                >
+                  {project.category}
+                </span>
+                <span className="text-xs font-mono text-black/60 truncate">
+                  {project.clientOrOrg}
+                </span>
               </div>
-            )}
 
-            {/* Year Tag */}
-            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black text-white text-[10px] font-mono font-semibold">
-              {project.year}
+              {/* Title */}
+              <h3 className="font-pacaembu text-lg sm:text-xl font-bold tracking-tight text-black group-hover:text-[#FF4BB9] transition-colors leading-snug">
+                {project.title}
+              </h3>
+
+              {/* Tagline / Description */}
+              <p className="text-xs sm:text-sm font-mooli text-black/75 line-clamp-2 leading-relaxed">
+                {project.tagline || project.description}
+              </p>
+
+              {/* Explicit Role & Outcome for Recruiter Transparency */}
+              <div className="mt-3 pt-3 border-t border-black/15 space-y-1.5 text-xs">
+                <div className="flex items-start gap-1.5">
+                  <span className="font-mono font-bold text-black text-[10px] uppercase tracking-wider shrink-0 mt-0.5">Role:</span>
+                  <span className="font-mooli text-black/85 leading-snug">{project.cardRole}</span>
+                </div>
+                <div className="flex items-start gap-1.5">
+                  <span className="font-mono font-bold text-black text-[10px] uppercase tracking-wider shrink-0 mt-0.5">Outcome:</span>
+                  <span className="font-mooli text-black/85 leading-snug">{project.cardOutcome}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Card Metadata & Content */}
-          <div className="mt-5 space-y-2.5">
-            {/* Category / Discipline Pill */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className="px-3 py-0.5 rounded-full text-xs font-pacaembu font-bold tracking-wide border border-black"
-                style={{ backgroundColor: project.accentColor, color: project.accentColor === '#000000' ? '#ffffff' : '#000000' }}
-              >
-                {project.category}
-              </span>
-              <span className="text-xs font-mono text-black/60">
-                {project.clientOrOrg}
-              </span>
+          {/* Tags & Action Arrow Footer */}
+          <div className="mt-4 pt-3 border-t border-black/10 flex flex-wrap gap-1.5 items-center justify-between">
+            <div className="flex flex-wrap gap-1.5">
+              {project.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-0.5 rounded-md bg-white border border-black/30 text-[10px] font-mono text-black/80"
+                >
+                  #{tag.toLowerCase().replace(/\s+/g, '')}
+                </span>
+              ))}
             </div>
 
-            {/* Title */}
-            <h3 className="font-pacaembu text-lg sm:text-xl font-bold tracking-tight text-black group-hover:text-[#FF4BB9] transition-colors leading-snug">
-              {project.title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-xs sm:text-sm font-mooli text-black/75 line-clamp-2 leading-relaxed">
-              {project.tagline || project.description}
-            </p>
-
-            {/* Tags footer */}
-            <div className="pt-2 flex flex-wrap gap-1.5 items-center justify-between">
-              <div className="flex flex-wrap gap-1.5">
-                {project.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 rounded-md bg-white border border-black/30 text-[10px] font-mono text-black/80"
-                  >
-                    #{tag.toLowerCase().replace(/\s+/g, '')}
-                  </span>
-                ))}
-              </div>
-
-              {/* Arrow button icon */}
-              <div className="w-7 h-7 rounded-full border border-black bg-white flex items-center justify-center text-black font-bold group-hover:bg-[#FFFF5F] group-hover:translate-x-1 transition-all">
-                ↗
-              </div>
+            {/* Arrow button icon */}
+            <div className="w-7 h-7 rounded-full border border-black bg-white flex items-center justify-center text-black font-bold group-hover:bg-[#FFFF5F] group-hover:translate-x-1 transition-all">
+              ↗
             </div>
           </div>
         </motion.div>

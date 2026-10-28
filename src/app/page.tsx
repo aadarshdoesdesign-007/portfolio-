@@ -10,16 +10,18 @@ import { CompanionSelector } from '@/components/CompanionSelector';
 import { useCompanion } from '@/context/CompanionContext';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects } from '@/content/projects';
+import { profile } from '@/content/profile';
 import { motion } from 'framer-motion';
 
 export default function HomePage() {
   const { mode } = useCompanion();
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 6);
+  const featuredProjects = projects.filter((p) => p.featured);
+  const totalProjectsCount = projects.length;
 
   return (
     <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#FFFF5F] overflow-x-hidden">
       <NotebookBackground />
-      {/* Viewport-level Spider & Ant Interaction Layer */}
+      {/* Viewport-level Spider & Ant Interaction Layer (pointer-events: none, non-blocking) */}
       <SpiderAntHero spiderSize={250} antSize={34} speed={1.3} />
 
       <Navbar />
@@ -40,22 +42,29 @@ export default function HomePage() {
 
           {/* Foreground Hero Content */}
           <div className="relative z-10 max-w-3xl space-y-6 pointer-events-auto">
-            {/* Badges & Companion Preference Selector */}
+            {/* Availability Pill & Non-blocking Companion Preference Selector */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black bg-white shadow-[2px_2px_0px_#000000] text-xs font-mono font-bold">
                 <span className="w-2 h-2 rounded-full bg-[#90CD26] animate-pulse" />
-                <span>OPEN FOR SELECT PRODUCT &amp; RESEARCH COLLABORATIONS</span>
+                <span className="uppercase">{profile.availability}</span>
               </div>
               <CompanionSelector />
             </div>
 
+            {/* Primary Headline */}
             <h1 className="font-pacaembu text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-black leading-[1.08]">
-              welcome to my <span className="underline decoration-[#FF4BB9] decoration-wavy decoration-4 underline-offset-8">portfolio</span>.
+              I design interfaces for <span className="underline decoration-[#FF4BB9] decoration-wavy decoration-4 underline-offset-8">complex systems</span>.
             </h1>
 
-            <p className="font-mooli text-lg sm:text-xl text-black/85 leading-relaxed max-w-xl">
-              I'm <span className="font-semibold text-black">Aadarsh Ramakrishnan</span>, a multidisciplinary designer and creative technologist based in Bengaluru, India, creating work across <span className="font-semibold text-black">UI/UX</span>, <span className="font-semibold text-black">product design</span>, <span className="font-semibold text-black">data visualization</span>, and <span className="font-semibold text-black">design research</span>.
-            </p>
+            {/* Clear, Supporting Value Proposition & Identity */}
+            <div className="space-y-3 max-w-2xl">
+              <p className="font-mooli text-lg sm:text-xl text-black/85 leading-relaxed">
+                {profile.supportingCopy}
+              </p>
+              <p className="font-mooli text-sm sm:text-base text-black/70 leading-relaxed">
+                I'm <span className="font-semibold text-black">{profile.name}</span>, a <span className="font-semibold text-black underline decoration-[#00ADE6] underline-offset-4">{profile.primaryRole}</span> based in {profile.location.split(',')[0]}, focusing on {profile.supportingRoles.join(', ')}.
+              </p>
+            </div>
 
             {/* Call-to-Action Pill Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -97,7 +106,7 @@ export default function HomePage() {
               href="/work"
               className="group hidden sm:flex items-center gap-2 font-pacaembu font-bold text-sm text-black hover:text-[#FF4BB9] transition-colors"
             >
-              <span>all projects</span>
+              <span>view all {totalProjectsCount} projects</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </div>
@@ -115,7 +124,7 @@ export default function HomePage() {
               href="/work"
               className="w-full text-center px-6 py-3 rounded-full border-2 border-black bg-[#FFFF5F] text-black font-pacaembu font-bold text-base shadow-[3px_3px_0px_#000000]"
             >
-              view all {projects.length} projects →
+              view all {totalProjectsCount} projects →
             </Link>
           </div>
         </section>
@@ -124,7 +133,7 @@ export default function HomePage() {
         <section className="rounded-3xl bg-[#F9F3EB] border-2 border-black shadow-[5px_5px_0px_#000000] p-8 sm:p-12 mb-16 relative overflow-hidden">
           <div className="max-w-3xl space-y-6">
             <div className="inline-block px-3 py-1 rounded-full bg-[#FFFF5F] border border-black text-xs font-mono font-bold tracking-wider">
-              PHILOSOPHY // TRANSLATION DEVICE
+              PHILOSOPHY // INFORMATION ARCHITECTURE
             </div>
 
             <h3 className="font-pacaembu text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-black leading-snug">

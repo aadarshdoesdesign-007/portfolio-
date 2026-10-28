@@ -8,6 +8,8 @@ export interface Project {
   year: string;
   timeline: string;
   role: string;
+  cardRole: string;
+  cardOutcome: string;
   location: string;
   accentColor: string;
   tagline: string;
@@ -20,7 +22,7 @@ export interface Project {
   outcomes: string[];
   featured?: boolean;
   coverBadge?: string;
-  diagramType?: 'matrix' | 'system' | 'chart' | 'flow' | 'wireframe' | 'brand';
+  diagramType?: 'matrix' | 'wireframe' | 'chart' | 'system' | 'nudge-llm' | 'katha-brand' | 'wayfinding' | 'speculative' | 'brand' | 'flow';
 }
 
 export const projects: Project[] = [
@@ -34,6 +36,8 @@ export const projects: Project[] = [
     year: '2026',
     timeline: '04/26 → 07/26',
     role: 'Data Visualization & UX Collaborator',
+    cardRole: 'UX and Data Visualisation Design',
+    cardOutcome: 'An interactive knowledge platform for exploring ethnographic methods, categories, and relationships.',
     location: 'Indore / Remote, IN',
     accentColor: '#00ADE6',
     tagline: 'Translating complex qualitative methodology across 28 ethnography types and 73 disciplines into an interactive relational dashboard.',
@@ -74,6 +78,8 @@ export const projects: Project[] = [
     year: '2026',
     timeline: '2025 → 2026',
     role: 'Lead Product Designer & UX Researcher',
+    cardRole: 'Product Design & UX Research',
+    cardOutcome: 'A student finance concept exploring the financial recall gap and opportunities for better spending awareness.',
     location: 'Bengaluru, IN',
     accentColor: '#FF4BB9',
     tagline: 'Bridging the cognitive gap between digital micro-spending and financial recall for university students.',
@@ -114,6 +120,8 @@ export const projects: Project[] = [
     year: '2026',
     timeline: '2025 → 2026',
     role: 'Lead Student Author & Computational Visualizer',
+    cardRole: 'Design Research & AI-Assisted Visualisation',
+    cardOutcome: 'A constraint-based approach to visualising uncertainty in fragmented cultural heritage reconstruction.',
     location: 'Hampi / New Delhi, IN',
     accentColor: '#FFFF5F',
     tagline: 'Applying generative diffusion models and field photogrammetry to ethically reconstruct lost architectural reliefs at Vijayanagara.',
@@ -154,6 +162,8 @@ export const projects: Project[] = [
     year: '2026',
     timeline: '10/25 → 04/26',
     role: 'UI/UX Design Intern',
+    cardRole: 'UI/UX and Product Interface Design',
+    cardOutcome: 'Interfaces for robotics-related workflows and system information, based on verified project materials.',
     location: 'Bengaluru, IN',
     accentColor: '#90CD26',
     tagline: 'Designing mission-critical ground control interfaces and flight telemetry systems for autonomous drone fleets.',
@@ -194,6 +204,8 @@ export const projects: Project[] = [
     year: '2026',
     timeline: '2026',
     role: 'Lead Interaction & Concept Designer',
+    cardRole: 'Interaction Design',
+    cardOutcome: 'An LLM interface and prompt-coaching concept (2nd Place ACM SIGCHI hackathon).',
     location: 'Pune / Mumbai, IN',
     accentColor: '#FF6100',
     tagline: 'Reimagining generative AI text boxes into proactive, human-centered cognitive scaffolds.',
@@ -222,7 +234,7 @@ export const projects: Project[] = [
     ],
     featured: true,
     coverBadge: 'ACM SIGCHI // 2ND PLACE',
-    diagramType: 'brand'
+    diagramType: 'nudge-llm'
   },
   {
     id: 'katha-studio',
@@ -234,8 +246,10 @@ export const projects: Project[] = [
     year: '2025',
     timeline: '2025',
     role: 'Brand Identity & Visual Designer',
+    cardRole: 'Brand Identity & Digital Experience',
+    cardOutcome: 'A creative studio identity and website translating the studio\'s approach into a coherent visual system.',
     location: 'Bengaluru, IN',
-    accentColor: '#B3D3FF',
+    accentColor: '#FF7043',
     tagline: 'Contemporary visual identity celebrating vernacular storytelling through bold typography and tactile printmaking.',
     description: 'Complete brand identity, typography system, digital presence, and packaging design exploring the intersection of modern Indian design and folkloric narrative.',
     tags: ['Branding', 'Visual Identity', 'Typography', 'Packaging', 'Art Direction'],
@@ -261,26 +275,28 @@ export const projects: Project[] = [
       'Client reported 60% increase in inbound commission inquiries within 3 months of launch.'
     ],
     featured: true,
-    coverBadge: 'BRAND SYSTEM // IDENTITY',
-    diagramType: 'brand'
+    coverBadge: 'KATHA // BRAND IDENTITY',
+    diagramType: 'katha-brand'
   },
   {
     id: 'zoo-navigation',
     slug: 'zoo-navigation-wayfinding-system',
     title: 'Zoo Navigation & Public Wayfinding System',
     shortTitle: 'Zoo Wayfinding',
-    clientOrOrg: 'Zoo Authority of Karnataka',
+    clientOrOrg: 'Zoo Authority of Karnataka (Mysore Zoo)',
     category: 'Product Design',
     year: '2026',
     timeline: '10/25 → 03/26',
     role: 'UX & Wayfinding Designer',
-    location: 'Shivamogga, IN',
+    cardRole: 'Wayfinding and Information Architecture',
+    cardOutcome: 'Public wayfinding and orientation signage system for Mysore Zoo.',
+    location: 'Mysuru / Shivamogga, IN',
     accentColor: '#90CD26',
-    tagline: 'Simplifying pedestrian orientation and environmental wayfinding across a sprawling 100+ acre wildlife reserve.',
+    tagline: 'Simplifying pedestrian orientation and environmental wayfinding across a sprawling wildlife reserve.',
     description: 'Spatial information architecture, zoned color taxonomies, and companion digital map flows engineered for accessibility across multilingual pedestrian groups.',
     tags: ['Wayfinding', 'Information Architecture', 'Public UX', 'Accessibility', 'Spatial Design'],
     overview: [
-      'Developed a comprehensive pedestrian orientation and digital wayfinding system for the Zoo Authority of Karnataka across their wildlife and safari reserve in Shivamogga.',
+      'Developed a comprehensive pedestrian orientation and digital wayfinding system for the Zoo Authority of Karnataka across their wildlife reserve (Mysore Zoo).',
       'The project combined field observation, behavioral shadowing, and cognitive mapping to resolve critical navigational bottlenecks encountered by diverse visitor demographics.'
     ],
     problem: 'Sprawling conservation terrain with confusing fork paths caused severe visitor disorientation, family fatigue, and emergency vehicle bottlenecks.',
@@ -300,9 +316,9 @@ export const projects: Project[] = [
       'Decreased visitor backtracking and disorientation during preliminary evaluation sessions.',
       'Supplied public agency with deployment-ready blueprint for site-wide implementation.'
     ],
-    featured: false,
+    featured: true,
     coverBadge: 'PUBLIC UX // WAYFINDING',
-    diagramType: 'flow'
+    diagramType: 'wayfinding'
   },
   {
     id: 'slanted-future-bingo',
@@ -314,6 +330,8 @@ export const projects: Project[] = [
     year: '2025',
     timeline: '2025',
     role: 'Visual Designer & Printmaker',
+    cardRole: 'Editorial and Typography Design',
+    cardOutcome: 'Poster and editorial contribution exploring future speculative systems.',
     location: 'Bengaluru / Germany',
     accentColor: '#FF4BB9',
     tagline: 'Speculative posters and graphic systems interrogating automated futures and human quirks.',
@@ -337,8 +355,8 @@ export const projects: Project[] = [
       'Published in international design anthology by Slanted Publishers.',
       'Exhibited in university student showcase reviews.'
     ],
-    featured: false,
+    featured: true,
     coverBadge: 'SLANTED // SPECULATIVE',
-    diagramType: 'chart'
+    diagramType: 'speculative'
   }
 ];

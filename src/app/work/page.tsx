@@ -4,19 +4,15 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { NotebookBackground } from '@/components/NotebookBackground';
 import { ProjectCard } from '@/components/ProjectCard';
-import { projects, Project } from '@/content/projects';
+import { projects } from '@/content/projects';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const categories = [
-    'All',
-    'Product Design',
-    'Data Visualization',
-    'Research & AI',
-    'Branding',
-  ];
+  // Derive categories dynamically from content while keeping 'All' first
+  const rawCategories = Array.from(new Set(projects.map((p) => p.category)));
+  const categories = ['All', ...rawCategories];
 
   const filteredProjects = selectedCategory === 'All'
     ? projects
@@ -40,7 +36,7 @@ export default function WorkPage() {
               </span>
             </div>
             <p className="font-mooli text-sm sm:text-base text-black/70 max-w-md">
-              Selected projects across UI/UX, product design, complex data visualization, design research, and visual branding.
+              Showing {filteredProjects.length} of {projects.length} verified projects across UI/UX, product design, complex data visualization, design research, and visual branding.
             </p>
           </div>
 
@@ -48,17 +44,21 @@ export default function WorkPage() {
           <div className="flex flex-wrap items-center gap-2.5 pt-2">
             {categories.map((cat) => {
               const isSelected = selectedCategory === cat;
+              const count = cat === 'All' ? projects.length : projects.filter((p) => p.category === cat).length;
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-pacaembu text-xs sm:text-sm font-semibold tracking-wide border-2 border-black transition-all duration-200 cursor-pointer ${
+                  className={`px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-pacaembu text-xs sm:text-sm font-semibold tracking-wide border-2 border-black transition-all duration-200 cursor-pointer flex items-center gap-2 ${
                     isSelected
                       ? 'bg-[#FFFF5F] text-black shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                       : 'bg-white/80 hover:bg-white text-black/80 hover:text-black shadow-[1px_1px_0px_#000000]'
                   }`}
                 >
-                  {cat}
+                  <span>{cat}</span>
+                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full border border-black ${isSelected ? 'bg-white text-black' : 'bg-black/5 text-black/60'}`}>
+                    {count}
+                  </span>
                 </button>
               );
             })}
