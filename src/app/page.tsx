@@ -14,15 +14,24 @@ export default function HomePage() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 6);
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#FFFF5F]">
+    <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#FFFF5F] overflow-x-hidden">
       <NotebookBackground />
+      {/* Viewport-level Spider & Ant Interaction Layer */}
+      <SpiderAntHero spiderSize={250} antSize={34} speed={1.3} />
+
       <Navbar />
 
-      <main className="relative z-10 flex-1 max-w-7xl mx-auto px-5 sm:px-10 py-8 sm:py-16 w-full">
-        {/* Hero Section with Opening Spider & Ant Interaction */}
+      <main className="relative z-10 flex-1 max-w-7xl mx-auto px-5 sm:px-10 py-8 sm:py-16 w-full pointer-events-auto">
+        {/* Hero Section */}
         <section className="relative min-h-[75vh] sm:min-h-[85vh] flex flex-col justify-center mb-16 sm:mb-24">
-          {/* Opening Spider & Ant Interaction Canvas */}
-          <SpiderAntHero spiderSize={280} antSize={34} speed={1.8} />
+          {/* Decorative Web Background Graphic */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+            <img
+              src="/spiderweb.svg"
+              alt="Geometric spiderweb background"
+              className="absolute inset-0 w-full h-full object-contain opacity-35 md:opacity-45 pointer-events-none"
+            />
+          </div>
 
           {/* Foreground Hero Content */}
           <div className="relative z-10 max-w-3xl space-y-6 pointer-events-auto">
