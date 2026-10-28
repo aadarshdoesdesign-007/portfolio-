@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { NotebookBackground } from '@/components/NotebookBackground';
 import { SpiderAntHero } from '@/components/SpiderAntHero';
+import { SpiderwebGraphic } from '@/components/SpiderwebGraphic';
 import { useCompanion } from '@/context/CompanionContext';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects } from '@/content/projects';
@@ -27,18 +28,13 @@ export default function HomePage() {
       {/* 3. Transparent Header — Notebook lines continue uninterrupted behind */}
       <Navbar />
 
-      {/* 4. Hero Section — Centered Geometric Spiderweb & Minimal Editorial Layout */}
+      {/* 4. Hero Section — Widescreen Organic Geometric Spiderweb & Minimal Editorial Layout */}
       <section className="relative min-h-[calc(100vh-88px)] flex flex-col justify-end px-6 sm:px-20 py-12 sm:py-16 w-full overflow-visible">
-        {/* Central Geometric Spiderweb Motif — Clearly Visible & Unclipped */}
+        {/* Widescreen Organic Geometric Spiderweb (spans 70–80% of viewport width with zero square edges) */}
         {mode === 'spider' && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div className="relative w-[92vw] max-w-4xl h-[70vh] sm:h-[78vh] flex items-center justify-center">
-              <img
-                src="/spiderweb.svg"
-                alt="Geometric spiderweb"
-                aria-hidden="true"
-                className="w-full h-full object-contain opacity-85 select-none pointer-events-none transition-opacity duration-700"
-              />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-visible">
+            <div className="relative w-[95vw] max-w-6xl h-[75vh] sm:h-[85vh] flex items-center justify-center overflow-visible">
+              <SpiderwebGraphic className="w-full h-full opacity-90 transition-opacity duration-700" />
             </div>
           </div>
         )}
