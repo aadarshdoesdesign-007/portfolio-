@@ -8,24 +8,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        survey: {
-          dark: '#111312',
-          surface: '#1A1D1B',
-          panel: '#252725',
-          border: '#333734',
-          muted: '#686A64',
-          parchment: '#E7E1D3',
-          offwhite: '#F4F2EC',
-          blue: '#42677B',
-          deepblue: '#1F3948',
-          orange: '#E66A2C',
-          yellow: '#D7C94B',
+        paper: '#E4E2D8',
+        card: '#F9F3EB',
+        notebook: {
+          line: '#00AEEF',
+          margin: '#FF31BC',
+        },
+        pop: {
+          pink: '#FF4BB9',
+          yellow: '#FFFF5F',
+          cyan: '#00ADE6',
+          blue: '#B3D3FF',
+          green: '#90CD26',
+          orange: '#FF6100',
         }
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'sans-serif'],
-        mono: ['var(--font-mono)', 'monospace'],
-        serif: ['var(--font-serif)', 'serif'],
+        pacaembu: ['Pacaembu', 'Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+        mooli: ['Mooli', 'Inter', 'sans-serif'],
+        sans: ['Pacaembu', 'Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       }
     },
   },

@@ -1,129 +1,58 @@
 'use client';
 import React from 'react';
-import { profile } from '@/content/profile';
-import { useLens } from '@/context/LensContext';
+import Link from 'next/link';
 
-interface FooterProps {
-  onCycleColor: () => void;
-  onToggleGrid: () => void;
-  gridActive: boolean;
-}
-
-export const Footer: React.FC<FooterProps> = ({
-  onCycleColor,
-  onToggleGrid,
-  gridActive
-}) => {
-  const { lens } = useLens();
-
+export const Footer: React.FC = () => {
   return (
-    <footer className={`background--highlight py-12 sm:py-16 md:py-20 text-white transition-colors duration-400 ${
-      lens === 'brutalist' ? 'border-t-2 border-white' :
-      lens === 'experimental' ? 'border-t border-dashed border-white/40' :
-      'border-t border-white/20'
-    }`}>
-      <div className="gridRow grid_reverse gap-y-12">
-        {/* Left Column: Credits and Colophon */}
-        <div className={`grid_1-2 space-y-4 text-xs sm:text-sm text-white/80 ${
-          lens === 'editorial' ? 'font-serif text-sm' : 'font-sans'
-        }`}>
-          <p className="leading-relaxed">
-            {lens === 'experimental' ? (
-              <span className="font-mono text-xs">
-                DATA_FEED::ARCHIVE // OPERATOR: <span className="text-white font-bold">{profile.name.toUpperCase()}</span>
-              </span>
-            ) : (
-              <>
-                Personal portfolio and research archive of <span className="font-semibold text-white">{profile.name}</span>.
-              </>
-            )}
+    <footer className="relative z-10 w-full mt-24 border-t-2 border-black/80 bg-[#E4E2D8]/95 px-5 sm:px-10 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+        {/* Colophon & Identity */}
+        <div className="space-y-2 max-w-md">
+          <div className="font-pacaembu text-xl sm:text-2xl font-bold text-black flex items-center gap-2">
+            <span>aadarsh ramakrishnan</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FF4BB9]" />
+          </div>
+          <p className="text-sm font-mooli text-black/75 leading-relaxed">
+            Multidisciplinary designer exploring UI/UX, complex system visualization, design research, and playful creative engineering.
           </p>
-          <p className={`leading-relaxed text-white/70 ${lens === 'editorial' ? 'italic' : ''}`}>
-            UI/UX Designer · Product Designer · Communication Designer
-            <br />
-            Student at Jain University, School of Design, Media and Creative Arts.
-          </p>
-          <div className="pt-4 text-white/60 font-mono text-[11px] leading-relaxed">
-            <p>2026 © {profile.name}. Bengaluru, Karnataka · 12°58'N 77°35'E ⌁</p>
-            <p>
-              {lens === 'swiss' ? 'International Typographic System // Helvetica Grid Archive.' :
-               lens === 'brutalist' ? 'RAW MONOSPACE ARCHIVE // NO BLOAT.' :
-               lens === 'editorial' ? 'Typeset in literary measure with editorial annotations.' :
-               lens === 'experimental' ? 'EOF // TELEMETRY TERMINATED // ALL SYSTEMS NOMINAL.' :
-               'Typography-led design system & research archive.'}
-            </p>
+          <div className="text-xs font-mono text-black/60 pt-1">
+            2026 © Aadarsh Ramakrishnan · Bengaluru, Karnataka · 12°58'N 77°35'E ⌁
           </div>
         </div>
 
-        {/* Middle Column: Direct Contact & Portfolio Links */}
-        <div className="grid_3-4">
-          <ul className={`space-y-2 text-sm ${lens === 'editorial' ? 'font-serif' : 'font-sans'}`}>
-            <li>
-              <a
-                href={profile.links.email}
-                className="inline-block py-1 hover:text-white underline decoration-white/30 underline-offset-4 transition-colors"
-              >
-                {lens === 'brutalist' ? `[EMAIL] --> ${profile.email}` : `Email — ${profile.email}`}
-              </a>
-            </li>
-            <li>
-              <a
-                href={profile.links.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block py-1 hover:text-white underline decoration-white/30 underline-offset-4 transition-colors"
-              >
-                {lens === 'brutalist' ? '[LINKEDIN] --> /in/aadarsh-ramakrishnan-b46052293/' : 'LinkedIn — /in/aadarsh-ramakrishnan-b46052293/'}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`tel:${profile.phone}`}
-                className="inline-block py-1 hover:text-white underline decoration-white/30 underline-offset-4 transition-colors font-mono text-xs"
-              >
-                {profile.phone}
-              </a>
-            </li>
-          </ul>
-        </div>
+        {/* Center / Right Links */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          <a
+            href="mailto:aadarshdoesdesign@gmail.com"
+            className="px-5 py-2.5 rounded-full border-2 border-black bg-[#FFFF5F] text-black font-pacaembu font-bold text-sm shadow-[3px_3px_0px_#000000] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0px_#000000] transition-all"
+          >
+            say hi ✉
+          </a>
 
-        {/* Right Column: Interaction Keyboard Controls */}
-        <div className="grid_5-6 flex flex-col items-start md:items-end justify-between gap-4">
-          <div className="space-y-3">
-            <button
-              onClick={onCycleColor}
-              className={`flex items-center gap-2 text-xs font-mono text-white/80 hover:text-white transition-colors cursor-pointer group ${
-                lens === 'brutalist' ? 'border border-white px-2 py-1 bg-black shadow-[2px_2px_0px_white]' : ''
-              }`}
-              title="Cycle accent theme (Press 'c')"
-            >
-              <span>{lens === 'experimental' ? 'COLOR_CYCLE' : 'Change Colour'}</span>
-              <kbd className={`w-5 h-5 flex items-center justify-center border border-white/40 ${
-                lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded'
-              } text-[11px] bg-white/10 group-hover:bg-white/20 transition-colors uppercase`}>
-                c
-              </kbd>
-            </button>
+          <a
+            href="https://www.linkedin.com/in/aadarsh-ramakrishnan-b46052293/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-full border border-black bg-white/80 hover:bg-white text-black font-pacaembu text-sm font-semibold transition-all hover:shadow-[2px_2px_0px_#000000]"
+          >
+            LinkedIn ↗
+          </a>
 
-            <button
-              onClick={onToggleGrid}
-              className={`flex items-center gap-2 text-xs font-mono text-white/80 hover:text-white transition-colors cursor-pointer group ${
-                lens === 'brutalist' ? 'border border-white px-2 py-1 bg-black shadow-[2px_2px_0px_white]' : ''
-              }`}
-              title="Toggle 6-column grid visualizer (Press 'g')"
-            >
-              <span>{gridActive ? (lens === 'experimental' ? 'GRID_OFF' : 'Hide Grid') : (lens === 'experimental' ? 'GRID_ON' : 'Toggle Grid')}</span>
-              <kbd className={`w-5 h-5 flex items-center justify-center border border-white/40 ${
-                lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded'
-              } text-[11px] bg-white/10 group-hover:bg-white/20 transition-colors uppercase`}>
-                g
-              </kbd>
-            </button>
-          </div>
+          <a
+            href="https://github.com/aadarshdoesdesign"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-full border border-black bg-white/80 hover:bg-white text-black font-pacaembu text-sm font-semibold transition-all hover:shadow-[2px_2px_0px_#000000]"
+          >
+            GitHub ↗
+          </a>
 
-          <div className="text-[11px] font-mono text-white/50 text-left md:text-right pt-6">
-            Press <kbd className={`px-1 border border-white/30 ${lens === 'swiss' || lens === 'brutalist' ? 'rounded-none' : 'rounded'}`}>⌘K</kbd> to search archive
-          </div>
+          <Link
+            href="/about"
+            className="px-4 py-2 rounded-full border border-black bg-white/80 hover:bg-white text-black font-pacaembu text-sm font-semibold transition-all hover:shadow-[2px_2px_0px_#000000]"
+          >
+            about me →
+          </Link>
         </div>
       </div>
     </footer>

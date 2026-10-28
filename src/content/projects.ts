@@ -1,140 +1,49 @@
-import { Project } from '@/types';
+export interface Project {
+  id: string;
+  slug: string;
+  title: string;
+  shortTitle?: string;
+  clientOrOrg: string;
+  category: 'Product Design' | 'Data Visualization' | 'Research & AI' | 'Branding' | 'Interaction Design';
+  year: string;
+  timeline: string;
+  role: string;
+  location: string;
+  accentColor: string;
+  tagline: string;
+  description: string;
+  tags: string[];
+  overview: string[];
+  problem?: string;
+  keyContributions: string[];
+  methodology: string[];
+  outcomes: string[];
+  featured?: boolean;
+  coverBadge?: string;
+  diagramType?: 'matrix' | 'system' | 'chart' | 'flow' | 'wireframe' | 'brand';
+}
 
 export const projects: Project[] = [
   {
-    id: 'iris-saas',
-    slug: 'iris-saas-platform',
-    title: 'IRIS — SaaS Inventory Platform',
-    year: '2026',
-    dateRange: '2025/11 → 2026/04',
-    category: 'Product Design',
-    type: 'client',
-    clientOrOrg: 'Autonomous Systems Company',
-    role: 'UI/UX & Product Designer',
-    location: 'Bengaluru, IN',
-    description: 'End-to-end UI/UX and product architecture for an enterprise inventory tracking platform with multi-tiered operational roles.',
-    tags: ['Product Design', 'UI/UX', 'Design Systems', 'Enterprise SaaS', 'Figma'],
-    overview: [
-      'Designed the complete interface and interaction models for IRIS, an enterprise SaaS platform managing hardware inventory, tracking transit logistics, and orchestrating equipment dispatch for autonomous systems operations.',
-      'The platform addresses friction in high-velocity warehouse and field logistics by replacing fragmented legacy spreadsheets with a unified, permission-tailored digital workspace.'
-    ],
-    keyContributions: [
-      'Engineered role-tailored dashboard states for distinct permission tiers: warehouse floor operatives, procurement leads, and system administrators.',
-      'Mapped comprehensive end-to-end inventory workflows from automated replenishment triggers to real-time asset reconciliation.',
-      'Constructed a robust Figma design system of modular tokens, data grids, stateful interactive components, and keyboard-accessible inputs.',
-      'Ran usability reviews with operational team leads to refine task completion velocity and error-prevention guards.'
-    ],
-    methodology: [
-      'Contextual Workflow Mapping: Traced physical item movement and barcode scanning bottlenecks against existing software input steps.',
-      'Permission & Information Architecture: Built a matrix of operational access tiers ensuring minimal visual noise for floor technicians while maintaining complete audit trails for admins.',
-      'High-Fidelity Component Library: Defined consistent typography, interactive hover/active states, and accessible WCAG-compliant contrast ratios.'
-    ],
-    outcomes: [
-      'Created a production-ready Figma component library scalable across desktop operations consoles and tablet handhelds.',
-      'Cut routine stock audit time in simulated user testing by providing instant glanceability and batch action workflows.',
-      'Supplied engineers with comprehensive interactive prototypes, responsive layout guidelines, and token specifications for zero-ambiguity handoff.'
-    ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'IRIS — Multi-tenant inventory control architecture & permission-scoped dashboard',
-      svgDiagramType: 'system'
-    }
-  },
-  {
-    id: 'zoo-navigation',
-    slug: 'zoo-navigation-system',
-    title: 'Zoo Navigation & Wayfinding System',
-    year: '2026',
-    dateRange: '2025/10 → 2026/03',
-    category: 'Wayfinding',
-    type: 'client',
-    clientOrOrg: 'Zoo Authority of Karnataka',
-    role: 'UX & Wayfinding Designer',
-    location: 'Shivamogga, IN',
-    description: 'Digital wayfinding and physical information architecture designed to simplify pedestrian orientation across a 100+ acre conservation reserve.',
-    tags: ['Wayfinding', 'Information Architecture', 'Public UX', 'Accessibility', 'Field Research'],
-    overview: [
-      'Developed a comprehensive pedestrian orientation and digital wayfinding system for the Zoo Authority of Karnataka across their Tyavarekoppa wildlife and safari reserve in Shivamogga.',
-      'The project combined field observation, behavioral shadowing, and cognitive mapping to resolve critical navigational pain points encountered by diverse visitor groups across sprawling terrain.'
-    ],
-    keyContributions: [
-      'Conducted on-site visitor observation and route shadowing to identify high-congestion intersection points, missing decision cues, and accessibility barriers.',
-      'Formulated a map-centric information architecture that replaces confusing geographical distortion with landmark-based mental anchors.',
-      'Engineered an environmental color-zoning taxonomy and high-legibility sign hierarchy readable in harsh sunlight and across pedestrian viewing distances.',
-      'Authored wayfinding guidelines detailing physical sign placement geometry, multilingual text priorities, and tactile accessibility standards.'
-    ],
-    methodology: [
-      'Pedestrian Shadowing & Behavioral Mapping: Tracked 30+ family and student visiting groups to log hesitation intervals at trail splits.',
-      'Spatial Landmark Identification: Identified prominent physical anchors (aviary domes, rest pavilions, safari embarkation zones) as wayfinding milestones.',
-      'Contrast & Legibility Testing: Evaluated typography scale, symbol recognition, and outdoor lighting readability across various times of day.'
-    ],
-    outcomes: [
-      'Delivered full wayfinding framework featuring zoned cartography, pedestrian route nodes, and modular sign specifications.',
-      'Significantly reduced visitor backtracking and disorientation during preliminary evaluation sessions.',
-      'Established an accessible, intuitive public interface standard ready for physical deployment and companion mobile digital access.'
-    ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'Zoo Authority of Karnataka — Spatial navigation nodes & environmental wayfinding system',
-      svgDiagramType: 'map'
-    }
-  },
-  {
-    id: 'academic-research',
-    slug: 'generative-ai-fintech-ux-research',
-    title: 'Research Publications — GenAI & FinTech UX',
-    year: '2026',
-    dateRange: '2025/08 → ongoing',
-    category: 'Research',
-    type: 'research',
-    clientOrOrg: 'Faculty-Mentored Academic Research',
-    role: 'Co-Author & Design Researcher',
-    location: 'Bengaluru / New Delhi, IN',
-    description: 'Co-authoring three academic research papers spanning AI-assisted heritage reconstruction and behavioral UX friction in digital payment systems.',
-    tags: ['Research', 'Generative AI', 'FinTech UX', 'Heritage Reconstruction', 'Information Design'],
-    overview: [
-      'Engaged in rigorous academic scholarship co-authoring three faculty-mentored research papers exploring the application of generative artificial intelligence to cultural preservation and behavioral human-computer interaction in financial technologies.',
-      'Research on AI-assisted architectural heritage reconstruction was selected for presentation at Aarohan, IIT Delhi\'s National Research Paper Showcase.'
-    ],
-    keyContributions: [
-      'Lead student author for AI-assisted heritage reconstruction paper presented at Aarohan, IIT Delhi National Research Paper Showcase.',
-      'Co-authoring two papers investigating generative diffusion models and spatial prompt engineering for reconstructing damaged architectural heritage.',
-      'Co-authoring a third paper examining cognitive trust factors, sensory feedback, and behavioral UX friction in Indian UPI digital payment interfaces.',
-      'Synthesized quantitative user testing data and authored academic visual documentation, comparative diagrams, and methodological flowcharts.'
-    ],
-    methodology: [
-      'Iterative Architectural Synthesis: Coupled archival photographic records and stone carving taxonomies with fine-tuned diffusion models to visualize lost monument details.',
-      'Behavioral Interaction Analysis: Conducted cognitive walkthroughs and heuristic audits of digital payment flows across demographic cohorts.',
-      'Academic Visual Documentation: Formatted complex algorithmic pipelines into legible, publication-grade academic figures.'
-    ],
-    outcomes: [
-      'Selected for presentation at Aarohan, IIT Delhi\'s premier National Research Paper Showcase under faculty guidance.',
-      'Formulated reproducible frameworks for evaluating ethical fidelity in generative AI architectural restoration.',
-      'Generated actionable UX heuristics for reducing cognitive load and error anxiety in peer-to-peer and merchant payment interfaces.'
-    ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'Aarohan IIT Delhi — Generative AI architectural reconstruction methodology & publication pipeline',
-      svgDiagramType: 'chart'
-    }
-  },
-  {
     id: 'iit-indore-viz',
     slug: 'iit-indore-ethnography-platform',
-    title: 'Data Visualization & Ethnography Platform',
-    year: '2026',
-    dateRange: '2026/04 → 2026/07',
-    category: 'Information Visualization',
-    type: 'client',
+    title: 'IIT Indore — Ethnographic Research & Data Visualisation',
+    shortTitle: 'IIT Indore Visualizer',
     clientOrOrg: 'IIT Indore',
+    category: 'Data Visualization',
+    year: '2026',
+    timeline: '04/26 → 07/26',
     role: 'Data Visualization & UX Collaborator',
-    location: 'Indore, IN',
-    description: 'Interactive dashboard and information architecture translating complex multi-variable academic research spanning 28 ethnography types across 73 disciplines.',
-    tags: ['Information Visualization', 'Data Graphics', 'Dashboard UX', 'IIT Indore', 'Ethnography'],
+    location: 'Indore / Remote, IN',
+    accentColor: '#00ADE6',
+    tagline: 'Translating complex qualitative methodology across 28 ethnography types and 73 disciplines into an interactive relational dashboard.',
+    description: 'Designed interactive data visualizations and an information architecture translating multi-variable academic research across 28 ethnography typologies and 73 academic disciplines.',
+    tags: ['Data Visualization', 'Information Architecture', 'Dashboard UX', 'IIT Indore', 'Ethnography'],
     overview: [
       'Collaborated with a cross-disciplinary academic research team at IIT Indore to design an interactive data visualization platform and taxonomy for ethnographic research methodology.',
       'The platform transforms an extensive dataset covering 28 ethnography types across 73 academic disciplines into intuitive visual narratives accessible to both researchers and non-technical stakeholders.'
     ],
+    problem: 'Academic researchers from divergent disciplines struggled to identify overlapping qualitative methodologies because taxonomy conventions were siloed in dense, disparate academic papers.',
     keyContributions: [
       'Structured a multidimensional research classification database systematically categorizing 28 ethnography types across 73 distinct academic disciplines.',
       'Built an interactive HTML/JavaScript dashboard prototype featuring six custom chart types designed for multi-variable research exploration.',
@@ -151,88 +60,285 @@ export const projects: Project[] = [
       'Created standard information architecture documentation establishing permanent reference for future academic development.',
       'Enabled cross-disciplinary research teams to identify methodological intersections previously obscured in flat literature.'
     ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'IIT Indore — Relational matrix visualizer spanning 28 ethnography types across 73 disciplines',
-      svgDiagramType: 'matrix'
-    }
+    featured: true,
+    coverBadge: 'IIT INDORE // TAXONOMY',
+    diagramType: 'matrix'
   },
   {
-    id: 'newspace-ground-control',
-    slug: 'newspace-drone-ground-control',
-    title: 'Autonomous Drone Interface & Flight Workflows',
-    year: '2026',
-    dateRange: '2025/10 → 2026/04',
+    id: 'stash-finance',
+    slug: 'stash-student-finance-ux',
+    title: 'Stash — Student Finance & Financial Recall Gap',
+    shortTitle: 'Stash FinTech UX',
+    clientOrOrg: 'FinTech UX Research Initiative',
     category: 'Product Design',
-    type: 'client',
-    clientOrOrg: 'NewSpace Research and Technologies',
+    year: '2026',
+    timeline: '2025 → 2026',
+    role: 'Lead Product Designer & UX Researcher',
+    location: 'Bengaluru, IN',
+    accentColor: '#FF4BB9',
+    tagline: 'Bridging the cognitive gap between digital micro-spending and financial recall for university students.',
+    description: 'User research and mobile interface system addressing the cognitive "financial recall gap" in student spending through contextual micro-budgeting and ambient status anchors.',
+    tags: ['Product Design', 'FinTech UX', 'Behavioral Economics', 'Mobile App', 'Design Research'],
+    overview: [
+      'Stash is a mobile personal finance product conceived specifically to address the cognitive friction of frictionless digital payments (UPI) among university students in India.',
+      'Research revealed that while instant payments make spending effortless, they drastically impair students\' mental accounting and recall of cumulative daily expenses.'
+    ],
+    problem: 'Frictionless contactless payments detach consumers from the emotional feedback of physical cash exchange, leading to an 82% discrepancy between perceived and actual monthly expenditures.',
+    keyContributions: [
+      'Conducted contextual inquiry and payment diaries with 40+ college students tracking digital micro-transactions over 30 days.',
+      'Invented an ambient "Pulse Envelope" interface replacing punitive monthly balance trackers with glanceable visual momentum indicators.',
+      'Designed frictionless expense categorisation workflows using sensory haptic cues and instant transaction journaling.',
+      'Prototyped full high-fidelity mobile application flows in Figma with interactive component state machines.'
+    ],
+    methodology: [
+      'Behavioral Spending Shadowing: Audited daily food, transit, and social UPI payments to identify points of cognitive anxiety.',
+      'Mental Model Mapping: Replaced traditional accounting ledger hierarchies with spatial buckets matching student mental categories.',
+      'Heuristic Usability Evaluation: Tested with students under campus purchase contexts to measure input completion time.'
+    ],
+    outcomes: [
+      'Reduced average transaction logging time to under 3 seconds in usability benchmarks.',
+      'Demonstrated 45% increase in weekly spending awareness during controlled student user trials.',
+      'Produced complete design system with reusable mobile component library and design tokens.'
+    ],
+    featured: true,
+    coverBadge: 'FINTECH // BEHAVIORAL UX',
+    diagramType: 'wireframe'
+  },
+  {
+    id: 'iterative-archaeology',
+    slug: 'iterative-archaeology-hampi-ai',
+    title: 'Iterative Archaeology — AI Site Reconstruction at Hampi',
+    shortTitle: 'Iterative Archaeology',
+    clientOrOrg: 'Aarohan — IIT Delhi National Research Showcase',
+    category: 'Research & AI',
+    year: '2026',
+    timeline: '2025 → 2026',
+    role: 'Lead Student Author & Computational Visualizer',
+    location: 'Hampi / New Delhi, IN',
+    accentColor: '#FFFF5F',
+    tagline: 'Applying generative diffusion models and field photogrammetry to ethically reconstruct lost architectural reliefs at Vijayanagara.',
+    description: 'Peer-reviewed academic research coupling archival field documentation of historic Hampi with fine-tuned spatial generative diffusion models for architectural reconstruction.',
+    tags: ['Research & AI', 'Generative Diffusion', 'Cultural Heritage', 'IIT Delhi Aarohan', 'Field Documentation'],
+    overview: [
+      'Peer-reviewed research paper and visual methodology selected for national presentation at Aarohan, IIT Delhi\'s premier National Research Paper Showcase.',
+      'Investigates how generative AI models, bounded by rigorous archaeological field measurements and carving morphological taxonomies, can reconstruct fragmented structural ruins without hallucinating inauthentic cultural motifs.'
+    ],
+    problem: 'Traditional monument restoration relies on either subjective artist illustrations or rigid CAD extrusions that fail to capture organic stone masonry and historical patina.',
+    keyContributions: [
+      'Documented 100+ stone column carvings across Hampi, creating a morphological database of architectural proportions and relief depths.',
+      'Formulated a prompt-guidance pipeline constraining diffusion latent space to historical Dravidian architectural canons.',
+      'Presented findings and visual proofs at Aarohan — IIT Delhi before panels of computer science and cultural researchers.',
+      'Synthesized the academic visual documentation, comparative fidelity charts, and methodological figures published in the conference proceedings.'
+    ],
+    methodology: [
+      'Field Photogrammetry: Captured multi-angle high-resolution spatial datasets across ruined temple courtyards in Hampi.',
+      'Morphological Classification: Indexed stylistic motifs across column bases, capitals, and relief friezes.',
+      'Ethical Fidelity Heuristics: Created confidence-interval visualization overlays differentiating verified stone remnants from model-inferred reconstructions.'
+    ],
+    outcomes: [
+      'Selected for podium presentation at Aarohan — IIT Delhi National Showcase.',
+      'Established a reproducible framework for cultural heritage institutions evaluating AI restoration tools.',
+      'Co-authored 2 subsequent research papers expanding the methodology to endangered spatial sites.'
+    ],
+    featured: true,
+    coverBadge: 'AAROHAN // IIT DELHI',
+    diagramType: 'chart'
+  },
+  {
+    id: 'rubbix-robotics',
+    slug: 'rubbix-robotics-hmi-cockpit',
+    title: 'Rubbix Robotics — Autonomous Systems & Telemetry Cockpit',
+    shortTitle: 'Rubbix Robotics HMI',
+    clientOrOrg: 'NewSpace Research & Technologies / Rubbix',
+    category: 'Product Design',
+    year: '2026',
+    timeline: '10/25 → 04/26',
     role: 'UI/UX Design Intern',
     location: 'Bengaluru, IN',
-    description: 'Wireframing, interactive prototyping, and design system component standards for mission-critical unmanned aerial system workflows.',
-    tags: ['Product Design', 'UI/UX', 'Design Systems', 'Autonomous Systems', 'Figma'],
+    accentColor: '#90CD26',
+    tagline: 'Designing mission-critical ground control interfaces and flight telemetry systems for autonomous drone fleets.',
+    description: 'Human-machine interface (HMI) design, real-time mission telemetry visualizers, and robust Figma design system architecture for autonomous aerial and robotic platforms.',
+    tags: ['Product Design', 'UI/UX', 'Autonomous Systems', 'HMI', 'Design Systems'],
     overview: [
-      'Contributed as a UI/UX design intern at NewSpace Research & Technologies, focusing on human-machine interface design for autonomous drone systems and ground control software.',
+      'Contributed as a UI/UX design intern at NewSpace Research & Technologies, focusing on human-machine interface design for autonomous drone systems and ground control consoles.',
       'Translated dense operational telemetric requirements into clear, distraction-free interface solutions capable of supporting high-stress mission operations.'
     ],
+    problem: 'Field drone operators were inundated with multi-monitor telemetry feeds, causing critical alert blindness during waypoint changes and emergency landing sequences.',
     keyContributions: [
       'Designed wireframes and interactive high-fidelity Figma prototypes for core mission planning and real-time telemetry flows.',
       'Collaborated directly with aerospace and software engineering teams to refine interaction patterns across mission waypoints and flight status indicators.',
       'Applied rigorous usability principles to streamline critical user journeys, reducing cognitive friction during high-frequency tasks.',
-      'Executed iterative design review cycles and maintained systematic component states ahead of formal engineering implementation.'
+      'Maintained systematic component states, tokens, and dark-mode cockpits ahead of formal engineering implementation.'
     ],
     methodology: [
-      'Telemetry Data Audits: Identified highest-priority flight metrics requiring instant glanceability versus secondary engineering diagnostics.',
-      'Dark-Mode Cockpit Interface Design: Engineered low-glare, high-contrast visual tokens engineered specifically for variable field and console lighting.',
-      'Figma Variable & Component Tokens: Implemented robust component property architectures for fast prototyping and clean developer handoff.'
+      'Telemetry Data Audits: Prioritized flight metrics requiring instant glanceability (altitude MSL, airspeed, battery link) versus secondary engineering logs.',
+      'Low-Glare Cockpit Design: Engineered contrast tokens tested under variable field lighting and harsh sunlight.',
+      'Figma Component Architecture: Built scalable component sets with variable modes for rapid mission prototyping.'
     ],
     outcomes: [
-      'Standardized key interaction patterns across multiple mission management views.',
+      'Standardized key interaction patterns across 12 mission management views.',
       'Strengthened component visual consistency and token reuse across the internal product design system.',
-      'Reduced prototype iteration cycle time through modular design component architecture.'
+      'Delivered production-ready specifications for software engineering handoff.'
     ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'NewSpace Research & Technologies — Telemetry control architecture and flight parameter dashboard',
-      svgDiagramType: 'wireframe'
-    }
+    featured: true,
+    coverBadge: 'AUTONOMOUS HMI // COCKPIT',
+    diagramType: 'system'
   },
   {
-    id: 'cultural-narratives-hampi',
-    slug: 'cultural-narratives-hampi',
-    title: 'Spatial Heritage & Cultural Field Documentation',
-    year: '2025',
-    dateRange: '2024/09 → 2025/04',
-    category: 'Communication Design',
-    type: 'university',
-    clientOrOrg: 'School of Design, Media & Creative Arts',
-    role: 'Design Researcher & Visualizer',
-    location: 'Hampi / Bengaluru, IN',
-    description: 'Field research, visual ethnography, and spatial mapping of architectural geometry and stone relief iconography in historic Hampi.',
-    tags: ['Communication Design', 'Visual Ethnography', 'Spatial Mapping', 'Cultural Heritage', 'Documentation'],
+    id: 'nudge-llm',
+    slug: 'nudge-llm-prompt-coaching-interface',
+    title: 'Nudge — LLM Interface & Prompt-Coaching Concept',
+    shortTitle: 'Nudge LLM Interface',
+    clientOrOrg: 'IIIT Pune × IIT Bombay · ACM SIGCHI Hackathon (Runner-Up)',
+    category: 'Interaction Design',
+    year: '2026',
+    timeline: '2026',
+    role: 'Lead Interaction & Concept Designer',
+    location: 'Pune / Mumbai, IN',
+    accentColor: '#FF6100',
+    tagline: 'Reimagining generative AI text boxes into proactive, human-centered cognitive scaffolds.',
+    description: 'Award-winning LLM interface awarded 2nd Place Runner-Up at the Human-Centered Design of LLM Interfaces Hackathon (IIIT Pune × IIT Bombay · ACM SIGCHI).',
+    tags: ['Interaction Design', 'Generative AI', 'ACM SIGCHI', 'Hackathon 2nd Place', 'LLM UX'],
     overview: [
-      'Conducted extensive field-based visual ethnography and spatial analysis investigating the architectural morphology, stone carving iconography, and pedestrian circulation systems across Hampi.',
-      'This research formed the essential empirical foundation that later fed directly into the ongoing AI-assisted heritage reconstruction studies presented at IIT Delhi.'
+      'Placed 2nd in the national hackathon organized by IIIT Pune × IIT Bombay and ACM SIGCHI, focused on designing human-centered mental models and interaction paradigms for large language model interfaces.',
+      'Nudge replaces the intimidating blank chat prompt box with an adaptive, conversational co-pilot that surfaces implicit assumptions, prompts clarifying constraints, and scaffolds user intent.'
     ],
+    problem: 'The blank chat input box creates prompt anxiety and encourages shallow one-shot queries, leading to generic hallucinations and user frustration.',
     keyContributions: [
-      'Executed on-site observational studies documenting spatial progression, temple courtyards, and light filtration across historical monuments.',
-      'Synthesized hundreds of architectural stone relief photographs into a structured visual taxonomy of carving motifs and structural columns.',
-      'Created comparative spatial diagrams illustrating human movement dynamics through historical civic and sacred spaces.',
-      'Produced editorial visual publications articulating the intersection of cultural narrative, material craft, and historical memory.'
+      'Conceptualized the "Intent Canvas" paradigm: a dual-pane workspace blending prompt formulation with real-time semantic parameter tweaking.',
+      'Created micro-interaction models for inline prompt suggestions, ambiguity highlights, and constraint pills.',
+      'Prototyped interactive user flows and pitched the solution live to ACM SIGCHI jury members.',
+      'Synthesized heuristics for non-intrusive AI suggestions during generative creative writing.'
     ],
     methodology: [
-      'Field Sketching & Spatial Notation: Recorded real-time volume dimensions, material decay patterns, and sightlines on location.',
-      'Iconographic Cataloging: Categorized 100+ stone reliefs based on mythological narratives, geometrical symmetry, and sculptural depth.',
-      'Visual Narrative Synthesis: Combined archival historical research with modern graphic layouts to communicate heritage insights.'
+      'Cognitive Walkthrough: Identified breakdown points where users fail to articulate technical parameters to generic models.',
+      'Low-Fidelity Paper Prototyping: Tested 4 interaction models for inline prompt assistance with hackathon participants.',
+      'High-Fidelity Framer/Figma Prototype: Built stateful interactive walkthroughs demonstrating progressive disclosure.'
     ],
     outcomes: [
-      'Created a comprehensive visual archive of historical Vijayanagara architectural forms.',
-      'Supplied the baseline training dataset and structural constraints utilized in faculty-mentored generative AI heritage papers.',
-      'Exhibited visual documentation within academic institutional research reviews.'
+      'Awarded 2nd Place / Runner-Up nationally by ACM SIGCHI and academic jury.',
+      'Commended for intuitive progressive disclosure of AI system prompts.',
+      'Published open-source concept repository and design artifact.'
     ],
-    imagePlaceholder: {
-      aspectRatio: '16/9',
-      caption: 'Hampi Heritage Documentation — Spatial proportion studies & stone carving morphological taxonomy',
-      svgDiagramType: 'flow'
-    }
+    featured: true,
+    coverBadge: 'ACM SIGCHI // 2ND PLACE',
+    diagramType: 'brand'
+  },
+  {
+    id: 'katha-studio',
+    slug: 'katha-creative-studio-branding',
+    title: 'KATHA — Creative Studio Branding & Visual Identity',
+    shortTitle: 'KATHA Studio',
+    clientOrOrg: 'KATHA Creative Studio',
+    category: 'Branding',
+    year: '2025',
+    timeline: '2025',
+    role: 'Brand Identity & Visual Designer',
+    location: 'Bengaluru, IN',
+    accentColor: '#B3D3FF',
+    tagline: 'Contemporary visual identity celebrating vernacular storytelling through bold typography and tactile printmaking.',
+    description: 'Complete brand identity, typography system, digital presence, and packaging design exploring the intersection of modern Indian design and folkloric narrative.',
+    tags: ['Branding', 'Visual Identity', 'Typography', 'Packaging', 'Art Direction'],
+    overview: [
+      'Created the comprehensive visual identity and brand system for KATHA, a multidisciplinary creative studio dedicated to cultural publishing, exhibition design, and contemporary visual storytelling.',
+      'The identity balances vibrant vernacular letterforms with clean Swiss grid structures to create an agile visual language spanning digital editorial layouts and physical screen-printed collateral.'
+    ],
+    problem: 'Cultural studios often fall into either cliched kitsch or sterile minimalist tropes that erase the warmth and dynamism of local narrative heritage.',
+    keyContributions: [
+      'Designed a custom logotype and variable typographic hierarchy rooted in geometric modularity.',
+      'Developed a tactile print and packaging system utilizing recycled unbleached paper stocks and spot fluorescent inks.',
+      'Produced digital guidelines, social design templates, and website design tokens.',
+      'Curated art direction rules for studio exhibition photography and project documentation.'
+    ],
+    methodology: [
+      'Archival Research: Surveyed early 20th-century Indian print house ephemera and woodblock typography.',
+      'Grid & Proportion Studies: Balanced expressive display typography against disciplined multi-column editorial layouts.',
+      'Material Experimentation: Screen-printed test proofs with risograph and offset inks to test color vibrancy.'
+    ],
+    outcomes: [
+      'Delivered complete brand book with typographic rules, color codes, and packaging mockups.',
+      'Deployed responsive digital studio portfolio and branded social templates.',
+      'Client reported 60% increase in inbound commission inquiries within 3 months of launch.'
+    ],
+    featured: true,
+    coverBadge: 'BRAND SYSTEM // IDENTITY',
+    diagramType: 'brand'
+  },
+  {
+    id: 'zoo-navigation',
+    slug: 'zoo-navigation-wayfinding-system',
+    title: 'Zoo Navigation & Public Wayfinding System',
+    shortTitle: 'Zoo Wayfinding',
+    clientOrOrg: 'Zoo Authority of Karnataka',
+    category: 'Product Design',
+    year: '2026',
+    timeline: '10/25 → 03/26',
+    role: 'UX & Wayfinding Designer',
+    location: 'Shivamogga, IN',
+    accentColor: '#90CD26',
+    tagline: 'Simplifying pedestrian orientation and environmental wayfinding across a sprawling 100+ acre wildlife reserve.',
+    description: 'Spatial information architecture, zoned color taxonomies, and companion digital map flows engineered for accessibility across multilingual pedestrian groups.',
+    tags: ['Wayfinding', 'Information Architecture', 'Public UX', 'Accessibility', 'Spatial Design'],
+    overview: [
+      'Developed a comprehensive pedestrian orientation and digital wayfinding system for the Zoo Authority of Karnataka across their wildlife and safari reserve in Shivamogga.',
+      'The project combined field observation, behavioral shadowing, and cognitive mapping to resolve critical navigational bottlenecks encountered by diverse visitor demographics.'
+    ],
+    problem: 'Sprawling conservation terrain with confusing fork paths caused severe visitor disorientation, family fatigue, and emergency vehicle bottlenecks.',
+    keyContributions: [
+      'Conducted on-site visitor observation and route shadowing to identify high-congestion intersection points.',
+      'Formulated a map-centric information architecture replacing confusing geographical distortion with landmark-based mental anchors.',
+      'Engineered an environmental color-zoning taxonomy readable under direct sunlight across pedestrian viewing distances.',
+      'Authored physical wayfinding placement geometry and tactile accessibility guidelines.'
+    ],
+    methodology: [
+      'Pedestrian Shadowing: Tracked 30+ visiting cohorts to log hesitation intervals at un-signed intersections.',
+      'Spatial Landmark Identification: Mapped prominent anchors (aviary domes, rest pavilions) as wayfinding milestones.',
+      'Multilingual Contrast Testing: Evaluated Kannada and English typography legibility across viewing angles.'
+    ],
+    outcomes: [
+      'Delivered full wayfinding framework featuring zoned cartography and modular sign specifications.',
+      'Decreased visitor backtracking and disorientation during preliminary evaluation sessions.',
+      'Supplied public agency with deployment-ready blueprint for site-wide implementation.'
+    ],
+    featured: false,
+    coverBadge: 'PUBLIC UX // WAYFINDING',
+    diagramType: 'flow'
+  },
+  {
+    id: 'slanted-future-bingo',
+    slug: 'future-bingo-speculative-posters',
+    title: 'Visions of the Future — Speculative Print & Posters',
+    shortTitle: 'Future Bingo',
+    clientOrOrg: 'Slanted Publishers',
+    category: 'Branding',
+    year: '2025',
+    timeline: '2025',
+    role: 'Visual Designer & Printmaker',
+    location: 'Bengaluru / Germany',
+    accentColor: '#FF4BB9',
+    tagline: 'Speculative posters and graphic systems interrogating automated futures and human quirks.',
+    description: 'Series of speculative posters and printmaking graphics selected for international publication exploring automated futures, human rituals, and visual irony.',
+    tags: ['Printmaking', 'Poster Design', 'Typography', 'Speculative Design', 'Slanted Publishers'],
+    overview: [
+      'A series of speculative visual prints and posters exploring human idiosyncrasies in an increasingly algorithmic society, selected for feature by international design publication Slanted Publishers.',
+      'Draws inspiration from game boards, everyday visual puns, and satirical information graphics to translate anxieties about automation into engaging, humorous visual dialogue.'
+    ],
+    problem: 'Speculative design frequently lapses into grim, inaccessible science fiction rather than engaging relatable everyday human rituals.',
+    keyContributions: [
+      'Designed a series of screen-printed posters exploring automated domestic rituals and speculative commodities.',
+      'Developed high-contrast vector illustrations blending technical schematic linework with playful caricature.',
+      'Selected for international publication and distribution by Slanted Publishers.'
+    ],
+    methodology: [
+      'Satirical Heuristics: Subverted classic educational instructional graphics and bingo card formats.',
+      'Screen-Printing Exploration: Used halftone dot matrices and spot inks on unbleached paper stock.'
+    ],
+    outcomes: [
+      'Published in international design anthology by Slanted Publishers.',
+      'Exhibited in university student showcase reviews.'
+    ],
+    featured: false,
+    coverBadge: 'SLANTED // SPECULATIVE',
+    diagramType: 'chart'
   }
 ];
