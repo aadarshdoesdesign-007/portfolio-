@@ -21,7 +21,7 @@ interface SpiderAntHeroProps {
   soundEnabled?: boolean;
 }
 
-// Math helpers
+// Math utilities
 const clamp = (val: number, min: number, max: number) => (val < min ? min : val > max ? max : val);
 const normalizeAngle = (angle: number) => {
   let a = angle;
@@ -31,30 +31,26 @@ const normalizeAngle = (angle: number) => {
   return a;
 };
 const distance = (x1: number, y1: number, x2: number, y2: number) => Math.hypot(x2 - x1, y2 - y1);
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 const radToDeg = (rad: number) => (rad * 180) / Math.PI;
 
 export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
-  spiderSize = 260,
-  antSize = 32,
-  speed = 1.6,
+  spiderSize = 250,
+  antSize = 34,
+  speed = 1.0,
   spiderColor = '#000000',
   antColor = '#FF4BB9',
   soundEnabled = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderRef = useRef<HTMLDivElement>(null);
-  const mosquitoRef = useRef<HTMLDivElement>(null);
+  const antRef = useRef<HTMLDivElement>(null);
   const spiderBodyRef = useRef<SVGGElement>(null);
   const legRefs = useRef<Record<string, SVGPathElement>>({});
 
   const [reducedMotion, setReducedMotion] = useState(false);
-
-  // Audio Context ref
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
-    // Check prefers-reduced-motion
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       setReducedMotion(mediaQuery.matches);
@@ -71,7 +67,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     let animId: number;
     let isDisposed = false;
 
-    // Dimensions
+    // Viewport dimensions
     let width = container.clientWidth || 800;
     let height = container.clientHeight || 600;
 
@@ -83,88 +79,46 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     };
     window.addEventListener('resize', updateDimensions);
 
-    // Initial state
+    // Initial positions: Spider starts near center, Ant starts in upper right
     const state = {
       t: 0,
-      autoMode: false,
       userActive: false,
-      cursor: { x: width * 0.65, y: height * 0.45 },
-      wander: { wx: width * 0.65, wy: height * 0.45, dwellStart: 0, dwellLen: 1.8 },
-      spider: {
-        x: width * 0.45,
-        y: height * 0.5,
-        heading: 0,
-        sp: 0,
-        state: 'REST', // REST, CHASE, POUNCE, EAT, RETURN, AVOID
-        pt: 0,
-        pdur: 0.35,
-        pounce: null as { sx: number; sy: number; tx: number; ty: number; t0: number; dur: number } | null,
-        eatT: 0,
-        pounceCd: 0,
-      },
-      mosq: {
-        x: width * 0.65,
-        y: height * 0.45,
+      cursor: { x: width * 0.7, y: height * 0.35 },
+      
+      // Ant state: independent quick insect movement
+      ant: {
+        x: width * 0.72,
+        y: height * 0.32,
         vx: 0,
         vy: 0,
-        state: 'landed', // landed, flying, dead
-        phi: 0,
-        alpha: 1,
-        scl: 1,
+        heading: 0,
+        targetX: width * 0.7,
+        targetY: height * 0.35,
+        speed: 180,
+        state: 'scuttle', // 'scuttle' | 'pause' | 'panic'
+        stateTimer: 0.8,
+        flutterAngle: 0,
+        scale: 1,
+      },
+
+      // Spider state: aggressive active hunter
+      spider: {
+        x: width * 0.35,
+        y: height * 0.55,
+        heading: 0, // In radians: 0 = facing right (+x), PI/2 = down (+y), -PI/2 = up (-y)
+        speed: 0,
+        maxSpeed: 450 * speed,
+        acceleration: 900 * speed,
+        state: 'chase', // 'chase' | 'pounce' | 'recover'
+        pounceProgress: 0,
+        pounceStart: { x: 0, y: 0 },
+        pounceTarget: { x: 0, y: 0 },
+        gaitPhase: 0,
+        bodyBob: 0,
       },
     };
 
-    // Leg Inverse Kinematics setup
-    interface LegState {
-      id: string;
-      three: boolean;
-      side: string;
-      n: number;
-      S: { x: number; y: number };
-      K: { x: number; y: number };
-      F: { x: number; y: number };
-      l1: number;
-      l2: number;
-      sign: number;
-      planted: { x: number; y: number };
-      swing: { sx: number; sy: number; tx: number; ty: number; t0: number; dur: number } | null;
-      lastEnd: number;
-    }
-
-    const legs: LegState[] = SPIDER_LEGS.map((leg) => {
-      const isLeft = leg.id.startsWith('L');
-      const num = parseInt(leg.id.split('_')[1], 10);
-      const angle = (isLeft ? Math.PI : 0) + (num - 3) * 0.35;
-      const reach = 180 + (num === 1 ? -20 : num === 5 ? 40 : 10);
-
-      const sx = SPIDER_CENTER_X + (isLeft ? -40 : 40);
-      const sy = SPIDER_CENTER_Y + (num - 3) * 28;
-      const kx = sx + Math.cos(angle) * (reach * 0.55);
-      const ky = sy + Math.sin(angle) * (reach * 0.45);
-      const fx = sx + Math.cos(angle) * reach;
-      const fy = sy + Math.sin(angle) * reach;
-
-      const l1 = distance(sx, sy, kx, ky);
-      const l2 = distance(kx, ky, fx, fy);
-
-      return {
-        id: leg.id,
-        three: leg.three,
-        side: isLeft ? 'L' : 'R',
-        n: num,
-        S: { x: sx, y: sy },
-        K: { x: kx, y: ky },
-        F: { x: fx, y: fy },
-        l1: Math.max(30, l1),
-        l2: Math.max(30, l2),
-        sign: isLeft ? -1 : 1,
-        planted: { x: fx, y: fy },
-        swing: null,
-        lastEnd: 0,
-      };
-    });
-
-    // Sound effect trigger (gentle click/step)
+    // Soft step sound effect
     const playStepSound = () => {
       if (!soundEnabled) return;
       try {
@@ -179,58 +133,46 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(140 + Math.random() * 40, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.04);
-          gain.gain.setValueAtTime(0.015, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+          osc.frequency.setValueAtTime(160 + Math.random() * 60, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.03);
+          gain.gain.setValueAtTime(0.012, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
           osc.connect(gain).connect(ctx.destination);
           osc.start();
-          osc.stop(ctx.currentTime + 0.05);
+          osc.stop(ctx.currentTime + 0.04);
         }
       } catch {
-        // audio disabled or restricted
+        // Audio suspended or blocked
       }
     };
 
-    // Pointer move listener
+    // Pointer listeners for interactive influence
     const handlePointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
-      const px = clamp(e.clientX - rect.left, 20, rect.width - 20);
-      const py = clamp(e.clientY - rect.top, 20, rect.height - 20);
-      state.cursor.x = px;
-      state.cursor.y = py;
+      state.cursor.x = clamp(e.clientX - rect.left, 40, rect.width - 40);
+      state.cursor.y = clamp(e.clientY - rect.top, 40, rect.height - 40);
       state.userActive = true;
-      state.autoMode = false;
     };
 
-    container.addEventListener('pointermove', handlePointerMove, { passive: true });
-
-    // Touch / click listener
     const handlePointerDown = (e: PointerEvent) => {
       handlePointerMove(e);
+      // On click/tap, ant startles and dashes towards the pointer
+      state.ant.targetX = state.cursor.x;
+      state.ant.targetY = state.cursor.y;
+      state.ant.state = 'panic';
+      state.ant.stateTimer = 1.0;
       if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
         audioCtxRef.current.resume().catch(() => {});
       }
     };
+
+    container.addEventListener('pointermove', handlePointerMove, { passive: true });
     container.addEventListener('pointerdown', handlePointerDown, { passive: true });
 
-    // World to local coords helper
-    const spiderScale = spiderSize / SPIDER_VIEWBOX_W;
-    const toWorld = (localPt: { x: number; y: number }) => {
-      const rad = state.spider.heading + Math.PI / 2;
-      const ox = (localPt.x - SPIDER_CENTER_X) * spiderScale;
-      const oy = (localPt.y - SPIDER_CENTER_Y) * spiderScale;
-      const c = Math.cos(rad);
-      const s = Math.sin(rad);
-      return {
-        x: state.spider.x + ox * c - oy * s,
-        y: state.spider.y + ox * s + oy * c,
-      };
-    };
-
     let lastTime: number | null = null;
+    let stepAccumulator = 0;
 
-    // Main animation loop
+    // Core Animation Frame Loop
     const frame = (time: number) => {
       if (isDisposed) return;
       animId = requestAnimationFrame(frame);
@@ -240,170 +182,200 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         return;
       }
 
-      const dt = Math.min((time - lastTime) / 1000, 0.05);
+      const dt = Math.min((time - lastTime) / 1000, 0.04);
       lastTime = time;
       state.t += dt;
 
-      // 1. Update Ant / Mosquito
-      const m = state.mosq;
-      let targetX = state.cursor.x;
-      let targetY = state.cursor.y;
-
-      // In auto mode, wander smoothly
-      if (!state.userActive) {
-        targetX = width * 0.5 + Math.sin(state.t * 0.8) * (width * 0.28);
-        targetY = height * 0.45 + Math.cos(state.t * 0.6) * (height * 0.22);
-      }
-
-      if (m.state !== 'dead') {
-        const dTarget = distance(m.x, m.y, targetX, targetY);
-        const lerpFactor = clamp(dt * 9, 0.05, 0.35);
-        m.x += (targetX - m.x) * lerpFactor;
-        m.y += (targetY - m.y) * lerpFactor;
-        m.phi = Math.sin(state.t * 30) * 0.15; // subtle fluttering
-        m.alpha = 1;
-        m.scl = 1;
-      } else {
-        // Eaten / dead: fade out and respawn after 2 seconds
-        m.alpha = Math.max(0, m.alpha - dt * 1.5);
-        if (m.alpha <= 0.05 && state.t - state.spider.eatT > 2.2) {
-          m.state = 'landed';
-          m.x = clamp(state.spider.x + (Math.random() - 0.5) * 350, 40, width - 40);
-          m.y = clamp(state.spider.y + (Math.random() - 0.5) * 280, 40, height - 40);
-          m.alpha = 1;
-        }
-      }
-
-      // 2. Update Spider State Machine
+      const ant = state.ant;
       const sp = state.spider;
-      const dToPrey = distance(sp.x, sp.y, m.x, m.y);
-      const angleToPrey = Math.atan2(m.y - sp.y, m.x - sp.x) - Math.PI / 2;
 
-      // State transitions
-      if (sp.state === 'REST') {
-        sp.sp = 0;
-        if (m.state !== 'dead' && dToPrey < 480) {
-          sp.state = 'CHASE';
-        }
-      } else if (sp.state === 'CHASE') {
-        if (m.state === 'dead') {
-          sp.state = 'RETURN';
-        } else if (dToPrey < 95) {
-          // Trigger pounce!
-          sp.state = 'POUNCE';
-          sp.pt = 0;
-          sp.pounce = {
-            sx: sp.x,
-            sy: sp.y,
-            tx: m.x,
-            ty: m.y,
-            t0: state.t,
-            dur: 0.22,
-          };
-          playStepSound();
+      // ==========================================
+      // 1. UPDATE ANT (PREY) BEHAVIOR
+      // ==========================================
+      ant.stateTimer -= dt;
+      const distToSpider = distance(ant.x, ant.y, sp.x, sp.y);
+
+      // Panic check: if spider gets uncomfortably close (< 150px), ant flees in panic!
+      if (distToSpider < 150 && ant.state !== 'panic') {
+        ant.state = 'panic';
+        ant.stateTimer = 1.2;
+
+        // Choose escape trajectory directly away from the spider
+        const fleeAngle = Math.atan2(ant.y - sp.y, ant.x - sp.x) + (Math.random() - 0.5) * 0.8;
+        const fleeDist = 220 + Math.random() * 150;
+        ant.targetX = clamp(ant.x + Math.cos(fleeAngle) * fleeDist, 50, width - 50);
+        ant.targetY = clamp(ant.y + Math.sin(fleeAngle) * fleeDist, 50, height - 50);
+      }
+
+      // Switch ant behavior state when timer expires
+      if (ant.stateTimer <= 0) {
+        if (ant.state === 'scuttle') {
+          // Brief insect pause/twitch
+          ant.state = 'pause';
+          ant.stateTimer = 0.15 + Math.random() * 0.35;
         } else {
-          // Crawl smoothly toward prey
-          const rotDiff = normalizeAngle(angleToPrey - sp.heading);
-          sp.heading += rotDiff * clamp(dt * 5 * speed, 0.05, 0.4);
+          // Pick new erratic target
+          ant.state = 'scuttle';
+          ant.stateTimer = 0.6 + Math.random() * 1.2;
 
-          const maxSp = 120 * speed;
-          sp.sp = maxSp;
-          const forwardRad = sp.heading + Math.PI / 2;
-          sp.x += Math.cos(forwardRad) * sp.sp * dt;
-          sp.y += Math.sin(forwardRad) * sp.sp * dt;
-        }
-      } else if (sp.state === 'POUNCE') {
-        if (sp.pounce) {
-          sp.pt += dt;
-          const progress = clamp(sp.pt / sp.pounce.dur, 0, 1);
-          const ease = easeOutCubic(progress);
-          sp.x = sp.pounce.sx + (sp.pounce.tx - sp.pounce.sx) * ease;
-          sp.y = sp.pounce.sy + (sp.pounce.ty - sp.pounce.sy) * ease;
-
-          if (progress >= 1) {
-            sp.state = 'EAT';
-            sp.eatT = state.t;
-            m.state = 'dead';
-            sp.pounce = null;
+          if (state.userActive && Math.random() < 0.6) {
+            // Bias towards cursor
+            const angleToCursor = Math.atan2(state.cursor.y - ant.y, state.cursor.x - ant.x) + (Math.random() - 0.5) * 1.0;
+            const stepLen = 140 + Math.random() * 180;
+            ant.targetX = clamp(ant.x + Math.cos(angleToCursor) * stepLen, 50, width - 50);
+            ant.targetY = clamp(ant.y + Math.sin(angleToCursor) * stepLen, 50, height - 50);
+          } else {
+            // Independent insect exploration
+            const randomAngle = Math.random() * Math.PI * 2;
+            const stepLen = 120 + Math.random() * 200;
+            ant.targetX = clamp(ant.x + Math.cos(randomAngle) * stepLen, 50, width - 50);
+            ant.targetY = clamp(ant.y + Math.sin(randomAngle) * stepLen, 50, height - 50);
           }
-        }
-      } else if (sp.state === 'EAT') {
-        sp.sp = 0;
-        if (state.t - sp.eatT > 1.2) {
-          sp.state = 'RETURN';
-        }
-      } else if (sp.state === 'RETURN') {
-        const homeX = width * 0.45;
-        const homeY = height * 0.5;
-        const dHome = distance(sp.x, sp.y, homeX, homeY);
-        if (dHome < 30) {
-          sp.state = 'REST';
-          sp.sp = 0;
-        } else {
-          const homeAngle = Math.atan2(homeY - sp.y, homeX - sp.x) - Math.PI / 2;
-          const rotDiff = normalizeAngle(homeAngle - sp.heading);
-          sp.heading += rotDiff * clamp(dt * 3, 0.03, 0.25);
-          sp.sp = 80 * speed;
-          const forwardRad = sp.heading + Math.PI / 2;
-          sp.x += Math.cos(forwardRad) * sp.sp * dt;
-          sp.y += Math.sin(forwardRad) * sp.sp * dt;
         }
       }
 
-      // 3. Update Leg IK & Gait Cycling
-      legs.forEach((leg) => {
-        const worldJoint = toWorld(leg.S);
-        const worldFootTarget = toWorld(leg.F);
+      // Move ant towards target
+      const antSpeed = ant.state === 'panic' ? 520 : ant.state === 'pause' ? 0 : 260;
+      const antDist = distance(ant.x, ant.y, ant.targetX, ant.targetY);
 
-        // Check if foot is overstretched from target
-        const footDist = distance(leg.planted.x, leg.planted.y, worldFootTarget.x, worldFootTarget.y);
-        const maxStretch = 45;
+      if (antDist > 8 && antSpeed > 0) {
+        const moveDist = Math.min(antDist, antSpeed * dt);
+        const antMoveAngle = Math.atan2(ant.targetY - ant.y, ant.targetX - ant.x);
+        ant.x += Math.cos(antMoveAngle) * moveDist;
+        ant.y += Math.sin(antMoveAngle) * moveDist;
+        ant.heading = antMoveAngle;
+      }
 
-        if (!leg.swing && footDist > maxStretch) {
-          // Plant new step
-          leg.swing = {
-            sx: leg.planted.x,
-            sy: leg.planted.y,
-            tx: worldFootTarget.x,
-            ty: worldFootTarget.y,
-            t0: state.t,
-            dur: 0.16 / speed,
-          };
+      // Fluttering wings
+      ant.flutterAngle = Math.sin(state.t * 35) * 0.18;
+
+      // ==========================================
+      // 2. UPDATE SPIDER (PREDATOR) PURSUIT BEHAVIOR
+      // ==========================================
+      // CRITICAL FIX: The spider's head and front legs must face the ant at all times!
+      // In the SVG asset, head is at y=307 (pointing UP / -y), body center is (556, 400), legs 5 at y=524.
+      // Math.atan2(dy, dx) returns angle where 0 = right (+x), PI/2 = down (+y), -PI/2 = up (-y).
+      // Since SVG artwork faces UP (-PI/2), rotating by (headingRad + PI/2) rotates the head to exactly match heading!
+      const targetAngleToAnt = Math.atan2(ant.y - sp.y, ant.x - sp.x);
+
+      // Fast, responsive steering towards the ant
+      const headingDiff = normalizeAngle(targetAngleToAnt - sp.heading);
+      const turnSpeed = 16.0; // Fast angular steering
+      sp.heading = normalizeAngle(sp.heading + headingDiff * clamp(dt * turnSpeed, 0.08, 0.75));
+
+      // Pursuit States: chase | pounce | recover
+      if (sp.state === 'chase') {
+        // Speed scaling based on distance: accelerates aggressively when ant is further away
+        const targetSpeed = clamp(distToSpider * 2.2, 180, sp.maxSpeed);
+        if (sp.speed < targetSpeed) {
+          sp.speed = Math.min(targetSpeed, sp.speed + sp.acceleration * dt);
+        } else {
+          sp.speed = Math.max(targetSpeed, sp.speed - sp.acceleration * 1.2 * dt);
+        }
+
+        // Move forward along spider's heading (leading with its head!)
+        const forwardX = Math.cos(sp.heading);
+        const forwardY = Math.sin(sp.heading);
+        sp.x += forwardX * sp.speed * dt;
+        sp.y += forwardY * sp.speed * dt;
+
+        // Pounce trigger: when spider gets close (< 95px), it lunges into a strike!
+        if (distToSpider < 95) {
+          sp.state = 'pounce';
+          sp.pounceProgress = 0;
+          sp.pounceStart = { x: sp.x, y: sp.y };
+          sp.pounceTarget = { x: ant.x, y: ant.y };
           playStepSound();
         }
+      } else if (sp.state === 'pounce') {
+        // High-velocity lunge
+        sp.pounceProgress += dt * 5.0; // 0.2s duration
+        const p = Math.min(1, sp.pounceProgress);
+        const ease = 1 - Math.pow(1 - p, 3);
+        sp.x = sp.pounceStart.x + (sp.pounceTarget.x - sp.pounceStart.x) * ease;
+        sp.y = sp.pounceStart.y + (sp.pounceTarget.y - sp.pounceStart.y) * ease;
 
-        if (leg.swing) {
-          const swingProg = clamp((state.t - leg.swing.t0) / leg.swing.dur, 0, 1);
-          const ease = easeOutCubic(swingProg);
-          leg.planted.x = leg.swing.sx + (leg.swing.tx - leg.swing.sx) * ease;
-          leg.planted.y = leg.swing.sy + (leg.swing.ty - leg.swing.sy) * ease;
-          if (swingProg >= 1) {
-            leg.swing = null;
-          }
+        if (p >= 1) {
+          // Close encounter finished: Ant flees immediately, spider recovers
+          sp.state = 'recover';
+          sp.speed = 40;
+          ant.state = 'panic';
+          ant.stateTimer = 1.5;
+
+          // Ant darts to a far position
+          const escapeAngle = sp.heading + Math.PI + (Math.random() - 0.5) * 1.5;
+          ant.targetX = clamp(ant.x + Math.cos(escapeAngle) * 320, 60, width - 60);
+          ant.targetY = clamp(ant.y + Math.sin(escapeAngle) * 320, 60, height - 60);
         }
+      } else if (sp.state === 'recover') {
+        // Brief 0.25s recovery pause, then immediately resume the chase
+        sp.speed = Math.max(0, sp.speed - 300 * dt);
+        if (distToSpider > 110) {
+          sp.state = 'chase';
+        }
+      }
 
-        // Apply IK transform to DOM paths
+      // Clamp spider inside hero bounds
+      sp.x = clamp(sp.x, 60, width - 60);
+      sp.y = clamp(sp.y, 60, height - 60);
+
+      // Gait & Leg Cycle animation
+      const currentSpeed = sp.state === 'pounce' ? 600 : sp.speed;
+      sp.gaitPhase += dt * currentSpeed * 0.055;
+      sp.bodyBob = Math.sin(sp.gaitPhase * 2) * 2.5;
+
+      // Step sound trigger on gait cycles
+      stepAccumulator += dt * currentSpeed;
+      if (stepAccumulator > 75) {
+        stepAccumulator = 0;
+        playStepSound();
+      }
+
+      // Animate leg micro-steps
+      SPIDER_LEGS.forEach((leg, idx) => {
+        const pathJoint = legRefs.current[`${leg.id}_JOINT`];
         const pathUpper = legRefs.current[`${leg.id}_UPPER`];
         const pathLower = legRefs.current[`${leg.id}_LOWER`];
-        const pathJoint = legRefs.current[`${leg.id}_JOINT`];
-        const pathKnee = legRefs.current[`${leg.id}_KNEE`];
 
-        // Micro-rotate joints slightly for realistic organic feeling
+        // Tripod alternating gait offset
+        const legPhase = sp.gaitPhase + (idx % 2 === 0 ? 0 : Math.PI);
+        const strideAngle = Math.sin(legPhase) * (currentSpeed > 30 ? 6.5 : 1.0);
+
         if (pathJoint) {
-          const subtleFlex = Math.sin(state.t * 8 + leg.n) * 1.5;
-          pathJoint.style.transform = `rotate(${subtleFlex}deg)`;
+          pathJoint.style.transform = `rotate(${strideAngle}deg)`;
+          pathJoint.style.transformOrigin = '50% 50%';
+        }
+        if (pathUpper) {
+          pathUpper.style.transform = `rotate(${strideAngle * 0.8}deg)`;
+          pathUpper.style.transformOrigin = '50% 50%';
+        }
+        if (pathLower) {
+          pathLower.style.transform = `rotate(${-strideAngle * 0.5}deg)`;
+          pathLower.style.transformOrigin = '50% 50%';
         }
       });
 
-      // 4. Update DOM Elements
-      if (spiderRef.current) {
-        const deg = radToDeg(sp.heading);
-        spiderRef.current.style.transform = `translate3d(${sp.x}px, ${sp.y}px, 0) translate(-50%, -50%) rotate(${deg}deg)`;
+      // Body stretch/squash during stride
+      if (spiderBodyRef.current) {
+        const squash = 1 + Math.sin(sp.gaitPhase * 2) * 0.025;
+        const stretch = 1 - Math.sin(sp.gaitPhase * 2) * 0.02;
+        spiderBodyRef.current.style.transform = `scale(${stretch}, ${squash})`;
+        spiderBodyRef.current.style.transformOrigin = `${(SPIDER_CENTER_X / SPIDER_VIEWBOX_W) * 100}% ${(SPIDER_CENTER_Y / SPIDER_VIEWBOX_H) * 100}%`;
       }
 
-      if (mosquitoRef.current) {
-        mosquitoRef.current.style.transform = `translate3d(${m.x}px, ${m.y}px, 0) translate(-50%, -50%) rotate(${radToDeg(m.phi)}deg) scale(${m.scl})`;
-        mosquitoRef.current.style.opacity = String(m.alpha);
+      // ==========================================
+      // 3. APPLY DOM TRANSFORMS
+      // ==========================================
+      // CRITICAL FIX: The spider SVG art faces UP at 12 o'clock.
+      // Adding 90 degrees (+PI/2) aligns the head with `heading` so the head leads in the direction of motion!
+      if (spiderRef.current) {
+        const spiderRotationDeg = radToDeg(sp.heading) + 90;
+        spiderRef.current.style.transform = `translate3d(${sp.x}px, ${sp.y}px, 0) translate(-50%, -50%) rotate(${spiderRotationDeg}deg)`;
+      }
+
+      if (antRef.current) {
+        const antRotationDeg = radToDeg(ant.heading) + radToDeg(ant.flutterAngle);
+        antRef.current.style.transform = `translate3d(${ant.x}px, ${ant.y}px, 0) translate(-50%, -50%) rotate(${antRotationDeg}deg) scale(${ant.scale})`;
       }
     };
 
@@ -416,9 +388,9 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       container.removeEventListener('pointermove', handlePointerMove);
       container.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [reducedMotion, speed, spiderSize, soundEnabled]);
+  }, [reducedMotion, spiderSize, antSize, speed, soundEnabled]);
 
-  // Reduced motion fallback: static tasteful display
+  // Accessibility: Static fallback for prefers-reduced-motion
   if (reducedMotion) {
     return (
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
@@ -430,8 +402,8 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         <div
           className="absolute"
           style={{
-            left: '48%',
-            top: '52%',
+            left: '50%',
+            top: '50%',
             transform: 'translate(-50%, -50%)',
             width: spiderSize,
           }}
@@ -475,10 +447,10 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         className="absolute inset-0 w-full h-full object-contain opacity-35 md:opacity-45 pointer-events-none transition-opacity duration-700"
       />
 
-      {/* Prey: Ant / Mosquito Character */}
+      {/* Prey: Ant Character */}
       <div
-        ref={mosquitoRef}
-        className="absolute will-change-transform z-10 pointer-events-none drop-shadow-[0_2px_4px_rgba(255,75,185,0.4)]"
+        ref={antRef}
+        className="absolute will-change-transform z-10 pointer-events-none drop-shadow-[0_2px_4px_rgba(255,75,185,0.5)]"
         style={{
           width: antSize,
           height: (antSize * MOSQUITO_VIEWBOX_H) / MOSQUITO_VIEWBOX_W,
@@ -495,10 +467,10 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         </svg>
       </div>
 
-      {/* Predator: Spider Character with 10 IK Legs */}
+      {/* Predator: Spider Character with 10 Articulated Legs */}
       <div
         ref={spiderRef}
-        className="absolute will-change-transform z-10 pointer-events-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]"
+        className="absolute will-change-transform z-10 pointer-events-none drop-shadow-[0_6px_16px_rgba(0,0,0,0.22)]"
         style={{
           width: spiderSize,
           height: (spiderSize * SPIDER_VIEWBOX_H) / SPIDER_VIEWBOX_W,
