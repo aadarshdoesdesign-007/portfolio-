@@ -221,7 +221,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         const distToPrey = Math.hypot(dxToPrey, dyToPrey);
 
         // Stopping distance: closes in and settles gracefully near the ant
-        const stoppingDistance = mode === 'dog' ? 85 : 68;
+        const stoppingDistance = mode === 'dog' ? 75 : 68;
 
         // Desired heading towards the prey
         const targetAngle = Math.atan2(dyToPrey, dxToPrey);
@@ -328,6 +328,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         const dogDeg = radToDeg(pursuer.heading);
         const flipY = Math.cos(pursuer.heading) < 0 ? -1 : 1;
         dogRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-50%, -50%) rotate(${dogDeg}deg) scale(1, ${flipY})`;
+        dogRef.current.classList.toggle('dora-running', pursuer.speed > 20);
       }
 
       // Ant transform:
@@ -482,18 +483,18 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         </div>
       )}
 
-      {/* 2. Cute Dog (for Dog mode) */}
+      {/* 2. Dora the Cinnamon Chow Chow (for Dog mode) */}
       {mode === 'dog' && (
         <div
           ref={dogRef}
           className="absolute will-change-transform z-10 pointer-events-none overflow-visible"
           style={{
-            width: 140,
-            height: 105,
+            width: 150,
+            height: 120,
             transformOrigin: '50% 50%',
           }}
         >
-          <DogCharacter size={140} isMoving={true} isPanting={true} />
+          <DogCharacter size={150} isMoving={false} isPanting={true} />
         </div>
       )}
     </div>
