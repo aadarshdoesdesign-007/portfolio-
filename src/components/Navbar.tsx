@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -19,9 +20,9 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full px-5 sm:px-10 py-5 sm:py-6 transition-all bg-[#E4E2D8]/80 backdrop-blur-sm border-b border-black/5">
+    <header className="relative top-0 z-40 w-full px-6 sm:px-20 py-6 transition-all bg-transparent pointer-events-auto">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand / Logo - Upper-Left */}
+        {/* Brand / Logo - Positioned to the right of the 55px pink margin rule */}
         <Link
           href="/"
           className="group flex items-center gap-2 select-none"

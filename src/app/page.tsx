@@ -17,31 +17,33 @@ export default function HomePage() {
   const totalProjectsCount = projects.length;
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#FFFF5F]">
-      <NotebookBackground />
+    <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#FFFF5F] bg-transparent">
+      {/* 1. Page-level continuous notebook background covering 100vw x 100vh + scroll */}
+      <NotebookBackground lineGap={29} />
 
-      {/* Dedicated Viewport-level Interaction Layer (pointer-events: none, non-blocking) */}
+      {/* 2. Dedicated Viewport-level Spider & Ant Interaction Layer */}
       <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
 
+      {/* 3. Transparent Header — Notebook lines continue uninterrupted behind */}
       <Navbar />
 
-      {/* Hero Section — Minimal Editorial Layout Matching eranamjoshi.com */}
-      <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-end px-6 sm:px-14 py-12 sm:py-16 w-full overflow-visible">
-        {/* Subtle Centered Geometric Spiderweb Background Motif */}
+      {/* 4. Hero Section — Centered Geometric Spiderweb & Minimal Editorial Layout */}
+      <section className="relative min-h-[calc(100vh-88px)] flex flex-col justify-end px-6 sm:px-20 py-12 sm:py-16 w-full overflow-visible">
+        {/* Central Geometric Spiderweb Motif — Clearly Visible & Unclipped */}
         {mode === 'spider' && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <div className="relative w-[80vw] max-w-2xl h-[55vh] flex items-center justify-center">
+            <div className="relative w-[92vw] max-w-4xl h-[70vh] sm:h-[78vh] flex items-center justify-center">
               <img
                 src="/spiderweb.svg"
-                alt=""
+                alt="Geometric spiderweb"
                 aria-hidden="true"
-                className="w-full h-full object-contain opacity-30 select-none pointer-events-none transition-opacity duration-700"
+                className="w-full h-full object-contain opacity-85 select-none pointer-events-none transition-opacity duration-700"
               />
             </div>
           </div>
         )}
 
-        {/* Lower-Left Minimal Introductory Statement */}
+        {/* Lower-Left Minimal Introductory Statement (aligned to the right of the 55px pink margin) */}
         <div className="relative z-10 max-w-lg space-y-4 pointer-events-auto pb-4 sm:pb-8">
           <div className="space-y-1.5">
             <h1 className="font-pacaembu text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-black leading-tight">
@@ -71,8 +73,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Selected Work Section (revealed as visitor scrolls down) */}
-      <main id="work" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-10 py-16 sm:py-24 w-full pointer-events-auto">
+      {/* 5. Selected Work Section (revealed as visitor scrolls down) */}
+      <main id="work" className="relative z-10 max-w-7xl mx-auto px-6 sm:px-20 py-16 sm:py-24 w-full pointer-events-auto">
         <div className="flex items-center justify-between mb-8 sm:mb-12">
           <div className="flex items-center gap-3">
             <h2 className="font-pacaembu text-3xl sm:text-4xl font-bold tracking-tight text-black">
