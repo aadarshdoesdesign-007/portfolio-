@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useGotham } from '@/context/GothamContext';
 
 interface NavPillProps {
   href: string;
@@ -18,16 +19,25 @@ export const NavPill: React.FC<NavPillProps> = ({
   color = 'yellow',
   onClick,
 }) => {
+  const { isGotham } = useGotham();
   const [isHovered, setIsHovered] = useState(false);
 
   const colorStyles = {
-    yellow: 'bg-[#FFFF5F] text-black shadow-[2px_2px_0px_#000000]',
+    yellow: isGotham
+      ? 'bg-[#FFE500] text-[#080A0F] font-bold shadow-[2px_2px_0px_#000000]'
+      : 'bg-[#FFFF5F] text-black shadow-[2px_2px_0px_#000000]',
     pink: 'bg-[#FF4BB9] text-white shadow-[2px_2px_0px_#000000]',
-    cyan: 'bg-[#00ADE6] text-white shadow-[2px_2px_0px_#000000]',
-    black: 'bg-black text-white shadow-[2px_2px_0px_rgba(0,0,0,0.3)]',
+    cyan: isGotham
+      ? 'bg-[#00ADE6] text-black font-bold shadow-[2px_2px_0px_#000000]'
+      : 'bg-[#00ADE6] text-white shadow-[2px_2px_0px_#000000]',
+    black: isGotham
+      ? 'bg-[#1E2533] text-[#F3F1E9] border border-[#303540] shadow-[2px_2px_0px_#000000]'
+      : 'bg-black text-white shadow-[2px_2px_0px_rgba(0,0,0,0.3)]',
   };
 
-  const idleStyle = 'bg-white/80 hover:bg-white text-black border border-black/80 hover:border-black';
+  const idleStyle = isGotham
+    ? 'bg-[#11151D]/90 hover:bg-[#11151D] text-[#F3F1E9] border border-[#303540] hover:border-[#FFE500]'
+    : 'bg-white/80 hover:bg-white text-black border border-black/80 hover:border-black';
 
   return (
     <div

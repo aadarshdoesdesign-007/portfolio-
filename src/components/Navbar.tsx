@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NavPill } from './NavPill';
-import { MorphingArrowBadge } from './MorphingArrowBadge';
 import { CompanionSelector } from './CompanionSelector';
+import { BatSymbolButton } from './BatSymbolButton';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
@@ -49,14 +49,15 @@ export const Navbar: React.FC = () => {
             <CompanionSelector />
           </div>
 
-          <Link href="/work" className="ml-1">
-            <MorphingArrowBadge size={40} shapeColor="#FFFF5F" />
-          </Link>
+          <div className="ml-1">
+            <BatSymbolButton size={40} />
+          </div>
         </nav>
 
         {/* Mobile Hamburger Button */}
         <div className="md:hidden flex items-center gap-2">
           <CompanionSelector />
+          <BatSymbolButton size={38} />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="flex flex-col justify-center items-center w-10 h-10 rounded-full border-2 border-black bg-white/90 shadow-[2px_2px_0px_#000000] focus:outline-none"

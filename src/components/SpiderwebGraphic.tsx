@@ -4,7 +4,7 @@ import React from 'react';
 
 export const SpiderwebGraphic: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <svg viewBox="-1200 -700 2400 1400" className={`w-full h-full overflow-visible select-none pointer-events-none ${className}`} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="-1200 -700 2400 1400" className={`w-full h-full overflow-visible select-none pointer-events-none spiderweb-graphic ${className}`} fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         {/* Elliptical radial fade mask to gracefully dissolve the outer strands with ZERO square edges */}
         <radialGradient id="webRadialFade" cx="50%" cy="50%" rx="52%" ry="48%">

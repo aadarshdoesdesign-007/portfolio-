@@ -42,7 +42,7 @@ export default function HomePage() {
         {/* Lower-Left Minimal Introductory Statement (aligned to the right of the 55px pink margin) */}
         <div className="relative z-10 max-w-lg space-y-4 pointer-events-auto pb-4 sm:pb-8">
           <div className="space-y-1.5">
-            <h1 className="font-pacaembu text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-black leading-tight">
+            <h1 className="font-pacaembu text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-black leading-tight hero-title-sheen">
               Aadarsh Ramakrishnan
             </h1>
 

@@ -36,11 +36,15 @@
   font-display: swap;
 }
 
+/* ==========================================================================
+   THEME DESIGN TOKENS
+   ========================================================================== */
 :root {
   --bg-paper: #E4E2D8;
   --bg-card: #F9F3EB;
   --text-primary: #000000;
   --text-muted: #6B6860;
+  --border-color: #000000;
   --notebook-line: #00AEEF;
   --notebook-margin: #FF31BC;
 
@@ -50,6 +54,21 @@
   --pop-blue: #B3D3FF;
   --pop-green: #90CD26;
   --pop-orange: #FF6100;
+  --signal-yellow: #FFE500;
+}
+
+/* GOTHAM MODE THEME TOKENS */
+html.gotham {
+  --bg-paper: #080A0F;
+  --bg-card: #11151D;
+  --text-primary: #F3F1E9;
+  --text-muted: #A4A9B4;
+  --border-color: #303540;
+  --notebook-line: rgba(255, 229, 0, 0.05);
+  --notebook-margin: rgba(255, 229, 0, 0.45);
+
+  --pop-yellow: #FFE500;
+  --signal-yellow: #FFE500;
 }
 
 html, body {
@@ -60,11 +79,17 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 ::selection {
   background: var(--pop-yellow);
   color: #000000;
+}
+
+html.gotham ::selection {
+  background: #FFE500;
+  color: #080A0F;
 }
 
 /* Notebook ruled line pattern utility */
@@ -75,13 +100,13 @@ html, body {
   background-size: 100% 24px;
 }
 
-/* Smooth custom scrollbar matching paper */
+/* Smooth custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #E4E2D8;
+  background: var(--bg-paper);
 }
 ::-webkit-scrollbar-thumb {
   background: #000000;
@@ -90,3 +115,161 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--pop-pink);
 }
+
+html.gotham ::-webkit-scrollbar-track {
+  background: #080A0F;
+}
+html.gotham ::-webkit-scrollbar-thumb {
+  background: #303540;
+}
+html.gotham ::-webkit-scrollbar-thumb:hover {
+  background: #FFE500;
+}
+
+/* ==========================================================================
+   GOTHAM MODE OVERRIDES & ATMOSPHERIC STYLING
+   ========================================================================== */
+
+/* 1. Cinematic Hero Title Sheen */
+html.gotham .hero-title-sheen {
+  background: linear-gradient(110deg, #F3F1E9 25%, #FFE500 50%, #F3F1E9 75%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gotham-title-sweep 8s infinite ease-in-out;
+}
+
+@keyframes gotham-title-sweep {
+  0%, 100% { background-position: 250% 0; }
+  50% { background-position: -250% 0; }
+}
+
+/* 2. Gotham Cards, Modals & Surfaces */
+html.gotham .bg-\[\#F9F3EB\],
+html.gotham .bg-white,
+html.gotham .bg-white\/95,
+html.gotham .bg-white\/90,
+html.gotham .bg-white\/80,
+html.gotham .bg-white\/70,
+html.gotham .bg-\[\#F4F9F8\],
+html.gotham .bg-\[\#F4F9FF\] {
+  background-color: #11151D !important;
+}
+
+html.gotham .border-black,
+html.gotham .border-black\/80,
+html.gotham .border-black\/50,
+html.gotham .border-black\/30,
+html.gotham .border-black\/25,
+html.gotham .border-black\/20,
+html.gotham .border-black\/15,
+html.gotham .border-black\/10 {
+  border-color: #303540 !important;
+}
+
+/* Gotham Neo-Brutalist Shadow Tuning */
+html.gotham [class*="shadow-\["][class*="\#000000"] {
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.95), 0 0 1px rgba(255, 229, 0, 0.12) !important;
+}
+
+/* Hover highlights on cards in Gotham */
+html.gotham article:hover > a > div,
+html.gotham .hover\:shadow-\[7px_7px_0px_\#000000\]:hover {
+  border-color: #FFE500 !important;
+  box-shadow: 0 0 16px rgba(255, 229, 0, 0.2), 3px 3px 0px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* 3. Gotham Typography & Text Colors */
+html.gotham .text-black {
+  color: #F3F1E9 !important;
+}
+
+html.gotham .text-black\/85,
+html.gotham .text-black\/80,
+html.gotham .text-black\/75,
+html.gotham .text-black\/70 {
+  color: #A4A9B4 !important;
+}
+
+html.gotham .text-black\/60,
+html.gotham .text-black\/50 {
+  color: #7E8696 !important;
+}
+
+/* 4. Yellow Buttons & Badges in Gotham */
+html.gotham .bg-\[\#FFFF5F\] {
+  background-color: #FFE500 !important;
+  color: #080A0F !important;
+}
+
+html.gotham .bg-\[\#FFFF5F\]:hover {
+  box-shadow: 0 0 14px rgba(255, 229, 0, 0.45) !important;
+}
+
+/* 5. Header & Navigation */
+html.gotham header {
+  background: transparent !important;
+}
+
+html.gotham header a span.bg-\[\#00ADE6\] {
+  background-color: #FFE500 !important;
+}
+
+/* Mobile Drawer Overlay */
+html.gotham .md\:hidden.bg-\[\#F9F3EB\] {
+  background-color: #11151D !important;
+  border-color: #303540 !important;
+}
+
+/* 6. Tags & Small Pills */
+html.gotham span[class*="bg-white"][class*="border"] {
+  background-color: #161B26 !important;
+  color: #A4A9B4 !important;
+  border-color: #303540 !important;
+}
+
+html.gotham div[class*="bg-white"][class*="border"] {
+  background-color: #161B26 !important;
+  color: #F3F1E9 !important;
+  border-color: #303540 !important;
+}
+
+/* Filter pills active in Play page & Work page */
+html.gotham button.bg-black.text-white {
+  background-color: #FFE500 !important;
+  color: #080A0F !important;
+  border-color: #FFE500 !important;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* 7. Contact Page Decoration */
+html.gotham .decoration-\[\#00ADE6\] {
+  text-decoration-color: #FFE500 !important;
+}
+
+/* 8. Spiderweb Graphic Moonlight Tint in Gotham */
+html.gotham .spiderweb-graphic line,
+html.gotham .spiderweb-graphic path {
+  stroke: rgba(255, 229, 0, 0.35) !important;
+}
+
+/* 9. Pet Companion Silhouette Enhancement in Gotham */
+html.gotham .dora-container {
+  filter: drop-shadow(0 0 12px rgba(255, 229, 0, 0.18));
+}
+
+/* 10. Case Studies, Methodology Badges & Micro-elements */
+html.gotham .bg-black\/5 {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #F3F1E9 !important;
+  border-color: #303540 !important;
+}
+
+html.gotham nav.border-t-2 {
+  border-color: #303540 !important;
+}
+
+html.gotham .group:hover .group-hover\:text-\[\#FF4BB9\] {
+  color: #FFE500 !important;
+}
+
