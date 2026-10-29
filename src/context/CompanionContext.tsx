@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type CompanionMode = 'spider' | 'dog' | 'ant-only';
+export type CompanionMode = 'leo' | 'dora' | 'none' | 'spider';
 
 interface CompanionContextType {
   mode: CompanionMode;
@@ -10,19 +10,25 @@ interface CompanionContextType {
 }
 
 const CompanionContext = createContext<CompanionContextType>({
-  mode: 'spider',
+  mode: 'leo',
   setMode: () => {},
 });
 
 export const CompanionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mode, setModeState] = useState<CompanionMode>('spider');
+  const [mode, setModeState] = useState<CompanionMode>('leo');
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount with migration support
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('companion_mode') as CompanionMode | null;
-      if (saved && (saved === 'spider' || saved === 'dog' || saved === 'ant-only')) {
-        setModeState(saved);
+      const saved = localStorage.getItem('companion_mode');
+      if (saved === 'dog') {
+        setModeState('dora');
+        localStorage.setItem('companion_mode', 'dora');
+      } else if (saved === 'ant-only') {
+        setModeState('none');
+        localStorage.setItem('companion_mode', 'none');
+      } else if (saved && ['leo', 'dora', 'none', 'spider'].includes(saved)) {
+        setModeState(saved as CompanionMode);
       }
     }
   }, []);

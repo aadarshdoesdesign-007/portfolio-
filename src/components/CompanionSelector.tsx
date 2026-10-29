@@ -14,28 +14,47 @@ export const CompanionSelector: React.FC = () => {
         setIsOpen(false);
       }
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
-  const options: { mode: CompanionMode; icon: string; title: string; subtitle: string }[] = [
+  const options: { mode: CompanionMode; icon: string; title: string; subtitle: string; shortLabel: string }[] = [
+    {
+      mode: 'leo',
+      icon: '🦔',
+      title: 'Leo (Hedgehog)',
+      subtitle: 'Scurries for crunchy treat pellets!',
+      shortLabel: 'Leo',
+    },
+    {
+      mode: 'dora',
+      icon: '🐕',
+      title: 'Dora (Chow Chow)',
+      subtitle: 'Cinnamon pup chases tennis ball!',
+      shortLabel: 'Dora',
+    },
+    {
+      mode: 'none',
+      icon: '👆',
+      title: 'Normal Cursor',
+      subtitle: 'Clean, distraction-free browser pointer',
+      shortLabel: 'Normal',
+    },
     {
       mode: 'spider',
       icon: '🕷️',
       title: 'Spider & Ant',
-      subtitle: 'Let the spider chase me!',
-    },
-    {
-      mode: 'dog',
-      icon: '🐕',
-      title: 'Dora (Chow Chow)',
-      subtitle: 'Cinnamon pup chases tennis ball!',
-    },
-    {
-      mode: 'ant-only',
-      icon: '🐜',
-      title: 'Just the Ant',
-      subtitle: 'Solo ant, no chaser',
+      subtitle: 'Black spider pursues the pink ant',
+      shortLabel: 'Spider',
     },
   ];
 
@@ -46,31 +65,37 @@ export const CompanionSelector: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-black/30 bg-white/90 hover:bg-white text-black font-mono text-xs font-semibold shadow-[1px_1px_0px_#000000] hover:shadow-[2px_2px_0px_#000000] transition-all cursor-pointer"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-black/30 bg-white/90 hover:bg-white text-black font-mono text-xs font-semibold shadow-[1px_1px_0px_#000000] hover:shadow-[2px_2px_0px_#000000] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/20"
         aria-label="Choose cursor companion"
         title="Choose cursor companion"
       >
         <span className="text-sm">{currentOption.icon}</span>
         <span className="hidden sm:inline text-[11px] font-mono font-bold text-black/80">
-          {currentOption.mode === 'dog' ? 'Dora' : currentOption.mode === 'spider' ? 'Spider' : 'Ant'}
+          {currentOption.shortLabel}
         </span>
-        <span className="text-[9px] text-black/50">▾</span>
+        <span className="text-[9px] text-black/50" aria-hidden="true">▾</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#F9F3EB] border-2 border-black shadow-[4px_4px_0px_#000000] p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+        <div
+          role="listbox"
+          aria-label="Cursor companion options"
+          className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#F9F3EB] border-2 border-black shadow-[4px_4px_0px_#000000] p-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+        >
           <div className="px-2 py-1 text-[10px] font-mono font-bold text-black/50 uppercase tracking-wider border-b border-black/10 mb-1.5 flex items-center justify-between">
             <span>Cursor Companion</span>
-            <span className="text-[9px] text-[#FF4BB9] font-bold">Interactive</span>
+            <span className="text-[9px] text-[#FF4BB9] font-bold">Personal Pets</span>
           </div>
-          <div className="px-2 py-0.5 mb-1.5 text-[11px] font-pacaembu font-bold text-black/80">
-            Scared of spiders?
-          </div>
+
           <div className="space-y-1">
             {options.map((opt) => (
               <button
                 key={opt.mode}
                 type="button"
+                role="option"
+                aria-selected={mode === opt.mode}
                 onClick={() => {
                   setMode(opt.mode);
                   setIsOpen(false);

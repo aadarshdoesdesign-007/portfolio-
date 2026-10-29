@@ -12,6 +12,7 @@ import {
   MOSQUITO_VIEWBOX_H,
 } from './SpiderAntGeometry';
 import { DogCharacter, BallCharacter } from './DogCharacter';
+import { HedgehogCharacter, PelletTreat } from './HedgehogCharacter';
 import { useCompanion } from '@/context/CompanionContext';
 
 interface SpiderAntHeroProps {
@@ -47,8 +48,10 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderRef = useRef<HTMLDivElement>(null);
   const dogRef = useRef<HTMLDivElement>(null);
+  const hedgehogRef = useRef<HTMLDivElement>(null);
   const antRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLDivElement>(null);
+  const pelletRef = useRef<HTMLDivElement>(null);
   const spiderBodyRef = useRef<SVGGElement>(null);
   const legRefs = useRef<Record<string, SVGPathElement>>({});
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -70,7 +73,9 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
   }, []);
 
   useEffect(() => {
-    if (reducedMotion || typeof window === 'undefined') return;
+    // If reduced motion is active or mode is "none" (Normal Cursor),
+    // do not run any loop or attach any listeners. Clean default state!
+    if (reducedMotion || mode === 'none' || typeof window === 'undefined') return;
 
     let animId: number;
     let isDisposed = false;
@@ -133,7 +138,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       },
     };
 
-    // Soft organic step sound
+    // Soft organic step sound for spider
     const playStepSound = () => {
       if (!soundEnabled) return;
       try {
@@ -236,7 +241,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       const pursuer = state.pursuer;
 
       // ==========================================
-      // 1. UPDATE PREY (ANT / BALL)
+      // 1. UPDATE PREY (PELLET / BALL / ANT)
       // ==========================================
       // If cursor is outside hero, gently glide home to hero rest spot
       const currentTargetX = state.isHoveringHero
@@ -268,132 +273,170 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       prey.y = clamp(prey.y, 35, heroHeight - 40);
 
       // ==========================================
-      // 2. UPDATE PURSUER (DORA / SPIDER)
+      // 2. UPDATE PURSUER (LEO / DORA / SPIDER)
       // ==========================================
-      if (mode !== 'ant-only') {
-        const dxToPrey = prey.x - pursuer.x;
-        const dyToPrey = prey.y - pursuer.y;
-        const distToPrey = Math.hypot(dxToPrey, dyToPrey);
+      const dxToPrey = prey.x - pursuer.x;
+      const dyToPrey = prey.y - pursuer.y;
+      const distToPrey = Math.hypot(dxToPrey, dyToPrey);
 
-        // ================= DOG MODE KINEMATICS =================
-        if (mode === 'dog') {
-          // Stopping distance: settle comfortably and naturally beside the ball
-          const stoppingDistance = 72;
+      // ================= LEO (HEDGEHOG) KINEMATICS =================
+      if (mode === 'leo') {
+        const stoppingDistance = 44;
 
-          // Determine horizontal facing with deadband to prevent rapid flipping
-          if (dxToPrey < -10) {
-            pursuer.facing = -1; // Facing left
-          } else if (dxToPrey > 10) {
-            pursuer.facing = 1; // Facing right
-          }
-
-          if (distToPrey > stoppingDistance) {
-            // Accelerate towards the ball
-            const desiredSpeed = clamp(
-              (distToPrey - stoppingDistance) * 3.8,
-              140,
-              pursuer.maxSpeed
-            );
-
-            if (pursuer.speed < desiredSpeed) {
-              pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
-            } else {
-              pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
-            }
-
-            const nx = dxToPrey / distToPrey;
-            const ny = dyToPrey / distToPrey;
-
-            pursuer.x += nx * pursuer.speed * dt;
-            pursuer.y += ny * pursuer.speed * dt;
-          } else {
-            // Within stopping distance: smoothly decelerate and rest
-            pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 2.5 * dt);
-            if (pursuer.speed > 5) {
-              const nx = dxToPrey / Math.max(distToPrey, 1);
-              const ny = dyToPrey / Math.max(distToPrey, 1);
-              pursuer.x += nx * pursuer.speed * dt;
-              pursuer.y += ny * pursuer.speed * dt;
-            }
-          }
-
-          // Confine Dora strictly within the hero section bounds
-          pursuer.x = clamp(pursuer.x, 60, heroWidth - 60);
-          pursuer.y = clamp(pursuer.y, 60, heroHeight - 65);
+        // Facing direction with deadband
+        if (dxToPrey < -6) {
+          pursuer.facing = -1; // Facing left
+        } else if (dxToPrey > 6) {
+          pursuer.facing = 1; // Facing right
         }
 
-        // ================= SPIDER MODE KINEMATICS =================
-        if (mode === 'spider') {
-          const stoppingDistance = 68;
-          const targetAngle = Math.atan2(dyToPrey, dxToPrey);
-          const angleDiff = normalizeAngle(targetAngle - pursuer.heading);
+        if (distToPrey > stoppingDistance) {
+          // Quick scurries toward pellet treat
+          const desiredSpeed = clamp(
+            (distToPrey - stoppingDistance) * 3.8,
+            120,
+            pursuer.maxSpeed * 0.88
+          );
 
-          const turnSpeed = 25.0;
-          const turnFactor = clamp(dt * turnSpeed, 0.18, 0.96);
-
-          if (distToPrey > stoppingDistance * 0.6) {
-            pursuer.heading = normalizeAngle(pursuer.heading + angleDiff * turnFactor);
+          if (pursuer.speed < desiredSpeed) {
+            pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
+          } else {
+            pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
           }
 
-          if (distToPrey > stoppingDistance) {
-            const desiredSpeed = clamp((distToPrey - stoppingDistance) * 4.4, 180, pursuer.maxSpeed);
+          const nx = dxToPrey / distToPrey;
+          const ny = dyToPrey / distToPrey;
 
-            if (pursuer.speed < desiredSpeed) {
-              pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
-            } else {
-              pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
-            }
+          pursuer.x += nx * pursuer.speed * dt;
+          pursuer.y += ny * pursuer.speed * dt;
+        } else {
+          // Settled next to pellet: decelerate and begin eating/sniffing
+          pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 2.8 * dt);
+          if (pursuer.speed > 5) {
+            const nx = dxToPrey / Math.max(distToPrey, 1);
+            const ny = dyToPrey / Math.max(distToPrey, 1);
+            pursuer.x += nx * pursuer.speed * dt;
+            pursuer.y += ny * pursuer.speed * dt;
+          }
+        }
 
+        pursuer.x = clamp(pursuer.x, 45, heroWidth - 45);
+        pursuer.y = clamp(pursuer.y, 50, heroHeight - 55);
+      }
+
+      // ================= DORA (CHOW CHOW) KINEMATICS =================
+      if (mode === 'dora') {
+        const stoppingDistance = 72;
+
+        if (dxToPrey < -10) {
+          pursuer.facing = -1; // Facing left
+        } else if (dxToPrey > 10) {
+          pursuer.facing = 1; // Facing right
+        }
+
+        if (distToPrey > stoppingDistance) {
+          const desiredSpeed = clamp(
+            (distToPrey - stoppingDistance) * 3.8,
+            140,
+            pursuer.maxSpeed
+          );
+
+          if (pursuer.speed < desiredSpeed) {
+            pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
+          } else {
+            pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
+          }
+
+          const nx = dxToPrey / distToPrey;
+          const ny = dyToPrey / distToPrey;
+
+          pursuer.x += nx * pursuer.speed * dt;
+          pursuer.y += ny * pursuer.speed * dt;
+        } else {
+          pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 2.5 * dt);
+          if (pursuer.speed > 5) {
+            const nx = dxToPrey / Math.max(distToPrey, 1);
+            const ny = dyToPrey / Math.max(distToPrey, 1);
+            pursuer.x += nx * pursuer.speed * dt;
+            pursuer.y += ny * pursuer.speed * dt;
+          }
+        }
+
+        pursuer.x = clamp(pursuer.x, 60, heroWidth - 60);
+        pursuer.y = clamp(pursuer.y, 60, heroHeight - 65);
+      }
+
+      // ================= SPIDER MODE KINEMATICS =================
+      if (mode === 'spider') {
+        const stoppingDistance = 68;
+        const targetAngle = Math.atan2(dyToPrey, dxToPrey);
+        const angleDiff = normalizeAngle(targetAngle - pursuer.heading);
+
+        const turnSpeed = 25.0;
+        const turnFactor = clamp(dt * turnSpeed, 0.18, 0.96);
+
+        if (distToPrey > stoppingDistance * 0.6) {
+          pursuer.heading = normalizeAngle(pursuer.heading + angleDiff * turnFactor);
+        }
+
+        if (distToPrey > stoppingDistance) {
+          const desiredSpeed = clamp((distToPrey - stoppingDistance) * 4.4, 180, pursuer.maxSpeed);
+
+          if (pursuer.speed < desiredSpeed) {
+            pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
+          } else {
+            pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
+          }
+
+          pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
+          pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
+        } else {
+          pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 1.5 * dt);
+          if (pursuer.speed > 5) {
             pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
             pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
+          }
+        }
+
+        pursuer.x = clamp(pursuer.x, -20, heroWidth + 20);
+        pursuer.y = clamp(pursuer.y, -20, heroHeight + 20);
+
+        if (pursuer.speed > 15) {
+          pursuer.gaitPhase += dt * pursuer.speed * 0.055;
+
+          stepAccumulator += dt * pursuer.speed;
+          if (stepAccumulator > 70) {
+            stepAccumulator = 0;
+            playStepSound();
+          }
+        }
+
+        // Spider leg IK
+        const isMoving = pursuer.speed > 15;
+        SPIDER_LEGS.forEach((leg, idx) => {
+          const pathJoint = legRefs.current[`${leg.id}_JOINT`];
+          const pathUpper = legRefs.current[`${leg.id}_UPPER`];
+
+          if (pathJoint || pathUpper) {
+            const legPhase = pursuer.gaitPhase + (idx % 2 === 0 ? 0 : Math.PI);
+            const strideAngle = isMoving ? Math.sin(legPhase) * 6.0 : 0;
+
+            if (pathJoint) {
+              pathJoint.style.transform = strideAngle ? `rotate(${strideAngle}deg)` : '';
+            }
+            if (pathUpper) {
+              pathUpper.style.transform = strideAngle ? `rotate(${strideAngle * 0.7}deg)` : '';
+            }
+          }
+        });
+
+        if (spiderBodyRef.current) {
+          if (isMoving) {
+            const squash = 1 + Math.sin(pursuer.gaitPhase * 2) * 0.02;
+            const stretch = 1 - Math.sin(pursuer.gaitPhase * 2) * 0.018;
+            spiderBodyRef.current.style.transform = `scale(${stretch}, ${squash})`;
           } else {
-            pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 1.5 * dt);
-            if (pursuer.speed > 5) {
-              pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
-              pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
-            }
-          }
-
-          pursuer.x = clamp(pursuer.x, -20, heroWidth + 20);
-          pursuer.y = clamp(pursuer.y, -20, heroHeight + 20);
-
-          if (pursuer.speed > 15) {
-            pursuer.gaitPhase += dt * pursuer.speed * 0.055;
-
-            stepAccumulator += dt * pursuer.speed;
-            if (stepAccumulator > 70) {
-              stepAccumulator = 0;
-              playStepSound();
-            }
-          }
-
-          // Spider leg IK
-          const isMoving = pursuer.speed > 15;
-          SPIDER_LEGS.forEach((leg, idx) => {
-            const pathJoint = legRefs.current[`${leg.id}_JOINT`];
-            const pathUpper = legRefs.current[`${leg.id}_UPPER`];
-
-            if (pathJoint || pathUpper) {
-              const legPhase = pursuer.gaitPhase + (idx % 2 === 0 ? 0 : Math.PI);
-              const strideAngle = isMoving ? Math.sin(legPhase) * 6.0 : 0;
-
-              if (pathJoint) {
-                pathJoint.style.transform = strideAngle ? `rotate(${strideAngle}deg)` : '';
-              }
-              if (pathUpper) {
-                pathUpper.style.transform = strideAngle ? `rotate(${strideAngle * 0.7}deg)` : '';
-              }
-            }
-          });
-
-          if (spiderBodyRef.current) {
-            if (isMoving) {
-              const squash = 1 + Math.sin(pursuer.gaitPhase * 2) * 0.02;
-              const stretch = 1 - Math.sin(pursuer.gaitPhase * 2) * 0.018;
-              spiderBodyRef.current.style.transform = `scale(${stretch}, ${squash})`;
-            } else {
-              spiderBodyRef.current.style.transform = 'scale(1, 1)';
-            }
+            spiderBodyRef.current.style.transform = 'scale(1, 1)';
           }
         }
       }
@@ -401,32 +444,49 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       // ==========================================
       // 3. APPLY DOM TRANSFORMS
       // ==========================================
-      // Spider transform
-      if (mode === 'spider' && spiderRef.current) {
-        const spiderRotationDeg = radToDeg(pursuer.heading) + 90;
-        spiderRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-${centerXPercent}%, -${centerYPercent}%) rotate(${spiderRotationDeg}deg)`;
+      // 1. Leo Hedgehog transform (100% Upright)
+      if (mode === 'leo' && hedgehogRef.current) {
+        const scaleX = pursuer.facing < 0 ? -1 : 1;
+        const isRunning = pursuer.speed > 20;
+        const isEating = pursuer.speed <= 20 && distToPrey <= 48;
+
+        hedgehogRef.current.classList.toggle('leo-running', isRunning);
+        hedgehogRef.current.classList.toggle('leo-eating', isEating);
+        hedgehogRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-50%, -50%) scale(${scaleX}, 1)`;
+
+        if (pelletRef.current) {
+          pelletRef.current.classList.toggle('scale-90', isEating);
+        }
       }
 
-      // Dora Chow Chow transform:
-      // CRITICAL: Dora is ALWAYS 100% UPRIGHT!
-      // No sideways rotation! No roll/pitch! No upside-down flipping!
-      // Turning left/right is achieved strictly via scaleX(-1) or scaleX(1).
-      if (mode === 'dog' && dogRef.current) {
+      // 2. Dora Chow Chow transform (100% Upright)
+      if (mode === 'dora' && dogRef.current) {
         const scaleX = pursuer.facing < 0 ? -1 : 1;
         const isRunning = pursuer.speed > 25;
         dogRef.current.classList.toggle('dora-running', isRunning);
         dogRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-50%, -50%) scale(${scaleX}, 1)`;
       }
 
-      // Ant transform
-      if ((mode === 'spider' || mode === 'ant-only') && antRef.current) {
-        const antRotationDeg = radToDeg(prey.heading) + 180;
-        antRef.current.style.transform = `translate3d(${prey.x}px, ${prey.y}px, 0) translate(-50%, -50%) rotate(${antRotationDeg}deg)`;
+      // 3. Spider transform
+      if (mode === 'spider' && spiderRef.current) {
+        const spiderRotationDeg = radToDeg(pursuer.heading) + 90;
+        spiderRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-${centerXPercent}%, -${centerYPercent}%) rotate(${spiderRotationDeg}deg)`;
       }
 
-      // Ball transform
-      if (mode === 'dog' && ballRef.current) {
+      // 4. Pellet Treat transform
+      if (mode === 'leo' && pelletRef.current) {
+        pelletRef.current.style.transform = `translate3d(${prey.x}px, ${prey.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      // 5. Tennis Ball transform
+      if (mode === 'dora' && ballRef.current) {
         ballRef.current.style.transform = `translate3d(${prey.x}px, ${prey.y}px, 0) translate(-50%, -50%) rotate(${prey.spin}deg)`;
+      }
+
+      // 6. Pink Ant transform
+      if (mode === 'spider' && antRef.current) {
+        const antRotationDeg = radToDeg(prey.heading) + 180;
+        antRef.current.style.transform = `translate3d(${prey.x}px, ${prey.y}px, 0) translate(-50%, -50%) rotate(${antRotationDeg}deg)`;
       }
     };
 
@@ -442,7 +502,8 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     };
   }, [reducedMotion, spiderSize, antSize, speed, soundEnabled, mode, centerXPercent, centerYPercent]);
 
-  if (reducedMotion) {
+  // Clean distraction-free return if reduced motion or "none" (Normal Cursor)
+  if (reducedMotion || mode === 'none') {
     return null;
   }
 
@@ -452,9 +513,39 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       aria-hidden="true"
       className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-hidden select-none"
     >
-      {/* ================= PREY ================= */}
-      {/* 1. Pink Ant (for Spider & Ant-only modes) */}
-      {(mode === 'spider' || mode === 'ant-only') && (
+      {/* ================= 1. PREY / TREATS / TOYS ================= */}
+      {/* 1A. Crunchy Pellet Treat (for Leo mode) */}
+      {mode === 'leo' && (
+        <div
+          ref={pelletRef}
+          className="absolute will-change-transform z-20 pointer-events-none overflow-visible"
+          style={{
+            width: 24,
+            height: 24,
+            transformOrigin: '50% 50%',
+          }}
+        >
+          <PelletTreat size={24} />
+        </div>
+      )}
+
+      {/* 1B. Tennis Ball (for Dora mode) */}
+      {mode === 'dora' && (
+        <div
+          ref={ballRef}
+          className="absolute will-change-transform z-20 pointer-events-none overflow-visible"
+          style={{
+            width: 32,
+            height: 32,
+            transformOrigin: '50% 50%',
+          }}
+        >
+          <BallCharacter size={32} />
+        </div>
+      )}
+
+      {/* 1C. Pink Ant (for Spider mode) */}
+      {mode === 'spider' && (
         <div
           ref={antRef}
           className="absolute will-change-transform z-20 pointer-events-none drop-shadow-[0_2px_6px_rgba(255,75,185,0.65)] overflow-visible"
@@ -475,23 +566,38 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
         </div>
       )}
 
-      {/* 2. Tennis Ball (for Dog mode) */}
-      {mode === 'dog' && (
+      {/* ================= 2. PURSUERS / CHARACTERS ================= */}
+      {/* 2A. Leo the Hedgehog (for Leo mode) */}
+      {mode === 'leo' && (
         <div
-          ref={ballRef}
-          className="absolute will-change-transform z-20 pointer-events-none overflow-visible"
+          ref={hedgehogRef}
+          className="absolute will-change-transform z-10 pointer-events-none overflow-visible"
           style={{
-            width: 32,
-            height: 32,
+            width: 95,
+            height: 76,
             transformOrigin: '50% 50%',
           }}
         >
-          <BallCharacter size={32} />
+          <HedgehogCharacter size={95} isMoving={false} isEating={false} />
         </div>
       )}
 
-      {/* ================= PURSUER ================= */}
-      {/* 1. Black Spider (for Spider mode) */}
+      {/* 2B. Dora the Cinnamon Chow Chow (for Dora mode) */}
+      {mode === 'dora' && (
+        <div
+          ref={dogRef}
+          className="absolute will-change-transform z-10 pointer-events-none overflow-visible"
+          style={{
+            width: 150,
+            height: 120,
+            transformOrigin: '50% 50%',
+          }}
+        >
+          <DogCharacter size={150} isMoving={false} isPanting={true} />
+        </div>
+      )}
+
+      {/* 2C. Black Spider (for Spider mode) */}
       {mode === 'spider' && (
         <div
           ref={spiderRef}
@@ -565,21 +671,6 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
               <path d={SPIDER_PATHS.BODY} />
             </g>
           </svg>
-        </div>
-      )}
-
-      {/* 2. Dora the Cinnamon Chow Chow (for Dog mode) */}
-      {mode === 'dog' && (
-        <div
-          ref={dogRef}
-          className="absolute will-change-transform z-10 pointer-events-none overflow-visible"
-          style={{
-            width: 150,
-            height: 120,
-            transformOrigin: '50% 50%',
-          }}
-        >
-          <DogCharacter size={150} isMoving={false} isPanting={true} />
         </div>
       )}
     </div>
