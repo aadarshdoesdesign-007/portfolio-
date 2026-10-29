@@ -16,143 +16,164 @@ export const GothamTransitionOverlay: React.FC = () => {
       className="fixed inset-0 w-screen h-screen z-[100] pointer-events-none overflow-hidden select-none"
     >
       <style>{`
-        /* Stage 1: Power Grid Dim */
-        @keyframes gotham-dim {
+        /* Stage 1: Power Brownout & Fade to Near-Black */
+        @keyframes gotham-fade-dark {
           0% { opacity: 0; }
-          40% { opacity: 0.85; }
-          60% { opacity: 0.65; }
-          100% { opacity: 0.95; }
+          100% { opacity: 0.96; }
         }
 
-        /* Stage 2: Thunder Flash */
-        @keyframes gotham-lightning-flash {
-          0% { opacity: 0; }
-          15% { opacity: 0.95; }
-          30% { opacity: 0.2; }
-          45% { opacity: 0.85; }
+        /* Stage 2: Distant Searchlight Ignition & Sweep */
+        @keyframes gotham-searchlight-ignite {
+          0% {
+            opacity: 0;
+            transform: rotate(-30deg) scaleY(0.3);
+          }
+          40% {
+            opacity: 0.85;
+          }
+          100% {
+            opacity: 0.95;
+            transform: rotate(-10deg) scaleY(1);
+          }
+        }
+
+        /* Stage 3: Volumetric Beam Rising Upward */
+        @keyframes gotham-beam-rise {
+          0% {
+            clip-path: polygon(48% 100%, 52% 100%, 52% 100%, 48% 100%);
+            opacity: 0.2;
+          }
+          100% {
+            clip-path: polygon(44% 100%, 56% 100%, 90% 0%, 20% 0%);
+            opacity: 0.9;
+          }
+        }
+
+        /* Stage 4: Bat Emblem Materialization & Cloud Burst */
+        @keyframes gotham-bat-materialize {
+          0% {
+            transform: scale(0.3) rotate(-8deg);
+            opacity: 0;
+            filter: blur(16px);
+          }
+          50% {
+            transform: scale(1.15) rotate(2deg);
+            opacity: 1;
+            filter: blur(2px);
+          }
+          100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+            filter: blur(0px);
+          }
+        }
+
+        /* Stage 5: Emerge Dissolve */
+        @keyframes gotham-emerge-dissolve {
+          0% { opacity: 0.95; }
           100% { opacity: 0; }
         }
 
-        /* Stage 3: Volumetric Bat-Signal Beam Sweep */
-        @keyframes bat-signal-sweep-enter {
-          0% {
-            transform: translate(-100%, 80%) rotate(-35deg);
-            opacity: 0;
-          }
-          30% {
-            opacity: 0.95;
-          }
-          70% {
-            opacity: 0.95;
-            transform: translate(20%, -30%) rotate(-15deg);
-          }
-          100% {
-            transform: translate(100%, -80%) rotate(0deg);
-            opacity: 0;
-          }
+        .anim-darken {
+          animation: gotham-fade-dark 0.3s ease-in forwards;
         }
 
-        @keyframes bat-signal-sweep-exit {
-          0% {
-            transform: translate(0%, 0%) rotate(0deg);
-            opacity: 0.8;
-          }
-          100% {
-            transform: translate(120%, -60%) rotate(25deg);
-            opacity: 0;
-          }
+        .anim-ignite {
+          animation: gotham-searchlight-ignite 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .anim-dim {
-          animation: gotham-dim 0.22s ease-in forwards;
+        .anim-beam-rise {
+          animation: gotham-beam-rise 0.45s ease-out forwards;
         }
 
-        .anim-flash {
-          animation: gotham-lightning-flash 0.3s ease-out forwards;
+        .anim-bat-pop {
+          animation: gotham-bat-materialize 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
         }
 
-        .anim-sweep-enter {
-          animation: bat-signal-sweep-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .anim-sweep-exit {
-          animation: bat-signal-sweep-exit 0.55s ease-out forwards;
+        .anim-dissolve {
+          animation: gotham-emerge-dissolve 0.45s ease-out forwards;
         }
       `}</style>
 
-      {/* Dimming Darkness Overlay */}
+      {/* Stage 1: Screen Fades to Near-Black */}
       {transitionStage === 'dim' && (
-        <div className="absolute inset-0 bg-[#080A0F] anim-dim" />
+        <div className="absolute inset-0 bg-[#05070A] anim-darken" />
       )}
 
-      {/* Distant Lightning Flash */}
-      {transitionStage === 'flash' && (
-        <div
-          className={`absolute inset-0 anim-flash ${
-            isGotham
-              ? 'bg-[radial-gradient(ellipse_at_top,_rgba(240,248,255,0.95)_0%,_rgba(255,229,0,0.4)_50%,_transparent_100%)]'
-              : 'bg-[radial-gradient(ellipse_at_center,_rgba(255,245,210,0.9)_0%,_rgba(255,180,100,0.3)_60%,_transparent_100%)]'
-          }`}
-        />
-      )}
-
-      {/* Volumetric Bat-Signal Beam Sweeping Across Viewport */}
-      {transitionStage === 'sweep' && (
-        <div
-          className={`absolute w-[180vw] h-[180vh] -top-[40vh] -left-[40vw] flex items-center justify-center ${
-            isGotham ? 'anim-sweep-enter' : 'anim-sweep-exit'
-          }`}
-        >
-          {/* Conical Light Beam */}
+      {/* Stage 2 & 3: Searchlight Switch-On & Beam Rising Through Fog */}
+      {(transitionStage === 'searchlight' || transitionStage === 'beam') && (
+        <div className="absolute inset-0 bg-[#07090F]">
+          {/* Intense Searchlight Ground Ignition */}
           <div
-            className="relative w-[100vw] h-[70vh] flex items-center justify-center"
+            className="absolute bottom-[-10%] right-[22%] w-[40vw] h-[120vh] anim-ignite"
             style={{
-              background: isGotham
-                ? 'radial-gradient(ellipse at center, rgba(255,229,0,0.42) 0%, rgba(255,229,0,0.18) 35%, rgba(255,229,0,0.04) 65%, transparent 75%)'
-                : 'radial-gradient(ellipse at center, rgba(255,240,180,0.5) 0%, rgba(255,220,120,0.2) 40%, transparent 75%)',
-              filter: 'blur(10px)',
+              background: 'conic-gradient(from 180deg at 50% 100%, transparent 82deg, rgba(255, 229, 0, 0.4) 89deg, rgba(255, 255, 255, 0.8) 90deg, rgba(255, 229, 0, 0.4) 91deg, transparent 98deg)',
+              filter: 'blur(16px)',
+              transformOrigin: '50% 100%',
             }}
-          >
-            {/* Bat Signal Silhouette Projected Inside Beam */}
-            {isGotham && (
-              <svg
-                viewBox="0 0 48 30"
-                width="160"
-                height="100"
-                className="opacity-90 drop-shadow-[0_0_25px_#FFE500]"
-              >
-                <path
-                  d="M 24 6
-                     C 22.8 4.2, 22.2 1.5, 21.6 0
-                     C 21.0 1.5, 20.4 4.2, 19.2 6
-                     C 16.5 5.5, 12.0 4.5, 4.0 9.0
-                     C 7.5 13.0, 10.5 15.5, 10.0 19.5
-                     C 13.0 18.0, 16.5 19.5, 17.5 24.5
-                     C 19.5 22.0, 22.0 23.5, 24.0 29.5
-                     C 26.0 23.5, 28.5 22.0, 30.5 24.5
-                     C 31.5 19.5, 35.0 18.0, 38.0 19.5
-                     C 37.5 15.5, 40.5 13.0, 44.0 9.0
-                     C 36.0 4.5, 31.5 5.5, 28.8 6
-                     C 27.6 4.2, 27.0 1.5, 26.4 0
-                     C 25.8 1.5, 25.2 4.2, 24.0 6 Z"
-                  fill="#080A0F"
-                  stroke="#FFE500"
-                  strokeWidth="0.8"
-                />
-              </svg>
-            )}
+          />
+
+          {/* Rising Volumetric Beam Overlay */}
+          {transitionStage === 'beam' && (
+            <div
+              className="absolute inset-0 anim-beam-rise"
+              style={{
+                background: 'linear-gradient(to top, rgba(255,229,0,0.4) 0%, rgba(255,255,255,0.7) 40%, rgba(255,229,0,0.5) 100%)',
+                filter: 'blur(20px)',
+              }}
+            />
+          )}
+
+          {/* Atmospheric Sparkle / Fog Glint */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,229,0,0.15)_0%,_transparent_70%)]" />
+        </div>
+      )}
+
+      {/* Stage 4: Bat Emblem Materializes in the Glowing Sky */}
+      {transitionStage === 'bat' && (
+        <div className="absolute inset-0 bg-[#080A0F] flex items-center justify-center">
+          {/* Glowing Circular High-Beam Disc */}
+          <div className="relative w-80 h-80 sm:w-96 sm:h-96 rounded-full flex items-center justify-center anim-bat-pop">
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, #FFFFD0 0%, #FFE500 55%, transparent 75%)',
+                boxShadow: '0 0 100px rgba(255, 229, 0, 0.9), inset 0 0 60px #FFFFFF',
+                filter: 'blur(6px)',
+              }}
+            />
+
+            {/* The Materializing Bat Silhouette */}
+            <svg
+              viewBox="0 0 200 110"
+              className="w-48 sm:w-60 h-auto relative z-10 drop-shadow-[0_0_16px_#000000]"
+            >
+              <path
+                d="M 100 20
+                   C 95 14, 93 4, 90 0
+                   C 87 5, 85 14, 80 20
+                   C 68 18, 48 16, 12 32
+                   C 26 48, 40 58, 38 72
+                   C 52 66, 68 72, 72 90
+                   C 80 81, 92 86, 100 110
+                   C 108 86, 120 81, 128 90
+                   C 132 72, 148 66, 162 72
+                   C 160 58, 174 48, 188 32
+                   C 152 16, 132 18, 120 20
+                   C 115 14, 113 5, 110 0
+                   C 107 4, 105 14, 100 20 Z"
+                fill="#07090E"
+                stroke="#000000"
+                strokeWidth="2"
+              />
+            </svg>
           </div>
         </div>
       )}
 
-      {/* Settle: Soft Ambient Fog Fade */}
-      {transitionStage === 'settle' && (
-        <div
-          className="absolute inset-0 transition-opacity duration-300 opacity-0"
-          style={{
-            background: isGotham ? '#080A0F' : 'transparent',
-          }}
-        />
+      {/* Stage 5: Skyline & Content Emerge (Smooth Dissolve Handoff) */}
+      {transitionStage === 'emerge' && (
+        <div className="absolute inset-0 bg-[#080A0F] anim-dissolve" />
       )}
     </div>
   );

@@ -36,7 +36,7 @@ export const NavPill: React.FC<NavPillProps> = ({
   };
 
   const idleStyle = isGotham
-    ? 'bg-[#11151D]/90 hover:bg-[#11151D] text-[#F3F1E9] border border-[#303540] hover:border-[#FFE500]'
+    ? 'bg-[#11151D]/90 hover:bg-[#11151D] text-[#F3F1E9] border border-[#303540] hover:border-[#FFE500] hover:shadow-[0_0_10px_rgba(255,229,0,0.35)]'
     : 'bg-white/80 hover:bg-white text-black border border-black/80 hover:border-black';
 
   return (

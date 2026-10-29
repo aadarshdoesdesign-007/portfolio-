@@ -2,7 +2,14 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
-export type GothamTransitionStage = 'idle' | 'dim' | 'flash' | 'sweep' | 'settle';
+export type GothamTransitionStage =
+  | 'idle'
+  | 'dim'
+  | 'searchlight'
+  | 'beam'
+  | 'bat'
+  | 'emerge'
+  | 'settle';
 
 interface GothamContextType {
   isGotham: boolean;
@@ -55,59 +62,58 @@ export const GothamProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return;
     }
 
-    // Run Cinematic Transition Sequence (approx 1.3s total)
+    // Run 2.0s Cinematic Transition Sequence
     setIsTransitioning(true);
     const nextState = !isGotham;
 
     if (nextState) {
-      // Entering Gotham:
-      // Stage 1: Dim (0 - 200ms) - sudden brownout
+      // 1. Screen briefly fades to near-black (0 - 300ms)
       setTransitionStage('dim');
 
       setTimeout(() => {
-        // Stage 2: Lightning Flash (200 - 450ms)
-        setTransitionStage('flash');
-        // Apply gotham class during flash so the dark theme is revealed
+        // 2. Distant searchlight switches on with visible sweep (300 - 750ms)
+        setTransitionStage('searchlight');
         document.documentElement.classList.add('gotham');
         setIsGotham(true);
         localStorage.setItem('portfolio_gotham_mode', 'true');
-      }, 200);
+      }, 300);
 
       setTimeout(() => {
-        // Stage 3: Bat-Signal Sweep across screen (450 - 1050ms)
-        setTransitionStage('sweep');
-      }, 450);
+        // 3. Beam travels upward through atmospheric fog (750 - 1200ms)
+        setTransitionStage('beam');
+      }, 750);
 
       setTimeout(() => {
-        // Stage 4: Settle (1050 - 1350ms)
+        // 4. Bat emblem materializes in the sky (1200 - 1650ms)
+        setTransitionStage('bat');
+      }, 1200);
+
+      setTimeout(() => {
+        // 5. Gotham skyline & hero typography emerge from the darkness (1650 - 2100ms)
+        setTransitionStage('emerge');
+      }, 1650);
+
+      setTimeout(() => {
+        // 6. Complete transition & settle into ambient animation (2100ms)
         setTransitionStage('settle');
-      }, 1050);
-
-      setTimeout(() => {
-        // Complete
         setIsTransitioning(false);
         setTransitionStage('idle');
-      }, 1350);
+      }, 2100);
     } else {
-      // Exiting Gotham:
-      // Stage 1: Sweep out with warm light pass (0 - 500ms)
-      setTransitionStage('sweep');
+      // Reverse sequence to restore light paper theme cleanly
+      setTransitionStage('dim');
 
       setTimeout(() => {
-        setTransitionStage('flash');
         document.documentElement.classList.remove('gotham');
         setIsGotham(false);
         localStorage.setItem('portfolio_gotham_mode', 'false');
-      }, 350);
-
-      setTimeout(() => {
-        setTransitionStage('settle');
-      }, 650);
+        setTransitionStage('emerge');
+      }, 400);
 
       setTimeout(() => {
         setIsTransitioning(false);
         setTransitionStage('idle');
-      }, 900);
+      }, 850);
     }
   }, [isGotham, isTransitioning]);
 
