@@ -11,12 +11,14 @@ import { BatSignal } from '@/components/BatSignal';
 import { GothamSkyline } from '@/components/GothamSkyline';
 import { FlyingBats } from '@/components/FlyingBats';
 import { useCompanion } from '@/context/CompanionContext';
+import { useGotham } from '@/context/GothamContext';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects } from '@/content/projects';
 import { profile } from '@/content/profile';
 
 export default function HomePage() {
   const { mode } = useCompanion();
+  const { isGotham } = useGotham();
   const featuredProjects = projects.filter((p) => p.featured);
   const totalProjectsCount = projects.length;
 
@@ -35,11 +37,11 @@ export default function HomePage() {
         <GothamSkyline />
         <FlyingBats />
 
-        {/* Dedicated Hero-level Companion Interaction Layer (strictly confined to hero) */}
-        <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
+        {/* Dedicated Hero-level Companion Interaction Layer (strictly confined to hero, hidden in Gotham) */}
+        {!isGotham && <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />}
 
-        {/* Widescreen Organic Geometric Spiderweb (spans 70–80% of viewport width with zero square edges) */}
-        {mode === 'spider' && (
+        {/* Widescreen Organic Geometric Spiderweb (only in spider mode in light theme) */}
+        {!isGotham && mode === 'spider' && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-visible">
             <div className="relative w-[95vw] max-w-6xl h-[75vh] sm:h-[85vh] flex items-center justify-center overflow-visible">
               <SpiderwebGraphic className="w-full h-full opacity-90 transition-opacity duration-700" />

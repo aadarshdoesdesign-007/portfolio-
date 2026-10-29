@@ -3,7 +3,7 @@ import './globals.css';
 import { CompanionProvider } from '@/context/CompanionContext';
 import { GothamProvider } from '@/context/GothamContext';
 import { GothamTransitionOverlay } from '@/components/GothamTransitionOverlay';
-import { BatmobileCursor } from '@/components/BatmobileCursor';
+import { BatCursor } from '@/components/BatCursor';
 
 export const viewport: Viewport = {
   themeColor: '#E4E2D8',
@@ -39,7 +39,7 @@ export default function RootLayout({
         <GothamProvider>
           <CompanionProvider>
             <GothamTransitionOverlay />
-            <BatmobileCursor />
+            <BatCursor />
             {children}
           </CompanionProvider>
         </GothamProvider>

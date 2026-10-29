@@ -79,7 +79,7 @@ export const CompanionSelector: React.FC = () => {
       >
         <span className="text-sm">{isGotham ? '🦇' : currentOption.icon}</span>
         <span className={`hidden sm:inline text-[11px] font-mono font-bold ${isGotham ? 'text-[#FFE500]' : 'text-black/80'}`}>
-          {isGotham ? 'Batmobile' : currentOption.shortLabel}
+          {isGotham ? 'Bat Cursor' : currentOption.shortLabel}
         </span>
         <span className={`text-[9px] ${isGotham ? 'text-[#A4A9B4]' : 'text-black/50'}`} aria-hidden="true">▾</span>
       </button>
@@ -99,7 +99,7 @@ export const CompanionSelector: React.FC = () => {
           }`}>
             <span>Cursor Companion</span>
             <span className={`text-[9px] font-bold ${isGotham ? 'text-[#FFE500]' : 'text-[#FF4BB9]'}`}>
-              {isGotham ? 'Batmobile in Gotham' : 'Personal Pets'}
+              {isGotham ? 'Bat Cursor active' : 'Personal Pets'}
             </span>
           </div>
 

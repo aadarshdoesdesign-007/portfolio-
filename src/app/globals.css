@@ -36,15 +36,15 @@
   font-display: swap;
 }
 
-/* Batmobile Cursor Override (Active only when Batmobile is driving in Gotham desktop mode) */
-html.gotham.has-batmobile-cursor,
-html.gotham.has-batmobile-cursor body,
-html.gotham.has-batmobile-cursor a,
-html.gotham.has-batmobile-cursor button,
-html.gotham.has-batmobile-cursor [role="button"],
-html.gotham.has-batmobile-cursor input,
-html.gotham.has-batmobile-cursor select,
-html.gotham.has-batmobile-cursor textarea {
+/* Bat Symbol Cursor Override (Active only in Gotham desktop mode) */
+html.gotham.has-bat-cursor,
+html.gotham.has-bat-cursor body,
+html.gotham.has-bat-cursor a,
+html.gotham.has-bat-cursor button,
+html.gotham.has-bat-cursor [role="button"],
+html.gotham.has-bat-cursor input,
+html.gotham.has-bat-cursor select,
+html.gotham.has-bat-cursor textarea {
   cursor: none !important;
 }
 

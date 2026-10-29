@@ -504,21 +504,9 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     };
   }, [reducedMotion, spiderSize, antSize, speed, soundEnabled, mode, centerXPercent, centerYPercent, isGotham]);
 
-  // In Gotham Mode: pet cursor following is completely deactivated.
-  // Dora remains visible as an adorable, non-tracking decorative illustration.
-  if (isGotham) {
-    if (mode === 'dora') {
-      return (
-        <div className="absolute bottom-12 right-12 sm:bottom-16 sm:right-20 z-20 pointer-events-none select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
-          <DogCharacter size={140} isMoving={false} isPanting={true} />
-        </div>
-      );
-    }
-    return null;
-  }
-
-  // Clean distraction-free return if reduced motion or "none" (Normal Cursor)
-  if (reducedMotion || mode === 'none') {
+  // When Gotham Mode is active, remove all pet companion illustrations (including Dora and Leo)
+  // and cursor tracking completely.
+  if (isGotham || reducedMotion || mode === 'none') {
     return null;
   }
 
