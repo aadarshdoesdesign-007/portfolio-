@@ -14,6 +14,7 @@ import {
 import { DogCharacter, BallCharacter } from './DogCharacter';
 import { HedgehogCharacter, PelletTreat } from './HedgehogCharacter';
 import { useCompanion } from '@/context/CompanionContext';
+import { useGotham } from '@/context/GothamContext';
 
 interface SpiderAntHeroProps {
   spiderSize?: number;
@@ -44,6 +45,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
   soundEnabled = false,
 }) => {
   const { mode } = useCompanion();
+  const { isGotham } = useGotham();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const spiderRef = useRef<HTMLDivElement>(null);
@@ -73,9 +75,9 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
   }, []);
 
   useEffect(() => {
-    // If reduced motion is active or mode is "none" (Normal Cursor),
-    // do not run any loop or attach any listeners. Clean default state!
-    if (reducedMotion || mode === 'none' || typeof window === 'undefined') return;
+    // If reduced motion is active, mode is "none", or Gotham Mode is active,
+    // do not run any cursor follower loop or attach any mouse listeners.
+    if (reducedMotion || mode === 'none' || isGotham || typeof window === 'undefined') return;
 
     let animId: number;
     let isDisposed = false;
@@ -500,7 +502,20 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [reducedMotion, spiderSize, antSize, speed, soundEnabled, mode, centerXPercent, centerYPercent]);
+  }, [reducedMotion, spiderSize, antSize, speed, soundEnabled, mode, centerXPercent, centerYPercent, isGotham]);
+
+  // In Gotham Mode: pet cursor following is completely deactivated.
+  // Dora remains visible as an adorable, non-tracking decorative illustration.
+  if (isGotham) {
+    if (mode === 'dora') {
+      return (
+        <div className="absolute bottom-12 right-12 sm:bottom-16 sm:right-20 z-20 pointer-events-none select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+          <DogCharacter size={140} isMoving={false} isPanting={true} />
+        </div>
+      );
+    }
+    return null;
+  }
 
   // Clean distraction-free return if reduced motion or "none" (Normal Cursor)
   if (reducedMotion || mode === 'none') {

@@ -7,7 +7,9 @@ import { Footer } from '@/components/Footer';
 import { NotebookBackground } from '@/components/NotebookBackground';
 import { SpiderAntHero } from '@/components/SpiderAntHero';
 import { SpiderwebGraphic } from '@/components/SpiderwebGraphic';
-import { BatSignalHero } from '@/components/BatSignalHero';
+import { BatSignal } from '@/components/BatSignal';
+import { GothamSkyline } from '@/components/GothamSkyline';
+import { FlyingBats } from '@/components/FlyingBats';
 import { useCompanion } from '@/context/CompanionContext';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projects } from '@/content/projects';
@@ -28,8 +30,10 @@ export default function HomePage() {
 
       {/* 3. Hero Section — Widescreen Organic Geometric Spiderweb & Minimal Editorial Layout */}
       <section className="relative min-h-[calc(100vh-88px)] flex flex-col justify-end px-6 sm:px-20 py-12 sm:py-16 w-full overflow-hidden">
-        {/* Cinematic Bat-Signal Searchlight & Layered Gotham Skyline (Active in Gotham Mode) */}
-        <BatSignalHero />
+        {/* Cinematic Gotham Centerpiece: Bat-Signal, Skyline & Flying Bats */}
+        <BatSignal />
+        <GothamSkyline />
+        <FlyingBats />
 
         {/* Dedicated Hero-level Companion Interaction Layer (strictly confined to hero) */}
         <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
