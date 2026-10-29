@@ -26,7 +26,6 @@ interface SpiderAntHeroProps {
 // Math helpers
 const clamp = (val: number, min: number, max: number) => (val < min ? min : val > max ? max : val);
 
-// Exact angle normalization keeping delta within [-PI, +PI]
 const normalizeAngle = (angle: number) => {
   let a = (angle + Math.PI) % (Math.PI * 2);
   if (a < 0) a += Math.PI * 2;
@@ -45,6 +44,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
 }) => {
   const { mode } = useCompanion();
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const spiderRef = useRef<HTMLDivElement>(null);
   const dogRef = useRef<HTMLDivElement>(null);
   const antRef = useRef<HTMLDivElement>(null);
@@ -75,43 +75,60 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     let animId: number;
     let isDisposed = false;
 
-    // Viewport dimensions
-    let vpWidth = window.innerWidth;
-    let vpHeight = window.innerHeight;
+    // Hero container dimensions
+    let heroWidth = window.innerWidth;
+    let heroHeight = window.innerHeight;
+
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        heroWidth = containerRef.current.clientWidth || window.innerWidth;
+        heroHeight = containerRef.current.clientHeight || window.innerHeight;
+      } else {
+        heroWidth = window.innerWidth;
+        heroHeight = window.innerHeight;
+      }
+    };
+    updateDimensions();
 
     const handleResize = () => {
-      vpWidth = window.innerWidth;
-      vpHeight = window.innerHeight;
+      updateDimensions();
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    // Initial state matching the reference:
-    // Spider rests near web center, ant rests slightly offset on the web
+    // Initial state matching the hero composition
+    const isMobile = heroWidth < 640;
+    const defaultPreyX = isMobile ? heroWidth * 0.65 : heroWidth * 0.68;
+    const defaultPreyY = isMobile ? heroHeight * 0.32 : heroHeight * 0.44;
+    const defaultPursuerX = isMobile ? heroWidth * 0.45 : heroWidth * 0.58;
+    const defaultPursuerY = isMobile ? heroHeight * 0.35 : heroHeight * 0.46;
+
     const state = {
       t: 0,
       userHasMoved: false,
+      isHoveringHero: false,
 
       target: {
-        x: vpWidth * 0.65,
-        y: vpHeight * 0.42,
+        x: defaultPreyX,
+        y: defaultPreyY,
       },
 
       prey: {
-        x: vpWidth * 0.65,
-        y: vpHeight * 0.42,
+        x: defaultPreyX,
+        y: defaultPreyY,
         heading: 0,
         speed: 0,
         spin: 0,
       },
 
       pursuer: {
-        x: vpWidth * 0.50,
-        y: vpHeight * 0.46,
-        heading: -Math.PI / 4, // Initial angle facing towards ant
+        x: defaultPursuerX,
+        y: defaultPursuerY,
+        heading: 0,
+        facing: 1, // 1 = facing right, -1 = facing left
         speed: 0,
-        maxSpeed: 700 * speed,
+        maxSpeed: 680 * speed,
         acceleration: 2600 * speed,
-        deceleration: 3400 * speed,
+        deceleration: 3200 * speed,
         gaitPhase: 0,
       },
     };
@@ -146,11 +163,26 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       }
     };
 
-    // Direct pointer tracking in viewport client coordinates
+    // Direct pointer tracking relative to the Hero Section container
     const handlePointerMove = (e: PointerEvent) => {
-      state.target.x = e.clientX;
-      state.target.y = e.clientY;
-      state.userHasMoved = true;
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+
+      // Check if cursor is within hero section
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (isInside) {
+        state.target.x = e.clientX - rect.left;
+        state.target.y = e.clientY - rect.top;
+        state.userHasMoved = true;
+        state.isHoveringHero = true;
+      } else {
+        state.isHoveringHero = false;
+      }
     };
 
     const handlePointerDown = (e: PointerEvent) => {
@@ -161,10 +193,21 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches && e.touches[0]) {
-        state.target.x = e.touches[0].clientX;
-        state.target.y = e.touches[0].clientY;
+      if (!containerRef.current || !e.touches || !e.touches[0]) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const touch = e.touches[0];
+
+      const isInside =
+        touch.clientX >= rect.left &&
+        touch.clientX <= rect.right &&
+        touch.clientY >= rect.top &&
+        touch.clientY <= rect.bottom;
+
+      if (isInside) {
+        state.target.x = touch.clientX - rect.left;
+        state.target.y = touch.clientY - rect.top;
         state.userHasMoved = true;
+        state.isHoveringHero = true;
       }
     };
 
@@ -175,7 +218,7 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
     let lastTime: number | null = null;
     let stepAccumulator = 0;
 
-    // Viewport-level 60/120fps Animation Loop with ZERO React state updates
+    // Viewport/Hero-level 60/120fps Animation Loop with ZERO React state updates
     const frame = (time: number) => {
       if (isDisposed) return;
       animId = requestAnimationFrame(frame);
@@ -195,93 +238,137 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       // ==========================================
       // 1. UPDATE PREY (ANT / BALL)
       // ==========================================
-      const dxCursor = state.target.x - prey.x;
-      const dyCursor = state.target.y - prey.y;
+      // If cursor is outside hero, gently glide home to hero rest spot
+      const currentTargetX = state.isHoveringHero
+        ? state.target.x
+        : (heroWidth < 640 ? heroWidth * 0.65 : heroWidth * 0.68);
+      const currentTargetY = state.isHoveringHero
+        ? state.target.y
+        : (heroWidth < 640 ? heroHeight * 0.32 : heroHeight * 0.44);
+
+      const dxCursor = currentTargetX - prey.x;
+      const dyCursor = currentTargetY - prey.y;
       const distCursor = Math.hypot(dxCursor, dyCursor);
 
       if (state.userHasMoved && distCursor > 1.0) {
-        // Ultra-responsive direct tracking with near-zero latency
-        prey.x += dxCursor * 0.94;
-        prey.y += dyCursor * 0.94;
+        const lerpFactor = state.isHoveringHero ? 0.92 : 0.08;
+        prey.x += dxCursor * lerpFactor;
+        prey.y += dyCursor * lerpFactor;
         prey.heading = Math.atan2(dyCursor, dxCursor);
         prey.speed = distCursor / Math.max(dt, 0.001);
-        prey.spin += distCursor * 1.6;
-      } else if (state.userHasMoved) {
-        prey.x = state.target.x;
-        prey.y = state.target.y;
+        prey.spin += distCursor * 1.5;
+      } else if (state.userHasMoved && state.isHoveringHero) {
+        prey.x = currentTargetX;
+        prey.y = currentTargetY;
         prey.speed = 0;
       }
 
+      // Constrain prey to safe bounds within hero
+      prey.x = clamp(prey.x, 30, heroWidth - 30);
+      prey.y = clamp(prey.y, 35, heroHeight - 40);
+
       // ==========================================
-      // 2. UPDATE PURSUER (SPIDER / DOG)
+      // 2. UPDATE PURSUER (DORA / SPIDER)
       // ==========================================
       if (mode !== 'ant-only') {
         const dxToPrey = prey.x - pursuer.x;
         const dyToPrey = prey.y - pursuer.y;
         const distToPrey = Math.hypot(dxToPrey, dyToPrey);
 
-        // Stopping distance: closes in and settles gracefully near the ant
-        const stoppingDistance = mode === 'dog' ? 75 : 68;
+        // ================= DOG MODE KINEMATICS =================
+        if (mode === 'dog') {
+          // Stopping distance: settle comfortably and naturally beside the ball
+          const stoppingDistance = 72;
 
-        // Desired heading towards the prey
-        const targetAngle = Math.atan2(dyToPrey, dxToPrey);
-        const angleDiff = normalizeAngle(targetAngle - pursuer.heading);
-
-        // Responsive turning: faster rate when distant or reversing direction
-        const turnSpeed = mode === 'dog' ? 18.0 : 25.0;
-        const turnFactor = clamp(dt * turnSpeed, 0.18, 0.96);
-
-        // Turn towards prey as long as we're not right on top of it to avoid micro-jitter
-        if (distToPrey > stoppingDistance * 0.6) {
-          pursuer.heading = normalizeAngle(pursuer.heading + angleDiff * turnFactor);
-        }
-
-        if (distToPrey > stoppingDistance) {
-          // Accelerate quickly towards ant
-          const desiredSpeed = clamp(
-            (distToPrey - stoppingDistance) * (mode === 'dog' ? 3.8 : 4.4),
-            180,
-            pursuer.maxSpeed
-          );
-
-          if (pursuer.speed < desiredSpeed) {
-            pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
-          } else {
-            pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
+          // Determine horizontal facing with deadband to prevent rapid flipping
+          if (dxToPrey < -10) {
+            pursuer.facing = -1; // Facing left
+          } else if (dxToPrey > 10) {
+            pursuer.facing = 1; // Facing right
           }
 
-          // Move forward leading directly with head
-          pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
-          pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
-        } else {
-          // Within stopping distance: smoothly decelerate and settle
-          pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 1.5 * dt);
-          if (pursuer.speed > 5) {
+          if (distToPrey > stoppingDistance) {
+            // Accelerate towards the ball
+            const desiredSpeed = clamp(
+              (distToPrey - stoppingDistance) * 3.8,
+              140,
+              pursuer.maxSpeed
+            );
+
+            if (pursuer.speed < desiredSpeed) {
+              pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
+            } else {
+              pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
+            }
+
+            const nx = dxToPrey / distToPrey;
+            const ny = dyToPrey / distToPrey;
+
+            pursuer.x += nx * pursuer.speed * dt;
+            pursuer.y += ny * pursuer.speed * dt;
+          } else {
+            // Within stopping distance: smoothly decelerate and rest
+            pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 2.5 * dt);
+            if (pursuer.speed > 5) {
+              const nx = dxToPrey / Math.max(distToPrey, 1);
+              const ny = dyToPrey / Math.max(distToPrey, 1);
+              pursuer.x += nx * pursuer.speed * dt;
+              pursuer.y += ny * pursuer.speed * dt;
+            }
+          }
+
+          // Confine Dora strictly within the hero section bounds
+          pursuer.x = clamp(pursuer.x, 60, heroWidth - 60);
+          pursuer.y = clamp(pursuer.y, 60, heroHeight - 65);
+        }
+
+        // ================= SPIDER MODE KINEMATICS =================
+        if (mode === 'spider') {
+          const stoppingDistance = 68;
+          const targetAngle = Math.atan2(dyToPrey, dxToPrey);
+          const angleDiff = normalizeAngle(targetAngle - pursuer.heading);
+
+          const turnSpeed = 25.0;
+          const turnFactor = clamp(dt * turnSpeed, 0.18, 0.96);
+
+          if (distToPrey > stoppingDistance * 0.6) {
+            pursuer.heading = normalizeAngle(pursuer.heading + angleDiff * turnFactor);
+          }
+
+          if (distToPrey > stoppingDistance) {
+            const desiredSpeed = clamp((distToPrey - stoppingDistance) * 4.4, 180, pursuer.maxSpeed);
+
+            if (pursuer.speed < desiredSpeed) {
+              pursuer.speed = Math.min(desiredSpeed, pursuer.speed + pursuer.acceleration * dt);
+            } else {
+              pursuer.speed = Math.max(desiredSpeed, pursuer.speed - pursuer.deceleration * dt);
+            }
+
             pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
             pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
+          } else {
+            pursuer.speed = Math.max(0, pursuer.speed - pursuer.deceleration * 1.5 * dt);
+            if (pursuer.speed > 5) {
+              pursuer.x += Math.cos(pursuer.heading) * pursuer.speed * dt;
+              pursuer.y += Math.sin(pursuer.heading) * pursuer.speed * dt;
+            }
           }
-        }
 
-        // Full viewport movement: soft edge bounds allow legs to reach edge without clipping
-        pursuer.x = clamp(pursuer.x, -20, vpWidth + 20);
-        pursuer.y = clamp(pursuer.y, -20, vpHeight + 20);
+          pursuer.x = clamp(pursuer.x, -20, heroWidth + 20);
+          pursuer.y = clamp(pursuer.y, -20, heroHeight + 20);
 
-        // Gait cycle
-        if (pursuer.speed > 15) {
-          pursuer.gaitPhase += dt * pursuer.speed * 0.055;
+          if (pursuer.speed > 15) {
+            pursuer.gaitPhase += dt * pursuer.speed * 0.055;
 
-          // Step sound
-          stepAccumulator += dt * pursuer.speed;
-          if (stepAccumulator > 70) {
-            stepAccumulator = 0;
-            playStepSound();
+            stepAccumulator += dt * pursuer.speed;
+            if (stepAccumulator > 70) {
+              stepAccumulator = 0;
+              playStepSound();
+            }
           }
-        }
 
-        // Spider leg IK & subtle organic body animation
-        if (mode === 'spider') {
+          // Spider leg IK
           const isMoving = pursuer.speed > 15;
-
           SPIDER_LEGS.forEach((leg, idx) => {
             const pathJoint = legRefs.current[`${leg.id}_JOINT`];
             const pathUpper = legRefs.current[`${leg.id}_UPPER`];
@@ -314,27 +401,24 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
       // ==========================================
       // 3. APPLY DOM TRANSFORMS
       // ==========================================
-      // Spider transform:
-      // - SVG artwork cephalothorax/head points UP (-90deg).
-      // - Adding +90deg aligns the head perfectly with pursuer.heading so it always leads.
-      // - Rotating around true cephalothorax center (47.35%, 44.77%) eliminates eccentric wobble.
+      // Spider transform
       if (mode === 'spider' && spiderRef.current) {
         const spiderRotationDeg = radToDeg(pursuer.heading) + 90;
         spiderRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-${centerXPercent}%, -${centerYPercent}%) rotate(${spiderRotationDeg}deg)`;
       }
 
-      // Dog transform
+      // Dora Chow Chow transform:
+      // CRITICAL: Dora is ALWAYS 100% UPRIGHT!
+      // No sideways rotation! No roll/pitch! No upside-down flipping!
+      // Turning left/right is achieved strictly via scaleX(-1) or scaleX(1).
       if (mode === 'dog' && dogRef.current) {
-        const dogDeg = radToDeg(pursuer.heading);
-        const flipY = Math.cos(pursuer.heading) < 0 ? -1 : 1;
-        dogRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-50%, -50%) rotate(${dogDeg}deg) scale(1, ${flipY})`;
-        dogRef.current.classList.toggle('dora-running', pursuer.speed > 20);
+        const scaleX = pursuer.facing < 0 ? -1 : 1;
+        const isRunning = pursuer.speed > 25;
+        dogRef.current.classList.toggle('dora-running', isRunning);
+        dogRef.current.style.transform = `translate3d(${pursuer.x}px, ${pursuer.y}px, 0) translate(-50%, -50%) scale(${scaleX}, 1)`;
       }
 
-      // Ant transform:
-      // - Mosquito illustration artwork proboscis points LEFT (180deg).
-      // - Adding +180deg aligns the head/proboscis to lead in the direction of motion.
-      // - Ant does NOT flutter or wander autonomously when stationary.
+      // Ant transform
       if ((mode === 'spider' || mode === 'ant-only') && antRef.current) {
         const antRotationDeg = radToDeg(prey.heading) + 180;
         antRef.current.style.transform = `translate3d(${prey.x}px, ${prey.y}px, 0) translate(-50%, -50%) rotate(${antRotationDeg}deg)`;
@@ -364,8 +448,9 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
 
   return (
     <div
+      ref={containerRef}
       aria-hidden="true"
-      className="fixed inset-0 w-screen h-screen pointer-events-none z-30 overflow-visible select-none"
+      className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-hidden select-none"
     >
       {/* ================= PREY ================= */}
       {/* 1. Pink Ant (for Spider & Ant-only modes) */}
@@ -396,12 +481,12 @@ export const SpiderAntHero: React.FC<SpiderAntHeroProps> = ({
           ref={ballRef}
           className="absolute will-change-transform z-20 pointer-events-none overflow-visible"
           style={{
-            width: 30,
-            height: 30,
+            width: 32,
+            height: 32,
             transformOrigin: '50% 50%',
           }}
         >
-          <BallCharacter size={30} />
+          <BallCharacter size={32} />
         </div>
       )}
 

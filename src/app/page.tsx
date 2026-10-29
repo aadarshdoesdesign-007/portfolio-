@@ -22,14 +22,14 @@ export default function HomePage() {
       {/* 1. Page-level continuous notebook background covering 100vw x 100vh + scroll */}
       <NotebookBackground lineGap={29} />
 
-      {/* 2. Dedicated Viewport-level Spider & Ant Interaction Layer */}
-      <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
-
-      {/* 3. Transparent Header — Notebook lines continue uninterrupted behind */}
+      {/* 2. Transparent Header — Notebook lines continue uninterrupted behind */}
       <Navbar />
 
-      {/* 4. Hero Section — Widescreen Organic Geometric Spiderweb & Minimal Editorial Layout */}
-      <section className="relative min-h-[calc(100vh-88px)] flex flex-col justify-end px-6 sm:px-20 py-12 sm:py-16 w-full overflow-visible">
+      {/* 3. Hero Section — Widescreen Organic Geometric Spiderweb & Minimal Editorial Layout */}
+      <section className="relative min-h-[calc(100vh-88px)] flex flex-col justify-end px-6 sm:px-20 py-12 sm:py-16 w-full overflow-hidden">
+        {/* Dedicated Hero-level Companion Interaction Layer (strictly confined to hero) */}
+        <SpiderAntHero spiderSize={220} antSize={30} speed={1.35} />
+
         {/* Widescreen Organic Geometric Spiderweb (spans 70–80% of viewport width with zero square edges) */}
         {mode === 'spider' && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-visible">
