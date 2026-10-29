@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type CompanionMode = 'leo' | 'dora' | 'none' | 'spider';
+export type CompanionMode = 'dora' | 'leo' | 'none' | 'spider';
 
 interface CompanionContextType {
   mode: CompanionMode;
@@ -10,12 +10,13 @@ interface CompanionContextType {
 }
 
 const CompanionContext = createContext<CompanionContextType>({
-  mode: 'leo',
+  mode: 'dora',
   setMode: () => {},
 });
 
 export const CompanionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mode, setModeState] = useState<CompanionMode>('leo');
+  // Default to Dora (the cinnamon Chow Chow) for first-time visitors
+  const [mode, setModeState] = useState<CompanionMode>('dora');
 
   // Load from localStorage on mount with migration support
   useEffect(() => {
@@ -27,8 +28,11 @@ export const CompanionProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       } else if (saved === 'ant-only') {
         setModeState('none');
         localStorage.setItem('companion_mode', 'none');
-      } else if (saved && ['leo', 'dora', 'none', 'spider'].includes(saved)) {
+      } else if (saved && ['dora', 'leo', 'none', 'spider'].includes(saved)) {
         setModeState(saved as CompanionMode);
+      } else {
+        // First-time visit: default to Dora
+        setModeState('dora');
       }
     }
   }, []);

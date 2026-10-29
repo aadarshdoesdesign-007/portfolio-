@@ -29,18 +29,18 @@ export const CompanionSelector: React.FC = () => {
 
   const options: { mode: CompanionMode; icon: string; title: string; subtitle: string; shortLabel: string }[] = [
     {
-      mode: 'leo',
-      icon: '🦔',
-      title: 'Leo (Hedgehog)',
-      subtitle: 'Scurries for crunchy treat pellets!',
-      shortLabel: 'Leo',
-    },
-    {
       mode: 'dora',
       icon: '🐕',
       title: 'Dora (Chow Chow)',
       subtitle: 'Cinnamon pup chases tennis ball!',
       shortLabel: 'Dora',
+    },
+    {
+      mode: 'leo',
+      icon: '🦔',
+      title: 'Leo (Hedgehog)',
+      subtitle: 'Scurries for crunchy treat pellets!',
+      shortLabel: 'Leo',
     },
     {
       mode: 'none',
